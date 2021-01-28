@@ -1,0 +1,11 @@
+.wrapper {
+    flex-grow: 1;
+}
+
+.wrapper.error textarea {
+    border: 1px solid tomato;
+}
+
+.wrapper.error span {
+    color: tomato;
+}
