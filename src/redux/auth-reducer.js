@@ -3,9 +3,10 @@ import {authAPI} from '../api/requests'
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA'
 
 const initialState = {
+	id: null,
 	username: null,
 	email: null,
-	signupTime: null,
+	createdAt: null,
 	lastActive: null,
 	isAuth: false
 }
@@ -19,23 +20,23 @@ const authReducer = (state = initialState, action) => {
 	}
 }
 
-export const setAuthUserData = (username, email, signupTime, lastActive, isAuth) => ({
+export const setAuthUserData = (id, username, email, createdAt, lastActive, isAuth) => ({
 	type: SET_AUTH_USER_DATA,
-	payload: {username, email, signupTime, lastActive, isAuth}
+	payload: {id, username, email, createdAt, lastActive, isAuth}
 })
 
 export const getAuthUserData = () => async dispatch => {
 	const data = await authAPI.me()
 	if (data && data.status) {
-		const {username, email, signupTime, lastActive} = data
-		dispatch(setAuthUserData(username, email, signupTime, lastActive, true))
+		const {id, username, email, createdAt, lastActive} = data.data
+		dispatch(setAuthUserData(id, username, email, createdAt, lastActive, true))
 	}
 }
 
 export const signup = (username, email, password) => async dispatch => {
 	const data = await authAPI.signup(username, email, password)
 	if (data.status) {
-		dispatch(getAuthUserData())
+		console.log('Successful!')
 	} else {
 		console.log('Error!')
 	}
@@ -43,9 +44,8 @@ export const signup = (username, email, password) => async dispatch => {
 
 export const signin = (username, password) => async dispatch => {
 	const data = await authAPI.signin(username, password)
-	console.log(data)
 	if (data.status) {
-		dispatch(getAuthUserData())
+		await dispatch(getAuthUserData())
 	} else {
 		console.log('Error!')
 	}
@@ -53,9 +53,8 @@ export const signin = (username, password) => async dispatch => {
 
 export const signout = () => async dispatch => {
 	const data = await authAPI.signout()
-	console.log(data)
 	if (data.status) {
-		dispatch(setAuthUserData(null, null, null, null, false))
+		dispatch(setAuthUserData(null, null, null, null, null, false))
 	}
 }
 
