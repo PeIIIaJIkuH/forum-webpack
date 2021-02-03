@@ -2,16 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45b0588f-640c-4745-bcb2-97f748732773" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/history.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/bell.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/loupe.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/profile.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreatePost/CreatePost.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreatePost/CreatePostForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/Header.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/Header.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Posts/Posts.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Posts/PostsContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/posts-reducer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/posts-selectors.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/requests.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Auth/Auth.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Auth/Auth.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hoc/withAuthRedirect.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hoc/withAuthRedirect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/app-reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/app-reducer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/auth-reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/auth-reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/auth-selectors.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/auth-selectors.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/profile-reducer.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,9 +52,8 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets/img" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -53,16 +62,16 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\baiga\Desktop\web\forum-react\src\assets\img" />
       <recent name="C:\Users\baiga\Desktop\web\forum-react\src\components\Auth" />
       <recent name="C:\Users\baiga\Desktop\web\forum-react\src\components" />
       <recent name="C:\Users\baiga\Desktop\web\forum\src\redux" />
       <recent name="C:\Users\baiga\Desktop\web\forum\components\common" />
-      <recent name="C:\Users\baiga\Desktop\web\forum" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\baiga\Desktop\web\forum\src" />
@@ -94,6 +103,14 @@
       <workItem from="1611819471932" duration="65000" />
       <workItem from="1611819616167" duration="4830000" />
       <workItem from="1611826637540" duration="12695000" />
+      <workItem from="1611913335950" duration="694000" />
+      <workItem from="1611914809115" duration="465000" />
+      <workItem from="1611916063640" duration="48000" />
+      <workItem from="1611929561310" duration="1935000" />
+      <workItem from="1612072901576" duration="3934000" />
+      <workItem from="1612121463625" duration="619000" />
+      <workItem from="1612166338250" duration="7324000" />
+      <workItem from="1612330154955" duration="6420000" />
     </task>
     <servers />
   </component>

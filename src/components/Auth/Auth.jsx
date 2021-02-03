@@ -31,6 +31,9 @@ const mapStateToProps = state => ({
 	isAuth: getIsAuthSelector(state)
 })
 
-const mapDispatchToProps = {signup, signin}
+const mapDispatchToProps = {
+	signup,
+	signin
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth)

@@ -1,0 +1,1 @@
+export const getPostsSelector = state => state.posts.posts
