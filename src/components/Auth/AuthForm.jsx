@@ -1,31 +1,42 @@
 import React from 'react'
-import s from './Auth.module.css'
-import {Field, Form} from 'react-final-form'
-import {Input} from '../common/FormControls/FormControls'
-import {required} from '../../utils/validators/validators'
+import {Button, Form, Input} from 'antd'
+import {LockOutlined, UserOutlined} from '@ant-design/icons'
+
+const tailLayout = {
+	wrapperCol: {
+		offset: 8,
+		span: 16
+	}
+}
 
 const AuthForm = ({onsubmit, isSignup}) => (
-	<Form onSubmit={onsubmit}>
-		{({handleSubmit, error}) => (
-			<form className={s.form} onSubmit={handleSubmit}>
-				<div className={s.formGroup}>
-					<label htmlFor='username'>Username</label>
-					<Field name='username' component={Input} type='text'
-					       validate={required}/>
-				</div>
-				{isSignup &&
-				<div className={s.formGroup}>
-					<label htmlFor='email'>Email</label>
-					<Field name='email' component={Input} type='email' validate={required}/>
-				</div>
-				}
-				<div className={s.formGroup}>
-					<label htmlFor='password'>Password</label>
-					<Field name='password' component={Input} type='password' validate={required}/>
-				</div>
-				<button type='submit' className={s.button}>{isSignup ? 'Sign up' : 'Sign in'}</button>
-			</form>
-		)}
+	<Form name='auth' onFinish={onsubmit}>
+		<Form.Item name='username' rules={[{
+			required: true,
+			message: 'Please enter your username!'
+		}]}>
+			<Input prefix={<UserOutlined/>} placeholder='Username'/>
+		</Form.Item>
+		{isSignup &&
+		<Form.Item name='email' rules={[{
+			required: true,
+			type: 'email',
+			message: 'The input is not valid E-mail!'
+		}]}>
+			<Input prefix='@' placeholder='E-mail'/>
+		</Form.Item>
+		}
+		<Form.Item name='password' rules={[{
+			required: true,
+			message: 'Please input your password!'
+		}]}>
+			<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
+		</Form.Item>
+		<Form.Item {...tailLayout}>
+			<Button type='primary' htmlType='submit'>
+				Submit
+			</Button>
+		</Form.Item>
 	</Form>
 )
 

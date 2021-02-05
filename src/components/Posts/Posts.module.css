@@ -1,0 +1,82 @@
+.post {
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.content {
+    color: #959595;
+    font-size: 16px;
+}
+
+.author {
+    margin-right: 40px;
+}
+
+.created {
+
+}
+
+.rating {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    font-size: 20px;
+}
+
+.rating div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ratingNumber {
+    margin: 4px 0;
+}
+
+.up:hover, .up:focus {
+    color: #00b594;
+    border-color: #00b594;
+}
+
+.up::selection {
+    background: #00b594;
+}
+
+.ratedUp {
+    color: #00b594;
+    border-color: #00b594;
+}
+
+.down:hover, .down:focus {
+    color: tomato;
+    border-color: tomato;
+}
+
+.down::selection {
+    background: tomato;
+}
+
+.onFocus {
+    color: rgba(0, 0, 0, 0.85);
+    border-color: #d9d9d9;
+}
+
+.ratedDown {
+    color: tomato;
+    border-color: tomato;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

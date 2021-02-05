@@ -15,7 +15,20 @@ export const authAPI = {
 }
 
 export const postAPI = {
-	all: () => defaultAxios.get('posts').catch(() => 'Can not load posts.'),
-	create: (title, content, categories) => defaultAxios.post('post/create', {title, content, categories}).then(r => r.data)
-		.catch(() => undefined)
+	all: () => defaultAxios.get('posts').then(r => r.data).catch(() => 'Can not load posts.'),
+	create: (title, content, categories) => defaultAxios.post('post/create', {
+		title,
+		content,
+		categories
+	}).then(r => r.data)
+		.catch(() => 'Can not create new post.'),
+	rate: (id, reaction) => defaultAxios.post('post/rate', {
+		id,
+		reaction
+	}).then(r => r.data).catch(() => 'Can not rate post.'),
+	get: id => defaultAxios.get(`post/${id}`).then(r => r.data).catch(() => 'Can not load post.')
+}
+
+export const categoriesAPI = {
+	all: () => defaultAxios.get('categories').then(r => r.data).catch(() => 'Can not load posts.')
 }

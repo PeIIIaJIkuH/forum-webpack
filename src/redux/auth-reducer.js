@@ -35,8 +35,8 @@ export const getAuthUserData = () => async dispatch => {
 	}
 }
 
-export const signup = (username, email, password) => async dispatch => {
-	const data = await authAPI.signup(username, email, password)
+export const signup = async (username, email, password) => {
+	const data = authAPI.signup(username, email, password)
 	if (data && data.status) {
 		console.log('Successful!')
 	} else {
@@ -46,7 +46,6 @@ export const signup = (username, email, password) => async dispatch => {
 
 export const signin = (username, password) => async dispatch => {
 	const data = await authAPI.signin(username, password)
-	console.log(data)
 	if (data && data.status) {
 		await dispatch(getAuthUserData())
 	} else {

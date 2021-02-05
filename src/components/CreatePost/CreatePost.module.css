@@ -6,6 +6,11 @@
 }
 
 .card {
-    width: 300px;
+    width: 100%;
+    max-width: 600px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form span[role='button'] {
+    margin-right: 10px;
 }

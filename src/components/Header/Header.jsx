@@ -6,42 +6,29 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 import logo from '../../assets/img/logo.svg'
-import bell from '../../assets/img/bell.svg'
-import find from '../../assets/img/loupe.svg'
-import profileLogo from '../../assets/img/profile.svg'
+import profile from '../../assets/img/profile.svg'
+import {Button, Image, Input, Layout} from 'antd'
 
 const Header = ({isAuth, signout}) => (
-	<header className={s.header}>
-		<div className='container'>
-			<div className={s.inner}>
-				<div className={s.logo}>
-					<img src={logo} alt='logo'/>
-					<div>
-						foru<span>me</span>
-					</div>
-				</div>
-				<div className={s.search}>
-					<img src={find} alt='magnifying glass'/>
-					<input type='text' placeholder='Search for Topics'/>
-				</div>
-				{isAuth ?
-					<div className={s.actions}>
-						<div className={s.bell}>
-							<img src={bell} alt='bell'/>
-						</div>
-						<div className={s.profile}>
-							<img src={profileLogo} alt='profile logo'/>
-						</div>
-						<button className={s.signout} onClick={() => {
-							signout()
-						}}>Sign Out
-						</button>
-					</div> :
-					<Link to='/signin'>Sign In</Link>
-				}
-			</div>
-		</div>
-	</header>
+	<Layout.Header className={s.header}>
+		<Link to='/' className={s.logo}>
+			<Image width={50} src={logo} preview={false} alt='logo'/>
+			foru<span>me</span>
+		</Link>
+		<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'/>
+		{isAuth ?
+			<span className={s.actions}>
+				<span className={s.profile}>
+					<Image width={40} src={profile} alt='profile' preview={false}/>
+				</span>
+				<Button type='link' onClick={() => {
+					signout()
+				}}>
+					Sign Out
+				</Button>
+			</span> :
+			<Link to='/signin'>Sign In</Link>}
+	</Layout.Header>
 )
 
 const mapStateToProps = state => ({

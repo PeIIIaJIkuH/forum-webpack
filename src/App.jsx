@@ -13,6 +13,7 @@ import history from './history'
 import Header from './components/Header/Header'
 import PostsContainer from './components/Posts/PostsContainer'
 import CreatePost from './components/CreatePost/CreatePost'
+import {Col, Row} from 'antd'
 
 class App extends React.Component {
 	componentDidMount() {
@@ -27,11 +28,19 @@ class App extends React.Component {
 		return (
 			<div className='App'>
 				<React.Suspense fallback={<Preloader/>}>
+					<Header/>
 					<Route exact path='/' render={() => (
-						<>
-							<Header/>
-							<PostsContainer/>
-						</>
+						<Row className='main'>
+							<Col span={3} offset={3}>
+								<div style={{background: 'red'}}>left</div>
+							</Col>
+							<Col span={10} offset={1}>
+								<PostsContainer/>
+							</Col>
+							<Col span={3} offset={1}>
+								<div style={{background: 'red'}}>right</div>
+							</Col>
+						</Row>
 					)}/>
 					<Route exact path='/create' render={() => <CreatePost/>}/>
 					<Route exact path='/signup' render={() => <Auth isSignup={true}/>}/>
