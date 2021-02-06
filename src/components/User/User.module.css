@@ -1,0 +1,9 @@
+.userInfo {
+    margin-bottom: 40px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.userInfo p {
+    margin-left: 10px;
+}

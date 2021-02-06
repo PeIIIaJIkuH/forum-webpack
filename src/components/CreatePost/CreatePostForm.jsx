@@ -1,6 +1,7 @@
 import React from 'react'
 import {Button, Form, Input, Select} from 'antd'
 import s from './CreatePost.module.css'
+import history from '../../history'
 
 const layout = {
 	labelCol: {
@@ -13,9 +14,12 @@ const layout = {
 
 const tailLayout = {
 	wrapperCol: {
-		offset: 8,
-		span: 16
+		span: 24
 	}
+}
+
+const onCancel = () => {
+	history.goBack()
 }
 
 class CreatePostForm extends React.Component {
@@ -29,7 +33,7 @@ class CreatePostForm extends React.Component {
 				required: true,
 				message: 'Please enter post title!'
 			}]}>
-				<Input/>
+				<Input autoFocus/>
 			</Form.Item>
 			<Form.Item label='Content' name='content' rules={[{
 				required: true,
@@ -44,14 +48,16 @@ class CreatePostForm extends React.Component {
 					placeholder='Please select'
 					allowClear
 				>
-					{this.props.categories && this.props.categories.map((e, i) => <Select.Option
-						key={i}>{e}</Select.Option>)}
+					{this.props.categories && this.props.categories.map(e => (
+						<Select.Option key={e}>{e}</Select.Option>
+					))}
 				</Select>
 			</Form.Item>
-			<Form.Item {...tailLayout}>
-				<Button type='primary' htmlType='submit'>
-					Submit
+			<Form.Item className={s.buttons} {...tailLayout}>
+				<Button className={s.create} type='primary' htmlType='submit'>
+					Create
 				</Button>
+				<Button type='primary' danger onClick={onCancel}>Cancel</Button>
 			</Form.Item>
 		</Form>
 	)

@@ -11,14 +11,14 @@ const tailLayout = {
 
 const AuthForm = ({onsubmit, isSignup}) => (
 	<Form name='auth' onFinish={onsubmit}>
-		<Form.Item name='username' rules={[{
+		<Form.Item name={(isSignup ? 'signUp' : 'signIn') + 'Username'} rules={[{
 			required: true,
 			message: 'Please enter your username!'
 		}]}>
-			<Input prefix={<UserOutlined/>} placeholder='Username'/>
+			<Input prefix={<UserOutlined/>} placeholder='Username' autoFocus/>
 		</Form.Item>
 		{isSignup &&
-		<Form.Item name='email' rules={[{
+		<Form.Item name='signUpEmail' rules={[{
 			required: true,
 			type: 'email',
 			message: 'The input is not valid E-mail!'
@@ -26,7 +26,7 @@ const AuthForm = ({onsubmit, isSignup}) => (
 			<Input prefix='@' placeholder='E-mail'/>
 		</Form.Item>
 		}
-		<Form.Item name='password' rules={[{
+		<Form.Item name={(isSignup ? 'signUp' : 'signIn') + 'Password'} rules={[{
 			required: true,
 			message: 'Please input your password!'
 		}]}>

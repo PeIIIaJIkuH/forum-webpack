@@ -1,1 +1,0 @@
-export const getCategoriesSelector = state => state.createPost.categories

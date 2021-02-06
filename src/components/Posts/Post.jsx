@@ -1,21 +1,12 @@
 import React from 'react'
 import s from './Posts.module.css'
-import {Button, Card, Col, Divider, Row} from 'antd'
-import moment from 'moment'
+import {Button, Card, Col, Divider, Row, Tag} from 'antd'
 import {CommentOutlined, DownOutlined, UpOutlined} from '@ant-design/icons'
+import {Link} from 'react-router-dom'
+import {getDateDifference} from '../../utils/helpers/helpers'
 
-const Post = ({data, setRating, isAuth}) => {
-	console.log(data)
-	const date = moment(new Date(data.createdAt * 1000))
-	const now = moment()
-	const arr = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'].map(e => ({
-		num: now.diff(date, e),
-		type: e
-	}))
-	const created = arr.find(e => {
-		if (e.num > 0) return `${+e.num} ${e.type}`
-		return false
-	})
+const Post = ({data, setRating, isAuth, isUserPage}) => {
+	const created = getDateDifference(data.createdAt)
 
 	const onClick = num => {
 		setRating(data.id, num)
@@ -41,19 +32,29 @@ const Post = ({data, setRating, isAuth}) => {
 					</div>
 				</Col>
 				<Col span={21}>
-					<div className={s.title}>
+					<Link to={`/post/${data.id}`} className={s.title}>
 						{data.title}
+					</Link>
+					<div className={s.content}>
+						{data.content.split('\n').map((paragraph, i) => (
+							<p key={i}>{paragraph}</p>
+						))}
 					</div>
-					<p className={s.content}>
-						{data.content}
-					</p>
-					<Divider/>
+					<Divider className={s.divider}/>
+					{data.categories &&
+					<div className={s.categories}>
+						{data.categories.map(category => (
+							<Tag key={category.id}>{category.name}</Tag>
+						))}
+					</div>}
 					<div className={s.bottom}>
 						<div className={s.author}>
-							{data.author.username}
+							<Link to={`/user/${data.author.id}`} disabled={isUserPage}>
+								{data.author.username}
+							</Link>
 						</div>
 						<div className={s.created}>
-							{created ? `${created.num} ${created.type.slice(0, -1)}${created.num > 1 && '(s)'} ago` : 'Just now'}
+							{created ? `${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'}
 						</div>
 						<div className={s.comments}>
 							<CommentOutlined/>

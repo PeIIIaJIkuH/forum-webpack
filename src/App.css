@@ -5,3 +5,8 @@
 .main {
     margin-top: 40px;
 }
+
+.addPost button {
+    width: 100%;
+    border-radius: 5px;
+}

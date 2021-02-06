@@ -3,23 +3,23 @@ import s from './Auth.module.css'
 import {connect} from 'react-redux'
 import {Link, Redirect} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
-import {getIsAuthSelector} from '../../redux/auth-selectors'
+import {getIsAuthSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import history from '../../history'
 import {Card} from 'antd'
 
 const Auth = ({signup, signin, isAuth, isSignup}) => {
-	const onSubmit = ({username, email, password}) => {
+	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
 		if (isSignup) {
-			signup(username, email, password)
+			signup(signUpUsername, signUpEmail, signUpPassword)
 			history.push('/signin')
 		} else {
-			signin(username, password)
+			signin(signInUsername, signInPassword)
 		}
 	}
-	
+
 	if (isAuth) return <Redirect to='/'/>
-	
+
 	return (
 		<div className={s.wrapper}>
 			<Card className={s.card} title={isSignup ? 'Sign Up' : 'Sign In'}

@@ -1,28 +1,27 @@
 import React from 'react'
 import s from './CreatePost.module.css'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
-import {getIsAuthSelector} from '../../redux/auth-selectors'
+import {getCategoriesSelector, getIsAuthSelector} from '../../redux/selectors'
 import CreatePostForm from './CreatePostForm'
 import {postAPI} from '../../api/requests'
 import {Card} from 'antd'
 import {requestCategories} from '../../redux/create-post-reducer'
-import {getCategoriesSelector} from '../../redux/create-post-selectors'
 import history from '../../history'
 import {requestPosts} from '../../redux/posts-reducer'
+import {Error403} from '../common/errors'
 
 const CreatePost = ({isAuth, requestCategories, categories}) => {
 	const onSubmit = async ({title, content, categories}) => {
-		await postAPI.create(title, content, categories)
-		requestPosts()
+		await postAPI.create(title, content.replace(/\n+/, '\n'), categories)
+		await requestPosts()
 		history.push('/')
 	}
 
-	if (!isAuth) return <Redirect to='/'/>
+	if (!isAuth) return <Error403/>
 
 	return (
 		<div className={s.wrapper}>
-			<Card className={s.card} title='Create a post'>
+			<Card className={s.card} title='Create a post' headStyle={{fontSize: '20px', fontWeight: 600}}>
 				<CreatePostForm onsubmit={onSubmit} getCategories={requestCategories} categories={categories}/>
 			</Card>
 		</div>
