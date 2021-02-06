@@ -1,6 +1,8 @@
 import React from 'react'
 import s from './Actions.module.css'
-import {Button, Form, Select} from 'antd'
+import Button from 'antd/lib/button'
+import Form from 'antd/lib/form'
+import Select from 'antd/lib/select'
 
 const layout = {
 	wrapperCol: {

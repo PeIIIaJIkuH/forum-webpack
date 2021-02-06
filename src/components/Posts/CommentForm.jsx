@@ -1,6 +1,8 @@
 import React from 'react'
 import s from './Posts.module.css'
-import {Button, Form, Input} from 'antd'
+import Button from 'antd/lib/button'
+import Form from 'antd/lib/form'
+import Input from 'antd/lib/input'
 
 const CommentForm = ({isAuth, onSubmit}) => {
 	const [form] = Form.useForm()

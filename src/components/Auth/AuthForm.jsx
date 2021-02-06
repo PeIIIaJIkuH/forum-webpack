@@ -1,5 +1,7 @@
 import React from 'react'
-import {Button, Form, Input} from 'antd'
+import Button from 'antd/lib/button'
+import Form from 'antd/lib/form'
+import Input from 'antd/lib/input'
 import {LockOutlined, UserOutlined} from '@ant-design/icons'
 
 const tailLayout = {

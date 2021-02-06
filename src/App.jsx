@@ -11,7 +11,8 @@ import {signout} from './redux/auth-reducer'
 import history from './history'
 import Header from './components/Header/Header'
 import CreatePost from './components/CreatePost/CreatePost'
-import {Col, Row} from 'antd'
+import Col from 'antd/lib/col'
+import Row from 'antd/lib/row'
 import LeftMenu from './components/LeftMenu/LeftMenu'
 import Actions from './components/Actions/Actions'
 import User from './components/User/User'
@@ -22,7 +23,6 @@ import DownVotedPosts from './components/Posts/DownVotedPosts'
 import AllPosts from './components/Posts/AllPosts'
 import {Error404} from './components/common/errors'
 import PostsByCategories from './components/Posts/PostsByCategories'
-import {toast} from 'react-toastify'
 
 class App extends React.Component {
 	componentDidMount() {

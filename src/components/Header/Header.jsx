@@ -1,16 +1,20 @@
 import React from 'react'
 import s from './Header.module.css'
-import {getIsAuthSelector, getUsernameSelector} from '../../redux/selectors'
+import {getIsAuthSelector, getUserIDSelector, getUsernameSelector} from '../../redux/selectors'
 import {signout} from '../../redux/auth-reducer'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 import logo from '../../assets/img/logo.svg'
 import profile from '../../assets/img/profile.svg'
-import {Button, Image, Input, Layout} from 'antd'
+import Button from 'antd/lib/button'
+import Input from 'antd/lib/input'
+import Image from 'antd/lib/image'
+import Layout from 'antd/lib/layout'
+
 import {toast} from 'react-toastify'
 
-const Header = ({isAuth, signout, username}) => (
+const Header = ({isAuth, signout, username, userID}) => (
 	<Layout.Header className={s.header}>
 		<Link to='/' className={s.logo}>
 			<Image width={50} src={logo} preview={false} alt='logo'/>
@@ -23,7 +27,7 @@ const Header = ({isAuth, signout, username}) => (
 			<span className={s.actions}>
 				<span className={s.profile}>
 					<span className={s.username}>
-						<Link to='/my'>{username}</Link>
+						<Link to={`/user/${userID}`}>{username}</Link>
 					</span>
 					<Image width={40} src={profile} alt='profile' preview={false}/>
 				</span>
@@ -39,7 +43,8 @@ const Header = ({isAuth, signout, username}) => (
 
 const mapStateToProps = state => ({
 	isAuth: getIsAuthSelector(state),
-	username: getUsernameSelector(state)
+	username: getUsernameSelector(state),
+	userID: getUserIDSelector(state)
 })
 
 const mapDispatchToProps = {

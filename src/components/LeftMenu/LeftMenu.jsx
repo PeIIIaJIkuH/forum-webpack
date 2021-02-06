@@ -1,5 +1,6 @@
 import React from 'react'
-import {Menu, Tooltip} from 'antd'
+import Menu from 'antd/lib/menu'
+import Tooltip from 'antd/lib/tooltip'
 import {getIsAuthSelector} from '../../redux/selectors'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'

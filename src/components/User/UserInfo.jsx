@@ -1,6 +1,7 @@
 import React from 'react'
 import s from './User.module.css'
-import {Card, Typography} from 'antd'
+import Card from 'antd/lib/card'
+import Typography from 'antd/lib/typography'
 import {getDateDifference} from '../../utils/helpers/helpers'
 
 const {Title} = Typography

@@ -1,6 +1,7 @@
 import React from 'react'
 import Post from './Post'
-import {Card, Empty} from 'antd'
+import Card from 'antd/lib/card'
+import Empty from 'antd/lib/empty'
 
 const Posts = ({posts, setRating, isAuth, isUserPage, requestPostsByCategories}) => {
 	return (

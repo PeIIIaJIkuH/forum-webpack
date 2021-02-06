@@ -7,7 +7,7 @@ import {requestComments, requestPost, setRating} from '../../redux/posts-reducer
 import Posts from './Posts'
 import CommentForm from './CommentForm'
 import Comments from './Comments'
-import {Card} from 'antd'
+import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
 
 class PostComment extends React.Component {

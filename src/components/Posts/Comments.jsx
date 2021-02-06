@@ -1,6 +1,7 @@
 import React from 'react'
 import s from './Posts.module.css'
-import {Comment, List} from 'antd'
+import Comment from 'antd/lib/comment'
+import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 

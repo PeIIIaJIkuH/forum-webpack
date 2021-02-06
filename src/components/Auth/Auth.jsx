@@ -6,7 +6,7 @@ import {signin, signup} from '../../redux/auth-reducer'
 import {getIsAuthSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import history from '../../history'
-import {Card} from 'antd'
+import Card from 'antd/lib/card'
 
 const Auth = ({signup, signin, isAuth, isSignup}) => {
 	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {

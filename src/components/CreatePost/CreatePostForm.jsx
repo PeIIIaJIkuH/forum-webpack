@@ -1,5 +1,8 @@
 import React from 'react'
-import {Button, Form, Input, Select} from 'antd'
+import Button from 'antd/lib/button'
+import Form from 'antd/lib/form'
+import Input from 'antd/lib/input'
+import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
 import history from '../../history'
 

@@ -1,5 +1,6 @@
 import React from 'react'
-import {Button, Result} from 'antd'
+import Button from 'antd/lib/button'
+import Result from 'antd/lib/result'
 import {Link} from 'react-router-dom'
 
 export const Error404 = () => (
