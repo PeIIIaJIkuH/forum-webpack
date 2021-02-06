@@ -3,10 +3,15 @@
     border-radius: 5px;
 }
 
-.card {
+.card, .footer {
     margin-top: 40px;
     border-radius: 5px;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .btnWrapper {

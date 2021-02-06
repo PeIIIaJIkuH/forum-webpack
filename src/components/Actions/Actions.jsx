@@ -12,6 +12,7 @@ import {connect} from 'react-redux'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
 import history from '../../history'
 import {toast} from 'react-toastify'
+import Layout from 'antd/lib/layout'
 
 toast.configure()
 
@@ -42,6 +43,11 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 			<Card className={s.card}>
 				<ActionsForm onSubmit={onSubmit} categories={categories} requestCategories={requestCategories}/>
 			</Card>
+			<Layout.Footer className={s.footer}>
+				<div>by PeIIIaJIkuH and indecember</div>
+				<div>GO, React, SQLite3</div>
+				<div>February, 2021</div>
+			</Layout.Footer>
 		</>
 	)
 }
