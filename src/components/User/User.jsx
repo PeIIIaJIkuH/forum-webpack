@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import UserInfo from './UserInfo'
 import UserPosts from '../Posts/UserPosts'
+import {Helmet} from 'react-helmet'
 
 class User extends React.Component {
 	async componentDidMount() {
@@ -15,6 +16,7 @@ class User extends React.Component {
 	render() {
 		return (
 			<>
+				<Helmet><title>Forum | {this.props.user ? this.props.user.username : 'User Page'}</title></Helmet>
 				<UserInfo user={this.props.user}/>
 				<UserPosts/>
 			</>

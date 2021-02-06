@@ -9,6 +9,7 @@ import CommentForm from './CommentForm'
 import Comments from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
+import {Helmet} from 'react-helmet'
 
 class PostComment extends React.Component {
 	async componentDidMount() {
@@ -26,6 +27,7 @@ class PostComment extends React.Component {
 
 		return (
 			<>
+				<Helmet><title>Forum | Comments</title></Helmet>
 				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}/>
 				<Card className={s.commentSection}>
 					<CommentForm isAuth={this.props.isAuth} onSubmit={onSubmit}/>

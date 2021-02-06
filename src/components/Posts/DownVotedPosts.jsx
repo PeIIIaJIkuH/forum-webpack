@@ -4,6 +4,7 @@ import {getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
 import {requestPostsByCategories, requestRatedPosts, setRating} from '../../redux/posts-reducer'
 import Posts from './Posts'
 import {Error403} from '../common/errors'
+import {Helmet} from 'react-helmet'
 
 class DownVotedPosts extends React.Component {
 	async componentDidMount() {
@@ -14,8 +15,11 @@ class DownVotedPosts extends React.Component {
 		if (!this.props.isAuth) return <Error403/>
 
 		return (
-			<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-				   requestPostsByCategories={this.props.requestPostsByCategories}/>
+			<>
+				<Helmet><title>Forum | Downvoted Posts</title></Helmet>
+				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
+					   requestPostsByCategories={this.props.requestPostsByCategories}/>
+			</>
 		)
 	}
 }

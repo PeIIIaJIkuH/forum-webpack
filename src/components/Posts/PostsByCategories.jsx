@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
 import {requestPostsByCategories, setRating} from '../../redux/posts-reducer'
 import Posts from './Posts'
+import {Helmet} from 'react-helmet'
 
 class PostsByCategories extends React.Component {
 	async componentDidMount() {
@@ -11,8 +12,11 @@ class PostsByCategories extends React.Component {
 
 	render() {
 		return (
+			<>
+				<Helmet><title>Forum | Search by Categories</title></Helmet>
 			<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 				   requestPostsByCategories={this.props.requestPostsByCategories}/>
+			</>
 		)
 	}
 

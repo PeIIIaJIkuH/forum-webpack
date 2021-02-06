@@ -9,6 +9,7 @@ import {requestCategories} from '../../redux/categories-reducer'
 import history from '../../history'
 import {requestPosts} from '../../redux/posts-reducer'
 import {Error403} from '../common/errors'
+import {Helmet} from 'react-helmet'
 
 const CreatePost = ({isAuth, requestCategories, categories}) => {
 	const onSubmit = async ({title, content, categories}) => {
@@ -20,11 +21,14 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 	if (!isAuth) return <Error403/>
 
 	return (
-		<div className={s.wrapper}>
-			<Card className={s.card} title='Create a post' headStyle={{fontSize: '20px', fontWeight: 600}}>
-				<CreatePostForm onsubmit={onSubmit} getCategories={requestCategories} categories={categories}/>
-			</Card>
-		</div>
+		<>
+			<Helmet><title>Forum | Create Post</title></Helmet>
+			<div className={s.wrapper}>
+				<Card className={s.card} title='Create a post' headStyle={{fontSize: '20px', fontWeight: 600}}>
+					<CreatePostForm onsubmit={onSubmit} getCategories={requestCategories} categories={categories}/>
+				</Card>
+			</div>
+		</>
 	)
 }
 
