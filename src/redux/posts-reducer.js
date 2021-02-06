@@ -16,7 +16,7 @@ const postsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_POSTS:
 			if (!action.payload.posts && action.payload.allowNull) return {...state, posts: null}
-			return {...state, posts: [...action.payload.posts]}
+			return {...state, posts: action.payload.posts ? [...action.payload.posts] : null}
 		case SET_RATING:
 			const post = getObjectInArray(state.posts, action.payload.id, 'id')
 			const [userRating, postRating] = getPostRating(post.userRating, post.postRating, action.payload.reaction)

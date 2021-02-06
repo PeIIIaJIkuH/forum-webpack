@@ -7,8 +7,11 @@ import {getIsAuthSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import history from '../../history'
 import Card from 'antd/lib/card'
+import Form from 'antd/lib/form'
 
 const Auth = ({signup, signin, isAuth, isSignup}) => {
+	const [form] = Form.useForm()
+
 	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
 		if (isSignup) {
 			signup(signUpUsername, signUpEmail, signUpPassword)
@@ -23,8 +26,14 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 	return (
 		<div className={s.wrapper}>
 			<Card className={s.card} title={isSignup ? 'Sign Up' : 'Sign In'}
-				  extra={<Link to={isSignup ? '/signin' : '/signup'}>{isSignup ? 'Sign In' : 'Sign Up'}</Link>}>
-				<AuthForm onsubmit={onSubmit} isSignup={isSignup}/>
+				  extra={(
+					  <Link to={isSignup ? '/signin' : '/signup'} onClick={() => {
+						  form.resetFields()
+					  }}>
+						  {isSignup ? 'Sign In' : 'Sign Up'}
+					  </Link>
+				  )}>
+				<AuthForm onsubmit={onSubmit} isSignup={isSignup} form={form}/>
 			</Card>
 		</div>
 	)
