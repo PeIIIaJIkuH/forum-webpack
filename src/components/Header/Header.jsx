@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
 import profile from '../../assets/img/profile.svg'
 import {Button, Image, Input, Layout} from 'antd'
-import history from '../../history'
+import {toast} from 'react-toastify'
 
 const Header = ({isAuth, signout, username}) => (
 	<Layout.Header className={s.header}>
@@ -16,7 +16,9 @@ const Header = ({isAuth, signout, username}) => (
 			<Image width={50} src={logo} preview={false} alt='logo'/>
 			foru<span>me</span>
 		</Link>
-		<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'/>
+		<Input.Search className={s.search} placeholder='Search something' enterButton size='middle' onSearch={() => {
+			toast.warning('This feature will be added soon!', {position: toast.POSITION.BOTTOM_RIGHT})
+		}}/>
 		{isAuth ?
 			<span className={s.actions}>
 				<span className={s.profile}>

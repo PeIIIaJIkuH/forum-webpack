@@ -1,23 +1,23 @@
 import {categoriesAPI} from '../api/requests'
 
-const SET_CATEGORIES = 'create-post/SET_CATEGORIES'
+const SET_CATEGORIES = 'categories/SET_CATEGORIES'
 
 const initialState = {
-	categories: null
+	data: null
 }
 
-const createPostReducer = (state = initialState, action) => {
+const categoriesReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_CATEGORIES:
-			return {...state, categories: [...action.payload]}
+			return {...state, data: [...action.payload]}
 		default:
 			return state
 	}
 }
 
-const setCategories = (categories) => ({
+const setCategories = data => ({
 	type: SET_CATEGORIES,
-	payload: categories
+	payload: data
 })
 
 export const requestCategories = () => async dispatch => {
@@ -29,4 +29,4 @@ export const requestCategories = () => async dispatch => {
 	await dispatch(setCategories(arr))
 }
 
-export default createPostReducer
+export default categoriesReducer

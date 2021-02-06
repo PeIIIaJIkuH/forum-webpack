@@ -1,12 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
-import {requestPosts, requestPostsByCategories, setRating} from '../../redux/posts-reducer'
+import {requestPostsByCategories, setRating} from '../../redux/posts-reducer'
 import Posts from './Posts'
 
-class AllPosts extends React.Component {
+class PostsByCategories extends React.Component {
 	async componentDidMount() {
-		await this.props.requestPosts()
+		await this.props.requestPostsByCategories()
 	}
 
 	render() {
@@ -25,8 +25,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	setRating,
-	requestPosts,
 	requestPostsByCategories
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllPosts)
+export default connect(mapStateToProps, mapDispatchToProps)(PostsByCategories)

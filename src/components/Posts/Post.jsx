@@ -1,11 +1,11 @@
 import React from 'react'
 import s from './Posts.module.css'
-import {Button, Card, Col, Divider, Row, Tag} from 'antd'
+import {Button, Card, Col, Divider, Row, Tag, Tooltip} from 'antd'
 import {CommentOutlined, DownOutlined, UpOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import {getDateDifference} from '../../utils/helpers/helpers'
 
-const Post = ({data, setRating, isAuth, isUserPage}) => {
+const Post = ({data, setRating, isAuth, isUserPage, requestPostsByCategories}) => {
 	const created = getDateDifference(data.createdAt)
 
 	const onClick = num => {
@@ -15,20 +15,35 @@ const Post = ({data, setRating, isAuth, isUserPage}) => {
 	const isRatedUp = data.userRating === 1,
 		isRatedDown = data.userRating === -1
 
+	const upVoteButton = (
+		<Button className={`${s.up} ${isRatedUp && s.ratedUp}`}
+				icon={<UpOutlined/>} disabled={!isAuth} onClick={() => {
+			onClick(1)
+		}}/>
+	)
+	const downVoteButton = (
+		<Button className={`${s.down} ${isRatedDown && s.ratedDown}`}
+				icon={<DownOutlined/>} disabled={!isAuth} onClick={() => {
+			onClick(-1)
+		}}/>
+	)
+
 	return (
 		<Card className={s.post}>
 			<Row>
 				<Col className={s.rating} span={2}>
 					<div>
-						<Button className={`${s.up} ${isRatedUp && s.ratedUp}`}
-								icon={<UpOutlined/>} disabled={!isAuth} onClick={() => {
-							onClick(1)
-						}}/>
+						{isAuth ? upVoteButton :
+							<Tooltip title='Only for authorized users.' placement='bottom'>
+								{upVoteButton}
+							</Tooltip>
+						}
 						<div className={s.ratingNumber}>{data.postRating}</div>
-						<Button className={`${s.down} ${isRatedDown && s.ratedDown}`}
-								icon={<DownOutlined/>} disabled={!isAuth} onClick={() => {
-							onClick(-1)
-						}}/>
+						{isAuth ? downVoteButton :
+							<Tooltip title='Only for authorized users.' placement='bottom'>
+								{downVoteButton}
+							</Tooltip>
+						}
 					</div>
 				</Col>
 				<Col span={21}>
@@ -44,7 +59,11 @@ const Post = ({data, setRating, isAuth, isUserPage}) => {
 					{data.categories &&
 					<div className={s.categories}>
 						{data.categories.map(category => (
-							<Tag key={category.id}>{category.name}</Tag>
+							<Tag className={s.tag} key={category.id} onClick={() => {
+								requestPostsByCategories([category.name])
+							}}>
+								{category.name}
+							</Tag>
 						))}
 					</div>}
 					<div className={s.bottom}>

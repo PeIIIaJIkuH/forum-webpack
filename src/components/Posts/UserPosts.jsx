@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
 import {withRouter} from 'react-router-dom'
-import {requestUserPosts, setRating} from '../../redux/posts-reducer'
+import {requestPostsByCategories, requestUserPosts, setRating} from '../../redux/posts-reducer'
 import Posts from './Posts'
 
 class UserPosts extends React.Component {
@@ -14,7 +14,7 @@ class UserPosts extends React.Component {
 	render() {
 		return (
 			<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-				   isUserPage={true}/>
+				   isUserPage={true} requestPostsByCategories={this.props.requestPostsByCategories}/>
 		)
 	}
 }
@@ -26,7 +26,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	requestUserPosts,
-	setRating
+	setRating,
+	requestPostsByCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UserPosts))

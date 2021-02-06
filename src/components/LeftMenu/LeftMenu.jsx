@@ -1,5 +1,5 @@
 import React from 'react'
-import {Menu} from 'antd'
+import {Menu, Tooltip} from 'antd'
 import {getIsAuthSelector} from '../../redux/selectors'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
@@ -13,12 +13,34 @@ const LeftMenu = ({isAuth, location}) => {
 		history.push(`/${e.key === 'home' ? '' : e.key}`)
 	}
 
+	const my = <div><UserOutlined/>My Posts</div>,
+		upVoted = <div><LikeOutlined/>Upvoted Posts</div>,
+		downVoted = <div><DislikeOutlined/>Downvoted Posts</div>
+
 	return (
 		<Menu mode='inline' defaultSelectedKeys={['home']} selectedKeys={[option]} onClick={handleClick}>
 			<Menu.Item key='home' icon={<HomeOutlined/>}>Home</Menu.Item>
-			<Menu.Item key='my' disabled={!isAuth} icon={<UserOutlined/>}>My Posts</Menu.Item>
-			<Menu.Item key='upvoted' disabled={!isAuth} icon={<LikeOutlined/>}>Upvoted Posts</Menu.Item>
-			<Menu.Item key='downvoted' disabled={!isAuth} icon={<DislikeOutlined/>}>Downvoted Posts</Menu.Item>
+			<Menu.Item key='my' disabled={!isAuth}>
+				{isAuth ? my :
+					<Tooltip title='Only for authorized users.' placement='right'>
+						{my}
+					</Tooltip>
+				}
+			</Menu.Item>
+			<Menu.Item key='up-voted' disabled={!isAuth}>
+				{isAuth ? upVoted :
+					<Tooltip title='Only for authorized users.' placement='right'>
+						{upVoted}
+					</Tooltip>
+				}
+			</Menu.Item>
+			<Menu.Item key='down-voted' disabled={!isAuth}>
+				{isAuth ? downVoted :
+					<Tooltip title='Only for authorized users.' placement='right'>
+						{downVoted}
+					</Tooltip>
+				}
+			</Menu.Item>
 		</Menu>
 	)
 }

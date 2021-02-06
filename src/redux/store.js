@@ -3,14 +3,14 @@ import thunkMiddleware from 'redux-thunk'
 import auth from './auth-reducer'
 import app from './app-reducer'
 import posts from './posts-reducer'
-import createPost from './create-post-reducer'
+import categories from './categories-reducer'
 
 
 const reducers = combineReducers({
 	auth,
 	app,
 	posts,
-	createPost
+	categories
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

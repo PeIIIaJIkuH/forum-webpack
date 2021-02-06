@@ -21,6 +21,8 @@ import UpVotedPosts from './components/Posts/UpVotedPosts'
 import DownVotedPosts from './components/Posts/DownVotedPosts'
 import AllPosts from './components/Posts/AllPosts'
 import {Error404} from './components/common/errors'
+import PostsByCategories from './components/Posts/PostsByCategories'
+import {toast} from 'react-toastify'
 
 class App extends React.Component {
 	componentDidMount() {
@@ -46,8 +48,9 @@ class App extends React.Component {
 								<Route exact path='/post/:id' render={() => <PostPage/>}/>
 								<Route exact path='/user/:id' render={() => <User/>}/>
 								<Route exact path='/my' render={() => <MyPosts/>}/>
-								<Route exact path='/upVoted' render={() => <UpVotedPosts/>}/>
-								<Route exact path='/downVoted' render={() => <DownVotedPosts/>}/>
+								<Route exact path='/up-voted' render={() => <UpVotedPosts/>}/>
+								<Route exact path='/down-voted' render={() => <DownVotedPosts/>}/>
+								<Route exact path='/by-categories' render={() => <PostsByCategories/>}/>
 								<Route exact path='/' render={() => <AllPosts/>}/>
 								<Route render={() => <Error404/>}/>
 							</Switch>

@@ -4,7 +4,7 @@ export const getUsernameSelector = state => state.auth.username
 
 export const getIsAuthSelector = state => state.auth.isAuth
 
-export const getCategoriesSelector = state => state.createPost.categories
+export const getCategoriesSelector = state => state.categories.data
 
 export const getUserSelector = state => state.posts.user
 

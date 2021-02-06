@@ -15,8 +15,8 @@ const initialState = {
 const postsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_POSTS:
-			if (!action.payload) return state
-			return {...state, posts: [...action.payload]}
+			if (!action.payload.posts && action.payload.allowNull) return {...state, posts: null}
+			return {...state, posts: [...action.payload.posts]}
 		case SET_RATING:
 			const post = getObjectInArray(state.posts, action.payload.id, 'id')
 			const [userRating, postRating] = getPostRating(post.userRating, post.postRating, action.payload.reaction)
@@ -34,14 +34,14 @@ const postsReducer = (state = initialState, action) => {
 	}
 }
 
-const setPosts = posts => ({
+const setPosts = (posts, allowNull) => ({
 	type: SET_POSTS,
-	payload: posts
+	payload: {posts, allowNull}
 })
 
 export const requestPosts = () => async dispatch => {
 	const data = await postAPI.all()
-	await dispatch(setPosts(data.data))
+	await dispatch(setPosts(data.data, false))
 }
 
 const setRatingAC = (id, reaction) => ({
@@ -66,18 +66,24 @@ export const requestUser = id => async dispatch => {
 
 export const requestUserPosts = id => async dispatch => {
 	const data = await userAPI.getCreatedPosts(+id)
-	console.log(data)
-	await dispatch(setPosts(data.data))
+	await dispatch(setPosts(data.data, false))
 }
 
 export const requestRatedPosts = reaction => async dispatch => {
 	const data = await userAPI.getRatedPosts(reaction)
-	await dispatch(setPosts(data.data))
+	await dispatch(setPosts(data.data, false))
 }
 
 export const requestPost = id => async dispatch => {
 	const data = await postAPI.get(id)
-	await dispatch(setPosts([data.data]))
+	await dispatch(setPosts([data.data], false))
+}
+
+export const requestPostsByCategories = categories => async dispatch => {
+	if (categories) {
+		const data = await postAPI.getByCategories(categories)
+		await dispatch(setPosts(data.data, true))
+	}
 }
 
 const setComments = comments => ({

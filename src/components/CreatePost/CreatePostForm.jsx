@@ -45,7 +45,7 @@ class CreatePostForm extends React.Component {
 				<Select
 					mode='tags'
 					size='default'
-					placeholder='Please select'
+					placeholder='Please select categories'
 					allowClear
 				>
 					{this.props.categories && this.props.categories.map(e => (

@@ -108,3 +108,7 @@
 .myPostsTitle {
     margin-bottom: 30px;
 }
+
+.tag {
+    cursor: pointer;
+}
