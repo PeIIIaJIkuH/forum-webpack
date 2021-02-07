@@ -1,10 +1,10 @@
 import {authAPI} from '../api/requests'
 import {toast} from 'react-toastify'
 import history from '../history'
+import {toastOptions} from '../utils/helpers/helpers'
 
-const SET_USER_DATA = 'auth/SET_USER_DATA'
-
-toast.configure()
+const SET_USER_DATA = 'auth/SET_USER_DATA',
+	SET_IS_FETCHING = 'auth/SET_IS_FETCHING'
 
 const initialState = {
 	id: null,
@@ -12,13 +12,16 @@ const initialState = {
 	email: null,
 	createdAt: null,
 	lastActive: null,
-	isAuth: false
+	isAuth: false,
+	isFetching: false
 }
 
 const authReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_USER_DATA:
 			return {...state, ...action.payload}
+		case SET_IS_FETCHING:
+			return {...state, isFetching: action.payload}
 		default:
 			return state
 	}
@@ -39,23 +42,27 @@ export const getAuthUserData = () => async dispatch => {
 	}
 }
 
-export const signup = (username, email, password) => async () => {
+export const signup = (username, email, password) => async dispatch => {
+	await dispatch(setIsFetching(true))
 	const data = await authAPI.signup(username, email, password)
 	if (data && data.status) {
-		toast.success('Successfully created new user!', {position: toast.POSITION.BOTTOM_RIGHT})
+		toast.success('Successfully created new user!', toastOptions)
 		history.push('/signin')
 	} else {
-		toast.error('Username or E-mail already exists!', {position: toast.POSITION.BOTTOM_RIGHT})
+		toast.error('Username or E-mail already exists!', toastOptions)
 	}
+	await dispatch(setIsFetching(false))
 }
 
 export const signin = (username, password) => async dispatch => {
+	await dispatch(setIsFetching(true))
 	const data = await authAPI.signin(username, password)
 	if (data && data.status) {
 		await dispatch(getAuthUserData())
 	} else {
-		toast.error('Can not log in, some error happened!', {position: toast.POSITION.BOTTOM_RIGHT})
+		toast.error('Can not log in, some error happened!', toastOptions)
 	}
+	await dispatch(setIsFetching(false))
 }
 
 export const signout = () => async dispatch => {
@@ -64,5 +71,10 @@ export const signout = () => async dispatch => {
 		dispatch(setAuthUserData(null, null, null, null, null, false))
 	}
 }
+
+const setIsFetching = isFetching => ({
+	type: SET_IS_FETCHING,
+	payload: isFetching
+})
 
 export default authReducer

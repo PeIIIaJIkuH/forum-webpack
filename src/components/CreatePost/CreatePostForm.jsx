@@ -27,7 +27,7 @@ const onCancel = () => {
 
 class CreatePostForm extends React.Component {
 	componentDidMount = () => {
-		this.props.getCategories()
+		this.props.requestCategories()
 	}
 
 	render = () => (
@@ -57,7 +57,7 @@ class CreatePostForm extends React.Component {
 				</Select>
 			</Form.Item>
 			<Form.Item className={s.buttons} {...tailLayout}>
-				<Button className={s.create} type='primary' htmlType='submit'>
+				<Button className={s.create} type='primary' htmlType='submit' loading={this.props.isFetching}>
 					Create
 				</Button>
 				<Button type='primary' danger onClick={onCancel}>Cancel</Button>

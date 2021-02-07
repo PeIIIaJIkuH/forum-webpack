@@ -1,4 +1,5 @@
 import moment from 'moment'
+import {Slide, toast} from 'react-toastify'
 
 export const updateObjectInArray = (items, itemId, prop, newObjProp) => items.map(e =>
 	e[prop] === itemId ? {...e, ...newObjProp} : e
@@ -35,4 +36,9 @@ export const getDateDifference = createdAt => {
 		if (e.num > 0) return `${+e.num} ${e.type}`
 		return false
 	})
+}
+
+export const toastOptions = {
+	position: toast.POSITION.BOTTOM_RIGHT,
+	transition: Slide
 }

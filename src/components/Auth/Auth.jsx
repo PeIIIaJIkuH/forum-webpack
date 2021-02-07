@@ -3,12 +3,12 @@ import s from './Auth.module.css'
 import {connect} from 'react-redux'
 import {Link, Redirect} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
-import {getIsAuthSelector} from '../../redux/selectors'
+import {getAuthIsFetchingSelector, getIsAuthSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import Card from 'antd/lib/card'
 import Form from 'antd/lib/form'
 
-const Auth = ({signup, signin, isAuth, isSignup}) => {
+const Auth = ({signup, signin, isAuth, isSignup, isFetching}) => {
 	const [form] = Form.useForm()
 
 	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
@@ -31,14 +31,15 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 						  {isSignup ? 'Sign In' : 'Sign Up'}
 					  </Link>
 				  )}>
-				<AuthForm onsubmit={onSubmit} isSignup={isSignup} form={form}/>
+				<AuthForm onsubmit={onSubmit} isSignup={isSignup} form={form} isFetching={isFetching}/>
 			</Card>
 		</div>
 	)
 }
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state)
+	isAuth: getIsAuthSelector(state),
+	isFetching: getAuthIsFetchingSelector(state)
 })
 
 const mapDispatchToProps = {

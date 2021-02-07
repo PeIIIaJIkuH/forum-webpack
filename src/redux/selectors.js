@@ -15,3 +15,5 @@ export const getCommentsSelector = state => state.posts.comments
 export const getUserIDSelector = state => state.auth.id
 
 export const getMenuOptionSelector = state => state.menu.option
+
+export const getAuthIsFetchingSelector = state => state.auth.isFetching

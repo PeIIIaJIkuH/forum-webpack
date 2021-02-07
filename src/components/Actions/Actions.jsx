@@ -12,13 +12,13 @@ import {connect} from 'react-redux'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
 import {toast} from 'react-toastify'
 import Layout from 'antd/lib/layout'
-
-toast.configure()
+import {toastOptions} from '../../utils/helpers/helpers'
+import Affix from 'antd/lib/affix'
 
 const Actions = ({isAuth, categories, requestCategories, requestPostsByCategories}) => {
 	const onSubmit = async ({categories}) => {
 		if (!categories || !categories.length) {
-			toast.error('You should choose at least one category!', {position: toast.POSITION.BOTTOM_RIGHT})
+			toast.error('You should choose at least one category!', toastOptions)
 		} else {
 			await requestPostsByCategories(categories)
 		}
@@ -33,7 +33,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 	)
 
 	return (
-		<>
+		<Affix offsetTop={104}>
 			{isAuth ? button :
 				<Tooltip title='Only for authorized users.' placement='bottom'>
 					{button}
@@ -46,7 +46,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 				<div>GO, React, SQLite3</div>
 				<div>February, 2021</div>
 			</Layout.Footer>
-		</>
+		</Affix>
 	)
 }
 

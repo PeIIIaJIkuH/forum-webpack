@@ -23,6 +23,9 @@ import DownVotedPosts from './components/Posts/DownVotedPosts'
 import AllPosts from './components/Posts/AllPosts'
 import {Error404} from './components/common/errors'
 import PostsByCategories from './components/Posts/PostsByCategories'
+import {toast} from 'react-toastify'
+
+toast.configure()
 
 class App extends React.Component {
 	componentDidMount() {

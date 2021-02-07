@@ -11,7 +11,7 @@ const tailLayout = {
 	}
 }
 
-const AuthForm = ({onsubmit, isSignup, form}) => {
+const AuthForm = ({onsubmit, isSignup, form, isFetching}) => {
 	return (
 		<Form name='auth' onFinish={onsubmit} form={form}>
 			<Form.Item name={(isSignup ? 'signUp' : 'signIn') + 'Username'} rules={[{
@@ -36,7 +36,7 @@ const AuthForm = ({onsubmit, isSignup, form}) => {
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			<Form.Item {...tailLayout}>
-				<Button type='primary' htmlType='submit'>
+				<Button type='primary' htmlType='submit' loading={!!isFetching}>
 					Submit
 				</Button>
 			</Form.Item>

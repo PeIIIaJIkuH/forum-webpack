@@ -10,12 +10,23 @@ import history from '../../history'
 import {requestPosts} from '../../redux/posts-reducer'
 import {Error403} from '../common/errors'
 import {Helmet} from 'react-helmet'
+import {toastOptions} from '../../utils/helpers/helpers'
+import {toast} from 'react-toastify'
 
 const CreatePost = ({isAuth, requestCategories, categories}) => {
+	const [isFetching, setIsFetching] = React.useState(false)
+
 	const onSubmit = async ({title, content, categories}) => {
-		await postAPI.create(title, content.replace(/\n+/, '\n'), categories)
-		await requestPosts()
-		history.push('/')
+		setIsFetching(true)
+		const data = await postAPI.create(title, content.replace(/\n+/, '\n'), categories)
+		if (data && data.status) {
+			await requestPosts()
+			await requestCategories()
+			history.push('/')
+		} else {
+			toast.warning('Something went wrong. Can not create post.', toastOptions)
+		}
+		setIsFetching(false)
 	}
 
 	if (!isAuth) return <Error403/>
@@ -25,7 +36,8 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 			<Helmet><title>Create Post | forume</title></Helmet>
 			<div className={s.wrapper}>
 				<Card className={s.card} title='Create a post' headStyle={{fontSize: '20px', fontWeight: 600}}>
-					<CreatePostForm onsubmit={onSubmit} getCategories={requestCategories} categories={categories}/>
+					<CreatePostForm onsubmit={onSubmit} requestCategories={requestCategories} categories={categories}
+									isFetching={isFetching}/>
 				</Card>
 			</div>
 		</>
