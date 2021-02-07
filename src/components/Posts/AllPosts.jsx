@@ -13,7 +13,7 @@ class AllPosts extends React.Component {
 	render() {
 		return (
 			<>
-				<Helmet><title>Forum | Home</title></Helmet>
+				<Helmet><title>Home | forume</title></Helmet>
 				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 					   requestPostsByCategories={this.props.requestPostsByCategories}/>
 			</>

@@ -16,7 +16,7 @@ class UpVotedPosts extends React.Component {
 
 		return (
 			<>
-				<Helmet><title>Forum | Upvoted Posts</title></Helmet>
+				<Helmet><title>Upvoted Posts | forume</title></Helmet>
 				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 					   requestPostsByCategories={this.props.requestPostsByCategories}/>
 			</>

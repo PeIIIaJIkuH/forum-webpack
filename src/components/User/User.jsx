@@ -16,7 +16,7 @@ class User extends React.Component {
 	render() {
 		return (
 			<>
-				<Helmet><title>Forum | {this.props.user ? this.props.user.username : 'User Page'}</title></Helmet>
+				<Helmet><title>{this.props.user ? this.props.user.username : 'User Page'} | forume</title></Helmet>
 				<UserInfo user={this.props.user}/>
 				<UserPosts/>
 			</>

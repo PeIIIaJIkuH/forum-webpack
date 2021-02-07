@@ -13,7 +13,7 @@ class PostsByCategories extends React.Component {
 	render() {
 		return (
 			<>
-				<Helmet><title>Forum | Search by Categories</title></Helmet>
+				<Helmet><title>Search by Categories | forume</title></Helmet>
 			<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 				   requestPostsByCategories={this.props.requestPostsByCategories}/>
 			</>

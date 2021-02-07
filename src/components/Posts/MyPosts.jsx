@@ -17,7 +17,7 @@ class MyPosts extends React.Component {
 
 		return (
 			<>
-				<Helmet><title>Forum | My Posts</title></Helmet>
+				<Helmet><title>My Posts | forume</title></Helmet>
 				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 					   requestPostsByCategories={this.props.requestPostsByCategories}/>
 			</>

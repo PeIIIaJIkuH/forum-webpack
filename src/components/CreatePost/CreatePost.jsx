@@ -22,7 +22,7 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 
 	return (
 		<>
-			<Helmet><title>Forum | Create Post</title></Helmet>
+			<Helmet><title>Create Post | forume</title></Helmet>
 			<div className={s.wrapper}>
 				<Card className={s.card} title='Create a post' headStyle={{fontSize: '20px', fontWeight: 600}}>
 					<CreatePostForm onsubmit={onSubmit} getCategories={requestCategories} categories={categories}/>

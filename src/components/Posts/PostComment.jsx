@@ -27,7 +27,7 @@ class PostComment extends React.Component {
 
 		return (
 			<>
-				<Helmet><title>Forum | Comments</title></Helmet>
+				<Helmet><title>Comments | forume</title></Helmet>
 				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
 					   requestPostsByCategories={this.props.requestPostsByCategories}/>
 				<Card className={s.commentSection}>
