@@ -59,7 +59,7 @@ export const signin = (username, password) => async dispatch => {
 
 export const signout = () => async dispatch => {
 	const data = await authAPI.signout()
-	if (data.status) {
+	if (data && data.status) {
 		dispatch(setAuthUserData(null, null, null, null, null, false))
 	}
 }

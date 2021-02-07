@@ -16,7 +16,7 @@ import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
 
 const Header = ({isAuth, signout, username, userID}) => (
-	<Affix offsetTop={0}>
+	<Affix offsetTop={1}>
 		<Layout.Header className={s.header}>
 			<Link to='/' className={s.logo}>
 				<Image width={50} src={logo} preview={false} alt='logo'/>

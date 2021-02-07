@@ -37,7 +37,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 	)
 
 	return (
-		<Affix offsetTop={104}>
+		<Affix offsetTop={105}>
 			<div>
 				{isAuth ? button :
 					<Tooltip title='Only for authorized users.' placement='bottom'>

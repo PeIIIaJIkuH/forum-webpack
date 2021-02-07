@@ -20,7 +20,7 @@ const LeftMenu = ({isAuth, location}) => {
 		downVoted = <div><DislikeOutlined/>Downvoted Posts</div>
 
 	return (
-		<Affix offsetTop={104}>
+		<Affix offsetTop={105}>
 			<Menu mode='inline' defaultSelectedKeys={['home']} selectedKeys={[option]} onClick={handleClick}>
 				<Menu.Item key='home' icon={<HomeOutlined/>}>Home</Menu.Item>
 				<Menu.Item key='my' disabled={!isAuth}>
