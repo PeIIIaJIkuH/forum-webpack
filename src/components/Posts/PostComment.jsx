@@ -3,7 +3,7 @@ import s from './Posts.module.css'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {getCommentsSelector, getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
-import {requestComments, requestPost, setRating} from '../../redux/posts-reducer'
+import {requestComments, requestPost, requestPostsByCategories, setRating} from '../../redux/posts-reducer'
 import Posts from './Posts'
 import CommentForm from './CommentForm'
 import Comments from './Comments'
@@ -28,7 +28,8 @@ class PostComment extends React.Component {
 		return (
 			<>
 				<Helmet><title>Forum | Comments</title></Helmet>
-				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}/>
+				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
+					   requestPostsByCategories={this.props.requestPostsByCategories}/>
 				<Card className={s.commentSection}>
 					<CommentForm isAuth={this.props.isAuth} onSubmit={onSubmit}/>
 					<Comments comments={this.props.comments}/>
@@ -47,7 +48,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	requestPost,
 	setRating,
-	requestComments
+	requestComments,
+	requestPostsByCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostComment))

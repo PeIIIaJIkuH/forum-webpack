@@ -5,7 +5,6 @@ import {Link, Redirect} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
 import {getIsAuthSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
-import history from '../../history'
 import Card from 'antd/lib/card'
 import Form from 'antd/lib/form'
 
@@ -15,7 +14,6 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
 		if (isSignup) {
 			signup(signUpUsername, signUpEmail, signUpPassword)
-			history.push('/signin')
 		} else {
 			signin(signInUsername, signInPassword)
 		}

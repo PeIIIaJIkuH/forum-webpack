@@ -4,14 +4,15 @@ import Button from 'antd/lib/button'
 import Col from 'antd/lib/col'
 import Row from 'antd/lib/row'
 import Card from 'antd/lib/card'
-import Tooltip from 'antd/lib/divider'
-import Divider from 'antd/lib/tag'
-import Tag from 'antd/lib/tooltip'
+import Tooltip from 'antd/lib/tooltip'
+import Divider from 'antd/lib/divider'
+import Tag from 'antd/lib/tag'
 import {CommentOutlined, DownOutlined, UpOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import {getDateDifference} from '../../utils/helpers/helpers'
 
 const Post = ({data, setRating, isAuth, isUserPage, requestPostsByCategories}) => {
+	console.log(data)
 	const created = getDateDifference(data.createdAt)
 
 	const onClick = num => {
@@ -81,9 +82,10 @@ const Post = ({data, setRating, isAuth, isUserPage, requestPostsByCategories}) =
 						<div className={s.created}>
 							{created ? `${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'}
 						</div>
-						<div className={s.comments}>
+						<Button type='link' className={s.comments}>
+							<span>{data && data.commentsNumber}</span>
 							<CommentOutlined/>
-						</div>
+						</Button>
 					</div>
 				</Col>
 			</Row>

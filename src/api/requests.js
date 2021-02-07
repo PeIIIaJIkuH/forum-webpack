@@ -8,7 +8,7 @@ const defaultAxios = axios.create({
 export const authAPI = {
 	me: () => defaultAxios.get('auth/me').then(r => r.data).catch(() => undefined),
 	signup: (username, email, password) => defaultAxios.post('auth/signup', {username, email, password})
-		.then(r => r.data),
+		.then(r => r.data).catch(() => undefined),
 	signin: (username, password) => defaultAxios.post('auth/signin', {username, password}).then(r => r.data)
 		.catch(() => undefined),
 	signout: () => defaultAxios.get('auth/signout').then(r => r.data).catch(() => undefined)

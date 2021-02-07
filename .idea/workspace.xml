@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45b0588f-640c-4745-bcb2-97f748732773" name="Default Changelist" comment="updated signup thunk">
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/requests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Actions/Actions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Actions/Actions.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Auth/Auth.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Auth/Auth.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/AuthForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Auth/AuthForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Posts/CommentForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Posts/CommentForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Posts/Post.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Posts/Post.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Posts/PostComment.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Posts/PostComment.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/auth-reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/auth-reducer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/posts-reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/posts-reducer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -118,6 +122,10 @@
       <workItem from="1612421066536" duration="37061000" />
       <workItem from="1612503557142" duration="54005000" />
       <workItem from="1612590672219" duration="19043000" />
+      <workItem from="1612628683092" duration="1493000" />
+      <workItem from="1612630515921" duration="3225000" />
+      <workItem from="1612684669756" duration="484000" />
+      <workItem from="1612689561174" duration="639000" />
     </task>
     <task id="LOCAL-00001" summary="createds post reducer">
       <created>1612511935259</created>

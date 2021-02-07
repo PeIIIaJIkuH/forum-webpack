@@ -1,5 +1,6 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getPostRating, updateObjectInArray} from '../utils/helpers/helpers'
+import history from '../history'
 
 const SET_POSTS = 'posts/SET_POSTS',
 	SET_RATING = 'posts/SET_RATING',
@@ -83,6 +84,7 @@ export const requestPostsByCategories = categories => async dispatch => {
 	if (categories) {
 		const data = await postAPI.getByCategories(categories)
 		await dispatch(setPosts(data.data, true))
+		history.push('/by-categories')
 	}
 }
 

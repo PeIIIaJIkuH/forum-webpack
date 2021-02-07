@@ -10,7 +10,6 @@ import {getCategoriesSelector, getIsAuthSelector} from '../../redux/selectors'
 import {requestCategories} from '../../redux/categories-reducer'
 import {connect} from 'react-redux'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
-import history from '../../history'
 import {toast} from 'react-toastify'
 import Layout from 'antd/lib/layout'
 
@@ -22,7 +21,6 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 			toast.error('You should choose at least one category!', {position: toast.POSITION.BOTTOM_RIGHT})
 		} else {
 			await requestPostsByCategories(categories)
-			history.push('/by-categories')
 		}
 	}
 

@@ -1,5 +1,6 @@
 import {authAPI} from '../api/requests'
 import {toast} from 'react-toastify'
+import history from '../history'
 
 const SET_USER_DATA = 'auth/SET_USER_DATA'
 
@@ -42,6 +43,7 @@ export const signup = (username, email, password) => async () => {
 	const data = await authAPI.signup(username, email, password)
 	if (data && data.status) {
 		toast.success('Successfully created new user!', {position: toast.POSITION.BOTTOM_RIGHT})
+		history.push('/signin')
 	} else {
 		toast.error('Username or E-mail already exists!', {position: toast.POSITION.BOTTOM_RIGHT})
 	}
