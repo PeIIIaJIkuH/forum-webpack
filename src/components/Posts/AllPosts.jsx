@@ -11,11 +11,12 @@ class AllPosts extends React.Component {
 	}
 
 	render() {
+		const {posts, setRating, isAuth, requestPostsByCategories} = this.props,
+			props = {posts, setRating, isAuth, requestPostsByCategories}
 		return (
 			<>
 				<Helmet><title>Home | forume</title></Helmet>
-				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-					   requestPostsByCategories={this.props.requestPostsByCategories}/>
+				<Posts {...props}/>
 			</>
 		)
 	}

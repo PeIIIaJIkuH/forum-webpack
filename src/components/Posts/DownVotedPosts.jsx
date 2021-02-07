@@ -12,13 +12,15 @@ class DownVotedPosts extends React.Component {
 	}
 
 	render() {
-		if (!this.props.isAuth) return <Error403/>
+		const {posts, setRating, isAuth, requestPostsByCategories} = this.props,
+			props = {posts, setRating, isAuth, requestPostsByCategories}
+
+		if (!isAuth) return <Error403/>
 
 		return (
 			<>
 				<Helmet><title>Downvoted Posts | forume</title></Helmet>
-				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-					   requestPostsByCategories={this.props.requestPostsByCategories}/>
+				<Posts {...props}/>
 			</>
 		)
 	}

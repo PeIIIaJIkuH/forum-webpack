@@ -32,7 +32,7 @@ class ActionsForm extends React.Component {
 					</Select>
 				</Form.Item>
 				<Form.Item {...tailLayout} className={s.btnWrapper}>
-					<Button type='primary' htmlType='submit'>
+					<Button type='primary' htmlType='submit' loading={this.props.isFetchingN}>
 						Search Posts
 					</Button>
 				</Form.Item>

@@ -12,9 +12,11 @@ class UserPosts extends React.Component {
 	}
 
 	render() {
+		const {posts, setRating, isAuth, requestPostsByCategories} = this.props,
+			props = {posts, setRating, isAuth, requestPostsByCategories}
+
 		return (
-			<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-				   isUserPage={true} requestPostsByCategories={this.props.requestPostsByCategories}/>
+			<Posts {...props} isUserPage={true}/>
 		)
 	}
 }

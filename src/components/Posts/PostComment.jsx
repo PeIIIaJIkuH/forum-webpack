@@ -25,11 +25,13 @@ class PostComment extends React.Component {
 			await this.props.requestComments(+id)
 		}
 
+		const {posts, setRating, isAuth, requestPostsByCategories} = this.props,
+			props = {posts, setRating, isAuth, requestPostsByCategories}
+
 		return (
 			<>
 				<Helmet><title>Comments | forume</title></Helmet>
-				<Posts posts={this.props.posts} setRating={this.props.setRating} isAuth={this.props.isAuth}
-					   requestPostsByCategories={this.props.requestPostsByCategories}/>
+				<Posts {...props}/>
 				<Card className={s.commentSection}>
 					<CommentForm isAuth={this.props.isAuth} onSubmit={onSubmit}/>
 					<Comments comments={this.props.comments}/>

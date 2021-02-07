@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import {Route, Router, Switch} from 'react-router-dom'
-import Preloader from './components/common/Preloader/Preloader'
+import Preloader from './components/common/preloaders/Preloader'
 import {connect, Provider} from 'react-redux'
 import {getInitializedSelector, getIsAuthSelector} from './redux/selectors'
 import {initializeApp} from './redux/app-reducer'
@@ -24,6 +24,7 @@ import AllPosts from './components/Posts/AllPosts'
 import {Error404} from './components/common/errors'
 import PostsByCategories from './components/Posts/PostsByCategories'
 import {toast} from 'react-toastify'
+import AppPreloader from './components/common/preloaders/AppPreloader'
 
 toast.configure()
 
@@ -34,7 +35,7 @@ class App extends React.Component {
 
 	render() {
 		if (!this.props.initialized) {
-			return <Preloader/>
+			return <AppPreloader/>
 		}
 
 		return (

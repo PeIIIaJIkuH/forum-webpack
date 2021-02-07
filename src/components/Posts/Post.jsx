@@ -12,7 +12,6 @@ import {Link} from 'react-router-dom'
 import {getDateDifference} from '../../utils/helpers/helpers'
 
 const Post = ({data, setRating, isAuth, isUserPage, requestPostsByCategories}) => {
-	console.log(data)
 	const created = getDateDifference(data.createdAt)
 
 	const onClick = num => {

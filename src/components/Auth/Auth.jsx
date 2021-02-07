@@ -8,15 +8,18 @@ import AuthForm from './AuthForm'
 import Card from 'antd/lib/card'
 import Form from 'antd/lib/form'
 
-const Auth = ({signup, signin, isAuth, isSignup, isFetching}) => {
+const Auth = ({signup, signin, isAuth, isSignup}) => {
 	const [form] = Form.useForm()
+	const [isFetching, setIsFetching] = React.useState(false)
 
-	const onSubmit = ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
+	const onSubmit = async ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
+		setIsFetching(true)
 		if (isSignup) {
-			signup(signUpUsername, signUpEmail, signUpPassword)
+			await signup(signUpUsername, signUpEmail, signUpPassword)
 		} else {
-			signin(signInUsername, signInPassword)
+			await signin(signInUsername, signInPassword)
 		}
+		setIsFetching(false)
 	}
 
 	if (isAuth) return <Redirect to='/'/>
@@ -38,8 +41,7 @@ const Auth = ({signup, signin, isAuth, isSignup, isFetching}) => {
 }
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state),
-	isFetching: getAuthIsFetchingSelector(state)
+	isAuth: getIsAuthSelector(state)
 })
 
 const mapDispatchToProps = {

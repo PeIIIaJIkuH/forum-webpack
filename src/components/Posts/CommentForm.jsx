@@ -7,6 +7,7 @@ import Tooltip from 'antd/lib/tooltip'
 
 const CommentForm = ({isAuth, onSubmit}) => {
 	const [form] = Form.useForm()
+	const [isFetching, setIsFetching] = React.useState(false)
 	const textArea = (
 			<Form.Item className={s.commentForm} name='content' rules={[{
 				required: true,
@@ -16,15 +17,17 @@ const CommentForm = ({isAuth, onSubmit}) => {
 			</Form.Item>
 		),
 		button = (
-			<Button type='primary' htmlType='submit' disabled={!isAuth}>
+			<Button type='primary' htmlType='submit' disabled={!isAuth} loading={isFetching}>
 				Add Comment
 			</Button>
 		)
 
 	return (
-		<Form form={form} onFinish={data => {
-			onSubmit(data)
+		<Form form={form} onFinish={async data => {
+			setIsFetching(true)
+			await onSubmit(data)
 			form.resetFields()
+			setIsFetching(false)
 		}}>
 			{isAuth ? textArea :
 				<Tooltip title='Only for authorized users.' placement='bottom'>
