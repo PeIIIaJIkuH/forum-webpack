@@ -10,7 +10,7 @@ import {requestComments, requestPost} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors'
-import Post from './Post'
+import Post from './Post/Post'
 import Empty from 'antd/lib/empty'
 
 const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
