@@ -16,29 +16,27 @@ const tailLayout = {
 	}
 }
 
-class ActionsForm extends React.Component {
-	async componentDidMount() {
-		this.props.requestCategories()
-	}
+const ActionsForm = ({requestCategories, categories, onSubmit, isFetching}) => {
+	React.useEffect(() => {
+		requestCategories()
+	}, [requestCategories])
 
-	render() {
-		return (
-			<Form {...layout} name='selectPosts' onFinish={this.props.onSubmit} layout='horizontal'>
-				<Form.Item name='categories'>
-					<Select mode='multiple' size='default' placeholder='Please select categories' allowClear>
-						{this.props.categories && this.props.categories.map(e => (
-							<Select.Option key={e}>{e}</Select.Option>
-						))}
-					</Select>
-				</Form.Item>
-				<Form.Item {...tailLayout} className={s.btnWrapper}>
-					<Button type='primary' htmlType='submit' loading={this.props.isFetchingN}>
-						Search Posts
-					</Button>
-				</Form.Item>
-			</Form>
-		)
-	}
+	return (
+		<Form {...layout} name='selectPosts' onFinish={onSubmit} layout='horizontal'>
+			<Form.Item name='categories'>
+				<Select mode='multiple' size='default' placeholder='Please select categories' allowClear>
+					{categories && categories.map(e => (
+						<Select.Option key={e}>{e}</Select.Option>
+					))}
+				</Select>
+			</Form.Item>
+			<Form.Item {...tailLayout} className={s.btnWrapper}>
+				<Button type='primary' htmlType='submit' loading={isFetching}>
+					Search Posts
+				</Button>
+			</Form.Item>
+		</Form>
+	)
 }
 
 export default ActionsForm

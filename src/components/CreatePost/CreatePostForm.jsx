@@ -25,13 +25,13 @@ const onCancel = () => {
 	history.goBack()
 }
 
-class CreatePostForm extends React.Component {
-	componentDidMount = () => {
-		this.props.requestCategories()
-	}
+const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit}) => {
+	React.useEffect(() => {
+		requestCategories()
+	}, [requestCategories])
 
-	render = () => (
-		<Form className={s.form} {...layout} name='createPost' onFinish={this.props.onsubmit}>
+	return (
+		<Form className={s.form} {...layout} name='createPost' onFinish={onsubmit}>
 			<Form.Item label='Title' name='title' rules={[{
 				required: true,
 				message: 'Please enter post title!'
@@ -51,13 +51,13 @@ class CreatePostForm extends React.Component {
 					placeholder='Please select categories'
 					allowClear
 				>
-					{this.props.categories && this.props.categories.map(e => (
+					{categories && categories.map(e => (
 						<Select.Option key={e}>{e}</Select.Option>
 					))}
 				</Select>
 			</Form.Item>
 			<Form.Item className={s.buttons} {...tailLayout}>
-				<Button className={s.create} type='primary' htmlType='submit' loading={this.props.isFetching}>
+				<Button className={s.create} type='primary' htmlType='submit' loading={isFetching}>
 					Create
 				</Button>
 				<Button type='primary' danger onClick={onCancel}>Cancel</Button>
