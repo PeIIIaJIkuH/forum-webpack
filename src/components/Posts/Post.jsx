@@ -10,8 +10,11 @@ import Tag from 'antd/lib/tag'
 import {CommentOutlined, DeleteOutlined, DownOutlined, EditOutlined, UpOutlined} from '@ant-design/icons'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import history from '../../history'
+import {connect} from 'react-redux'
+import {deletePost, requestPostsByCategories, setRating} from '../../redux/posts-reducer'
+import {getIsAuthSelector} from '../../redux/selectors'
 
-const Post = ({post, setRating, isAuth, isUserPage, requestPostsByCategories, userID, deletePost}) => {
+const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, deletePost}) => {
 	const created = getDateDifference(post.createdAt)
 
 	const onClick = num => {
@@ -86,7 +89,7 @@ const Post = ({post, setRating, isAuth, isUserPage, requestPostsByCategories, us
 					</div>}
 					<div className={s.bottom}>
 						<div className={s.author}>
-							<Button className={s.user} type='text' disabled={isUserPage} onClick={() => {
+							<Button className={s.user} type='text' onClick={() => {
 								history.push(`/user/${post.author.id}`)
 							}}>
 								{post.author.username}
@@ -108,4 +111,14 @@ const Post = ({post, setRating, isAuth, isUserPage, requestPostsByCategories, us
 	)
 }
 
-export default Post
+const mapStateToProps = state => ({
+	isAuth: getIsAuthSelector(state)
+})
+
+const mapDispatchToProps = {
+	setRating,
+	requestPostsByCategories,
+	deletePost
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post)

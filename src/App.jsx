@@ -23,6 +23,13 @@ import User from './components/User/User'
 
 toast.configure()
 
+// TODO:
+// requestUserPosts gives commentsNumber = 0 for every post
+// check all the features and functions
+// make additional menu items for left menu, that will be disabled but active sometimes, for example search by categories
+// finish edit and delete post
+// make loader for pages
+
 const App = ({initialized, isAuth, initializeApp}) => {
 	React.useEffect(() => {
 		initializeApp()

@@ -1,14 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getIsAuthSelector, getPostsSelector, getUserIDSelector} from '../../redux/selectors'
-import {
-	requestAllPosts,
-	requestComments,
-	requestPostsByCategories,
-	requestRatedPosts,
-	requestUserPosts,
-	setRating
-} from '../../redux/posts-reducer'
+import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import Post from './Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
@@ -16,27 +9,30 @@ import {withRouter} from 'react-router-dom'
 import {Error404} from '../common/errors'
 import {Helmet} from 'react-helmet'
 
-const Posts = ({type, posts, ...props}) => {
-	const urlId = props.match.params.id,
+const Posts = ({
+				   type, posts, match, userID, requestUserPosts, requestRatedPosts, requestPostsByCategories,
+				   requestAllPosts
+			   }) => {
+	const urlId = match.params.id,
 		[title, setTitle] = React.useState('Home')
 
 	React.useEffect(() => {
 		if (type === 'my') {
 			setTitle('My Posts')
-			props.requestUserPosts(props.userID)
+			requestUserPosts(userID)
 		} else if (type === 'user') {
 			setTitle('user')
-			props.requestUserPosts(props.match.params.id)
+			requestUserPosts(match.params.id)
 		} else if (type === 'upvoted' || type === 'downvoted') {
 			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
-			props.requestRatedPosts(type)
+			requestRatedPosts(type)
 		} else if (type === 'categories') {
 			setTitle('Search by Categories')
-			props.requestPostsByCategories()
+			requestPostsByCategories()
 		} else {
-			props.requestAllPosts()
+			requestAllPosts()
 		}
-	}, [type, props.match.params.id])
+	}, [type, match.params.id])
 
 	if (urlId !== undefined && isNaN(+urlId)) return <Error404/>
 
@@ -46,7 +42,7 @@ const Posts = ({type, posts, ...props}) => {
 			<section className='posts'>
 				{posts ?
 					posts.map((post, i) => (
-						<Post post={post} key={i} {...props}/>
+						<Post post={post} key={i}/>
 					)) :
 					<Card><Empty/></Card>
 				}
@@ -65,9 +61,7 @@ const mapDispatchToProps = {
 	requestAllPosts,
 	requestUserPosts,
 	requestRatedPosts,
-	requestPostsByCategories,
-	setRating,
-	requestComments
+	requestPostsByCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Posts))

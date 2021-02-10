@@ -6,17 +6,14 @@ import Comments from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
 import {getCommentsSelector, getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
-import {requestComments, requestPost, requestPostsByCategories, setRating} from '../../redux/posts-reducer'
+import {requestComments, requestPost} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors'
 import Post from './Post'
 import Empty from 'antd/lib/empty'
 
-const PostPage = ({
-					  isAuth, comments, requestComments, match, posts, requestPost, requestPostsByCategories,
-					  setRating
-				  }) => {
+const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
 	const urlId = match.params.id
 
 	const onSubmit = async ({content}) => {
@@ -37,8 +34,7 @@ const PostPage = ({
 			<section className='posts'>
 				{posts ?
 					posts.map((post, i) => (
-						<Post post={post} key={i} isAuth={isAuth} requestPostsByCategories={requestPostsByCategories}
-							  setRating={setRating}/>
+						<Post post={post} key={i}/>
 					)) :
 					<Card><Empty/></Card>
 				}
@@ -61,8 +57,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	requestComments,
-	requestPostsByCategories,
-	setRating,
 	requestPost
 }
 

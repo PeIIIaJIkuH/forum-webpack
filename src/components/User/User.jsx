@@ -1,6 +1,6 @@
 import React from 'react'
-import {getIsAuthSelector, getPostsSelector, getUserIDSelector, getUserSelector} from '../../redux/selectors'
-import {requestPostsByCategories, requestUser, requestUserPosts, setRating} from '../../redux/posts-reducer'
+import {getPostsSelector, getUserSelector} from '../../redux/selectors'
+import {requestUser, requestUserPosts} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import UserInfo from './UserInfo'
@@ -10,10 +10,7 @@ import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
 import {Error404} from '../common/errors'
 
-const User = ({
-				  user, match, requestUser, requestUserPosts, posts, isAuth, requestPostsByCategories, userID,
-				  setRating
-			  }) => {
+const User = ({user, match, requestUser, requestUserPosts, posts}) => {
 	const urlId = match.params.id
 
 	React.useEffect(() => {
@@ -30,8 +27,7 @@ const User = ({
 			<section className='posts'>
 				{posts ?
 					posts.map((post, i) => (
-						<Post post={post} key={i} isAuth={isAuth} requestPostsByCategories={requestPostsByCategories}
-							  userID={userID} setRating={setRating}/>
+						<Post post={post} key={i}/>
 					)) :
 					<Card><Empty/></Card>
 				}
@@ -42,16 +38,12 @@ const User = ({
 
 const mapStateToProps = state => ({
 	user: getUserSelector(state),
-	isAuth: getIsAuthSelector(state),
-	userID: getUserIDSelector(state),
 	posts: getPostsSelector(state)
 })
 
 const mapDispatchToProps = {
 	requestUser,
-	requestUserPosts,
-	requestPostsByCategories,
-	setRating
+	requestUserPosts
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(User))
