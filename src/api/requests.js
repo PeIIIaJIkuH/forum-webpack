@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const defaultAxios = axios.create({
 	baseURL: 'http://localhost:8081/api/',
+	// baseURL: 'http://docker-api-container/api/',
 	withCredentials: true
 })
 
