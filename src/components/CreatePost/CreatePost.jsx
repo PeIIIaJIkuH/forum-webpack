@@ -19,6 +19,7 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 	const onSubmit = async ({title, content, categories}) => {
 		setIsFetching(true)
 		const data = await postAPI.create(title, content.replace(/\n+/, '\n'), categories)
+		setIsFetching(false)
 		if (data && data.status) {
 			await requestPosts()
 			await requestCategories()
@@ -26,7 +27,6 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 		} else {
 			toast.warning('Something went wrong. Can not create post.', toastOptions)
 		}
-		setIsFetching(false)
 	}
 
 	if (!isAuth) return <Error403/>
