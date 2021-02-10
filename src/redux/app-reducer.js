@@ -19,7 +19,7 @@ const initializedSuccess = () => ({type: INITIALIZED_SUCCESS})
 
 export const initializeApp = () => async dispatch => {
 	await dispatch(getAuthUserData())
-	dispatch(initializedSuccess())
+	await dispatch(initializedSuccess())
 }
 
 export default appReducer

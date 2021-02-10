@@ -7,7 +7,7 @@ import {postAPI} from '../../api/requests'
 import Card from 'antd/lib/card'
 import {requestCategories} from '../../redux/categories-reducer'
 import history from '../../history'
-import {requestPosts} from '../../redux/posts-reducer'
+import {requestAllPosts} from '../../redux/posts-reducer'
 import {Error403} from '../common/errors'
 import {Helmet} from 'react-helmet'
 import {toastOptions} from '../../utils/helpers/helpers'
@@ -21,7 +21,7 @@ const CreatePost = ({isAuth, requestCategories, categories}) => {
 		const data = await postAPI.create(title, content.replace(/\n+/, '\n'), categories)
 		setIsFetching(false)
 		if (data && data.status) {
-			await requestPosts()
+			await requestAllPosts()
 			await requestCategories()
 			history.push('/')
 		} else {

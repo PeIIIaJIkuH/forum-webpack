@@ -27,7 +27,8 @@ export const postAPI = {
 	addComment: (id, content) => defaultAxios.post('comment/create', {post_id: id, content})
 		.then(r => r.data).catch(() => 'Can not create new comment.'),
 	getByCategories: categories => defaultAxios.post('post/filter', {option: 'categories', categories})
-		.then(r => r.data).catch(() => 'Can not load posts by categories.')
+		.then(r => r.data).catch(() => 'Can not load posts by categories.'),
+	delete: id => defaultAxios.delete('post/delete').then(r => r.data).catch(() => 'Can not delete post.')
 }
 
 export const categoriesAPI = {
