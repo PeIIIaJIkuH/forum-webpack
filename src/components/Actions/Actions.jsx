@@ -29,7 +29,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 
 	return (
 		<Affix offsetTop={105}>
-			<div>
+			<div className='actions'>
 				<Link className={s.addPost} to='/create'>
 					<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth}>
 						Add post

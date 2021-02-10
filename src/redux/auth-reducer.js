@@ -22,16 +22,16 @@ const authReducer = (state = initialState, action) => {
 	}
 }
 
-export const setAuthUserData = (id, username, email, createdAt, lastActive, isAuth) => ({
+const setUserDataAC = (id, username, email, createdAt, lastActive, isAuth) => ({
 	type: SET_USER_DATA,
 	payload: {id, username, email, createdAt, lastActive, isAuth}
 })
 
-export const getAuthUserData = () => async dispatch => {
+export const requestAuthUserData = () => async dispatch => {
 	const data = await authAPI.me()
 	if (data && data.status) {
 		const {id, username, email, createdAt, lastActive} = data.data
-		dispatch(setAuthUserData(id, username, email, createdAt, lastActive, true))
+		dispatch(setUserDataAC(id, username, email, createdAt, lastActive, true))
 	} else {
 		console.log('User is not signed in.')
 	}
@@ -49,7 +49,7 @@ export const signup = (username, email, password) => async dispatch => {
 export const signin = (username, password) => async dispatch => {
 	const data = await authAPI.signin(username, password)
 	if (data && data.status) {
-		await dispatch(getAuthUserData())
+		await dispatch(requestAuthUserData())
 	} else {
 		toast.error('Can not log in, some error happened!', toastOptions)
 	}
@@ -58,7 +58,7 @@ export const signin = (username, password) => async dispatch => {
 export const signout = () => async dispatch => {
 	const data = await authAPI.signout()
 	if (data && data.status) {
-		dispatch(setAuthUserData(null, null, null, null, null, false))
+		dispatch(setUserDataAC(null, null, null, null, null, false))
 	}
 }
 

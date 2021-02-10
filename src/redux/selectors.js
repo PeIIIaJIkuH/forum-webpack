@@ -13,5 +13,3 @@ export const getPostsSelector = state => state.posts.posts
 export const getCommentsSelector = state => state.posts.comments
 
 export const getUserIDSelector = state => state.auth.id
-
-export const getMenuOptionSelector = state => state.menu.option

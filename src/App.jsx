@@ -28,7 +28,6 @@ toast.configure()
 // check all the features and functions
 // finish edit and delete post
 // make loader for pages
-// update each useEffect correctly
 
 const App = ({initialized, isAuth, initializeApp}) => {
 	React.useEffect(() => {

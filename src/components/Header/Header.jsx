@@ -11,7 +11,6 @@ import Input from 'antd/lib/input'
 import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
-
 import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
 import {LogoutOutlined} from '@ant-design/icons'

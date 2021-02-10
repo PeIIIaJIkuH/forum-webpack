@@ -8,7 +8,8 @@ import {
 	DislikeOutlined,
 	FormOutlined,
 	HomeOutlined,
-	LikeOutlined, LoginOutlined,
+	LikeOutlined,
+	LoginOutlined,
 	TagsOutlined,
 	TeamOutlined,
 	UserOutlined

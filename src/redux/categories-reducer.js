@@ -21,11 +21,8 @@ const setCategories = data => ({
 })
 
 export const requestCategories = () => async dispatch => {
-	const data = await categoriesAPI.all()
-	const arr = []
-	if (data.data) {
-		data.data.forEach(e => arr.push(e.name))
-	}
+	const data = await categoriesAPI.all(),
+		arr = data && data.data.map(e => e.name)
 	await dispatch(setCategories(arr))
 }
 
