@@ -14,6 +14,7 @@ import Affix from 'antd/lib/affix'
 
 import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
+import {LogoutOutlined} from '@ant-design/icons'
 
 const Header = ({isAuth, signout, username, userID}) => (
 	<Affix offsetTop={1}>
@@ -34,13 +35,13 @@ const Header = ({isAuth, signout, username, userID}) => (
 					</span>
 					<Image width={40} src={profile} alt='profile' preview={false}/>
 				</span>
-				<Button type='link' danger onClick={() => {
+				<Button type='link' icon={<LogoutOutlined/>} danger onClick={() => {
 					signout()
 				}}>
 					Sign Out
 				</Button>
 			</span> :
-				<Link to='/signin'><Button type='link'>Sign In</Button></Link>}
+				<Link to='/auth/signin'><Button type='link'>Sign In</Button></Link>}
 		</Layout.Header>
 	</Affix>
 )

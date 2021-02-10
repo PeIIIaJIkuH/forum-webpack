@@ -2,7 +2,6 @@ import React from 'react'
 import s from './Actions.module.css'
 import Button from 'antd/lib/button'
 import Card from 'antd/lib/card'
-import Tooltip from 'antd/lib/tooltip'
 import {PlusOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import ActionsForm from './ActionsForm'
@@ -28,21 +27,14 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 		}
 	}
 
-	const button = (
-		<Link className={s.addPost} to='/create'>
-			<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth}>
-				Add post
-			</Button>
-		</Link>
-	)
-
 	return (
 		<Affix offsetTop={105}>
 			<div>
-				{isAuth ? button :
-					<Tooltip title='Only for authorized users.' placement='bottom'>
-						{button}
-					</Tooltip>}
+				<Link className={s.addPost} to='/create'>
+					<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth}>
+						Add post
+					</Button>
+				</Link>
 				<Card className={s.card}>
 					<ActionsForm onSubmit={onSubmit} categories={categories} requestCategories={requestCategories}
 								 isFetching={isFetching}/>
