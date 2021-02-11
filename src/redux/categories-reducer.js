@@ -1,4 +1,5 @@
 import {categoriesAPI} from '../api/requests'
+import {setProgress} from './app-reducer'
 
 const SET_CATEGORIES = 'categories/SET_CATEGORIES'
 
@@ -21,9 +22,11 @@ const setCategories = data => ({
 })
 
 export const requestCategories = () => async dispatch => {
+	dispatch(setProgress(0))
 	const data = await categoriesAPI.all()
 	const arr = data && data.data.map(e => e.name)
 	await dispatch(setCategories(arr))
+	dispatch(setProgress(100))
 }
 
 export default categoriesReducer

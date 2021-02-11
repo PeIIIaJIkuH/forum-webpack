@@ -18,13 +18,15 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 	const onSubmit = async ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
 		setIsFetching(true)
 		if (isSignup) {
-			await signup(signUpUsername, signUpEmail, signUpPassword)
+			const ok = await signup(signUpUsername, signUpEmail, signUpPassword)
 			setIsFetching(false)
-			history.push('/auth/signin')
+			if (ok)
+				history.push('/auth/signin')
 		} else {
-			await signin(signInUsername, signInPassword)
+			const ok = await signin(signInUsername, signInPassword)
 			setIsFetching(false)
-			history.push('/')
+			if (ok)
+				history.push('/')
 		}
 	}
 
@@ -36,9 +38,7 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 			<div className={s.wrapper}>
 				<Card className={s.card} title={isSignup ? 'Sign Up' : 'Sign In'}
 					  extra={(
-						  <Link to={isSignup ? '/auth/signin' : '/auth/signup'} onClick={() => {
-							  form.resetFields()
-						  }}>
+						  <Link to={isSignup ? '/auth/signin' : '/auth/signup'} onClick={() => form.resetFields()}>
 							  {isSignup ? 'Sign In' : 'Sign Up'}
 						  </Link>
 					  )}>

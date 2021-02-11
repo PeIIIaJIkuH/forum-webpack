@@ -3,6 +3,7 @@ import s from './Actions.module.css'
 import Button from 'antd/lib/button'
 import Form from 'antd/lib/form'
 import Select from 'antd/lib/select'
+import {FileSearchOutlined} from '@ant-design/icons'
 
 const layout = {
 	wrapperCol: {
@@ -31,7 +32,7 @@ const ActionsForm = ({requestCategories, categories, onSubmit, isFetching}) => {
 				</Select>
 			</Form.Item>
 			<Form.Item {...tailLayout} className={s.btnWrapper}>
-				<Button type='primary' htmlType='submit' loading={isFetching}>
+				<Button type='primary' htmlType='submit' icon={<FileSearchOutlined/>} loading={isFetching}>
 					Search Posts
 				</Button>
 			</Form.Item>

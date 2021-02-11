@@ -8,9 +8,7 @@ const Categories = ({categories, requestPostsByCategories}) => {
 			{categories &&
 			<div className={s.categories}>
 				{categories.map(category => (
-					<Tag className={s.tag} key={category.id} onClick={() => {
-						requestPostsByCategories([category.name])
-					}}>
+					<Tag className={s.tag} key={category.id} onClick={() => requestPostsByCategories([category.name])}>
 						{category.name}
 					</Tag>
 				))}

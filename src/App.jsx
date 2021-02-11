@@ -17,7 +17,7 @@ import Actions from './components/Actions/Actions'
 import {Error404} from './components/common/errors'
 import {toast} from 'react-toastify'
 import AppPreloader from './components/common/preloaders/AppPreloader'
-import NewPosts from './components/Posts/Posts'
+import Posts from './components/Posts/Posts'
 import PostPage from './components/Posts/PostPage'
 import User from './components/User/User'
 
@@ -34,6 +34,8 @@ const App = ({initialized, isAuth, initializeApp}) => {
 		initializeApp()
 	}, [initializeApp])
 
+	const [progress, setProgress] = React.useState(0)
+
 	if (!initialized) {
 		return <AppPreloader/>
 	}
@@ -41,7 +43,7 @@ const App = ({initialized, isAuth, initializeApp}) => {
 	return (
 		<div className='App'>
 			<React.Suspense fallback={<Preloader/>}>
-				<Header/>
+				<Header progress={progress} setProgress={setProgress}/>
 				<Row className='main'>
 					<Col span={3} offset={3}><LeftMenu/></Col>
 					<Col span={10} offset={1}>
@@ -51,11 +53,11 @@ const App = ({initialized, isAuth, initializeApp}) => {
 							<Route exact path='/create' render={() => <CreatePost/>}/>
 							<Route exact path='/post/:id' render={() => <PostPage/>}/>
 							<Route exact path='/user/:id' render={() => <User/>}/>
-							<Route exact path='/my' render={() => <NewPosts type='my'/>}/>
-							<Route exact path='/up-voted' render={() => <NewPosts type='upvoted'/>}/>
-							<Route exact path='/down-voted' render={() => <NewPosts type='downvoted'/>}/>
-							<Route exact path='/by-categories' render={() => <NewPosts type='categories'/>}/>
-							<Route exact path='/' render={() => <NewPosts/>}/>
+							<Route exact path='/my' render={() => <Posts type='my'/>}/>
+							<Route exact path='/up-voted' render={() => <Posts type='upvoted'/>}/>
+							<Route exact path='/down-voted' render={() => <Posts type='downvoted'/>}/>
+							<Route exact path='/by-categories' render={() => <Posts type='categories'/>}/>
+							<Route exact path='/' render={() => <Posts/>}/>
 							<Route render={() => <Error404/>}/>
 						</Switch>
 					</Col>

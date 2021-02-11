@@ -14,14 +14,10 @@ const Rate = ({isAuth, setRating, post}) => {
 	return (
 		<div>
 			<Button className={`${s.up} ${isRatedUp && s.ratedUp}`}
-					icon={<UpOutlined/>} disabled={!isAuth} onClick={() => {
-				onClick(1)
-			}}/>
+					icon={<UpOutlined/>} disabled={!isAuth} onClick={() => onClick(1)}/>
 			<div className={s.ratingNumber}>{post.postRating}</div>
 			<Button className={`${s.down} ${isRatedDown && s.ratedDown}`}
-					icon={<DownOutlined/>} disabled={!isAuth} onClick={() => {
-				onClick(-1)
-			}}/>
+					icon={<DownOutlined/>} disabled={!isAuth} onClick={() => onClick(-1)}/>
 		</div>
 	)
 }

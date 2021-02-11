@@ -5,6 +5,7 @@ import Input from 'antd/lib/input'
 import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
 import history from '../../history'
+import {CloudUploadOutlined, StopOutlined} from '@ant-design/icons'
 
 const layout = {
 	labelCol: {
@@ -57,10 +58,11 @@ const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit}) =
 				</Select>
 			</Form.Item>
 			<Form.Item className={s.buttons} {...tailLayout}>
-				<Button className={s.create} type='primary' htmlType='submit' loading={isFetching}>
+				<Button className={s.create} type='primary' htmlType='submit' icon={<CloudUploadOutlined/>}
+						loading={isFetching}>
 					Create
 				</Button>
-				<Button type='primary' danger onClick={onCancel}>Cancel</Button>
+				<Button type='primary' danger onClick={onCancel} icon={<StopOutlined/>}>Cancel</Button>
 			</Form.Item>
 		</Form>
 	)

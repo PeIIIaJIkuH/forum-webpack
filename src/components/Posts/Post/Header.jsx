@@ -6,17 +6,13 @@ import history from '../../../history'
 const Header = ({post, userID, deletePost}) => {
 	return (
 		<div className={s.header}>
-			<Button className={s.title} type='text' onClick={() => {
-				history.push(`/post/${post.id}`)
-			}}>
+			<Button className={s.title} type='text' onClick={() => history.push(`/post/${post.id}`)}>
 				{post.title}
 			</Button>
 			{/*{userID === post.author.id && (*/}
 			{/*	<div>*/}
 			{/*		<Button className={s.edit} type='text' icon={<EditOutlined/>}/>*/}
-			{/*		<Button danger type='link' icon={<DeleteOutlined/>} onClick={() => {*/}
-			{/*			deletePost(post.id)*/}
-			{/*		}}/>*/}
+			{/*		<Button danger type='link' icon={<DeleteOutlined/>} onClick={() => deletePost(post.id)}/>*/}
 			{/*	</div>*/}
 			{/*)}*/}
 		</div>
