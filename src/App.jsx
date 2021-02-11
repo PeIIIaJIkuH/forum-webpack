@@ -33,8 +33,7 @@ const App = ({initialized, isAuth, initializeApp}) => {
 		initializeApp()
 	}, [initializeApp])
 
-	const [progress, setProgress] = React.useState(0),
-		githubPath = '/forum-react'
+	const [progress, setProgress] = React.useState(0)
 
 	if (!initialized) {
 		return <AppPreloader/>
@@ -48,17 +47,16 @@ const App = ({initialized, isAuth, initializeApp}) => {
 					<Col span={3} offset={3}><LeftMenu/></Col>
 					<Col span={10} offset={1}>
 						<Switch>
-							<Route exact path={`${githubPath}/auth/signup`} render={() => <Auth isSignup/>}/>
-							<Route exact path={`${githubPath}/auth/signin`} render={() => <Auth/>}/>
-							<Route exact path={`${githubPath}/create`} render={() => <CreatePost/>}/>
-							<Route exact path={`${githubPath}/post/:id`} render={() => <PostPage/>}/>
-							<Route exact path={`${githubPath}/user/:id`} render={() => <User/>}/>
-							<Route exact path={`${githubPath}/my`} render={() => <Posts type='my'/>}/>
-							<Route exact path={`${githubPath}/up-voted`} render={() => <Posts type='upvoted'/>}/>
-							<Route exact path={`${githubPath}/down-voted`} render={() => <Posts type='downvoted'/>}/>
-							<Route exact path={`${githubPath}/by-categories`}
-								   render={() => <Posts type='categories'/>}/>
-							<Route exact path={`${githubPath}/`} render={() => <Posts/>}/>
+							<Route exact path='/auth/signup' render={() => <Auth isSignup/>}/>
+							<Route exact path='/auth/signin' render={() => <Auth/>}/>
+							<Route exact path='/create' render={() => <CreatePost/>}/>
+							<Route exact path='/post/:id' render={() => <PostPage/>}/>
+							<Route exact path='/user/:id' render={() => <User/>}/>
+							<Route exact path='/my' render={() => <Posts type='my'/>}/>
+							<Route exact path='/up-voted' render={() => <Posts type='upvoted'/>}/>
+							<Route exact path='/down-voted' render={() => <Posts type='downvoted'/>}/>
+							<Route exact path='/by-categories' render={() => <Posts type='categories'/>}/>
+							<Route exact path='/' render={() => <Posts/>}/>
 							<Route render={() => <Error404/>}/>
 						</Switch>
 					</Col>
