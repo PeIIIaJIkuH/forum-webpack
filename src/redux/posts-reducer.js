@@ -127,8 +127,7 @@ export const requestComments = id => async dispatch => {
 
 export const deletePost = id => async dispatch => {
 	dispatch(setProgress(0))
-	console.log(id)
-	const data = postAPI.delete(id)
+	const data = await postAPI.delete(id)
 	if (data && data.status) {
 		await dispatch(deletePostAC(id))
 	} else {
