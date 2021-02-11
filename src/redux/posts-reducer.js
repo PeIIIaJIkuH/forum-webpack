@@ -20,7 +20,7 @@ const postsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_POSTS:
 			if (!action.payload.posts && action.payload.allowNull) return {...state, posts: null}
-			return {...state, posts: action.payload.posts ? [...action.payload.posts] : null}
+			return {...state, posts: action.payload.posts}
 		case SET_RATING:
 			const post = getObjectInArray(state.posts, action.payload.id, 'id')
 			const [userRating, postRating] = getPostRating(post.userRating, post.postRating, action.payload.reaction)
@@ -30,9 +30,9 @@ const postsReducer = (state = initialState, action) => {
 					{postRating, userRating})
 			}
 		case SET_USER:
-			return {...state, user: {...action.payload}}
+			return {...state, user: action.payload}
 		case SET_COMMENTS:
-			return {...state, comments: action.payload === null ? null : [...action.payload]}
+			return {...state, comments: action.payload}
 		case DELETE_POST:
 			return {...state, posts: state.posts.filter(post => post.id !== action.payload)}
 		default:
@@ -82,6 +82,7 @@ export const requestUserPosts = id => async dispatch => {
 export const requestRatedPosts = reaction => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(reaction)
+	console.log(data)
 	await dispatch(setPostsAC(data.data, false))
 	dispatch(setProgress(100))
 }
@@ -127,12 +128,12 @@ export const requestComments = id => async dispatch => {
 export const deletePost = id => async dispatch => {
 	dispatch(setProgress(0))
 	console.log(id)
-	// const data = postAPI.delete(id)
-	// if (data && data.status) {
-	// 	await dispatch(deletePostAC(id))
-	// } else {
-	// 	toast.warning('Could not delete this post.', toastOptions)
-	// }
+	const data = postAPI.delete(id)
+	if (data && data.status) {
+		await dispatch(deletePostAC(id))
+	} else {
+		toast.warning('Could not delete this post.', toastOptions)
+	}
 	dispatch(setProgress(100))
 }
 

@@ -10,7 +10,7 @@ const initialState = {
 const categoriesReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_CATEGORIES:
-			return {...state, data: [...action.payload]}
+			return {...state, data: action.payload}
 		default:
 			return state
 	}
@@ -24,7 +24,7 @@ const setCategories = data => ({
 export const requestCategories = () => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await categoriesAPI.all()
-	const arr = data && data.data.map(e => e.name)
+	const arr = data && data.data ? data.data.map(e => e.name) : null
 	await dispatch(setCategories(arr))
 	dispatch(setProgress(100))
 }

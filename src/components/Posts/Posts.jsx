@@ -22,7 +22,7 @@ const Posts = ({
 			requestUserPosts(userID)
 		} else if (type === 'user') {
 			setTitle('user')
-			requestUserPosts(match.params.id)
+			requestUserPosts(urlId)
 		} else if (type === 'upvoted' || type === 'downvoted') {
 			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
 			requestRatedPosts(type)
@@ -30,6 +30,7 @@ const Posts = ({
 			setTitle('Search by Categories')
 			requestPostsByCategories()
 		} else {
+			setTitle('Home')
 			requestAllPosts()
 		}
 	}, [type, match.params.id, requestUserPosts, requestRatedPosts, requestPostsByCategories,
