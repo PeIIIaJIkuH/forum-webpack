@@ -32,7 +32,8 @@ const Posts = ({
 		} else {
 			requestAllPosts()
 		}
-	}, [type, match.params.id])
+	}, [type, match.params.id, requestUserPosts, requestRatedPosts, requestPostsByCategories,
+		requestAllPosts, userID])
 
 	if (urlId !== undefined && isNaN(+urlId)) return <Error404/>
 

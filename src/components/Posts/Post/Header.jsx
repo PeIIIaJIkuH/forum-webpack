@@ -2,7 +2,6 @@ import React from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
 import history from '../../../history'
-import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
 
 const Header = ({post, userID, deletePost}) => {
 	return (
@@ -12,14 +11,14 @@ const Header = ({post, userID, deletePost}) => {
 			}}>
 				{post.title}
 			</Button>
-			{userID === post.author.id && (
-				<div>
-					<Button className={s.edit} type='text' icon={<EditOutlined/>}/>
-					<Button danger type='link' icon={<DeleteOutlined/>} onClick={() => {
-						deletePost(post.id)
-					}}/>
-				</div>
-			)}
+			{/*{userID === post.author.id && (*/}
+			{/*	<div>*/}
+			{/*		<Button className={s.edit} type='text' icon={<EditOutlined/>}/>*/}
+			{/*		<Button danger type='link' icon={<DeleteOutlined/>} onClick={() => {*/}
+			{/*			deletePost(post.id)*/}
+			{/*		}}/>*/}
+			{/*	</div>*/}
+			{/*)}*/}
 		</div>
 	)
 }

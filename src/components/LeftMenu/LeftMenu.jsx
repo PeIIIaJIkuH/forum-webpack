@@ -28,14 +28,14 @@ const LeftMenu = ({isAuth, location}) => {
 	return (
 		<Affix offsetTop={105}>
 			<Menu mode='inline' defaultSelectedKeys={['home']} selectedKeys={[option]} onClick={handleClick}>
-				<MenuItem key='home' title='Home' icon={<HomeOutlined/>} isAuth={isAuth} forAll={true} available/>
+				<MenuItem key='home' title='Home' icon={<HomeOutlined/>} isAuth={isAuth} forAll available/>
 				<MenuItem key='my' title='My Posts' icon={<UserOutlined/>} isAuth={isAuth} available/>
 				<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} isAuth={isAuth} available/>
 				<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} isAuth={isAuth} available/>
 				<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>}/>
 				<MenuItem key='user' title='User Posts' icon={<TeamOutlined/>}/>
 				<MenuItem key='post' title='Comments' icon={<CommentOutlined/>}/>
-				<MenuItem key='auth' title='Authorization' icon={<LoginOutlined/>} isAuth={isAuth} available/>
+				<MenuItem key='auth/signin' title='Authorization' icon={<LoginOutlined/>} forAll available/>
 				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} isAuth={isAuth} available/>
 			</Menu>
 		</Affix>
