@@ -15,15 +15,15 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 	const [form] = Form.useForm()
 	const [isFetching, setIsFetching] = React.useState(false)
 
-	const onSubmit = async ({signInUsername, signInPassword, signUpUsername, signUpEmail, signUpPassword}) => {
+	const onSubmit = async ({username, email, password}) => {
 		setIsFetching(true)
 		if (isSignup) {
-			const ok = await signup(signUpUsername, signUpEmail, signUpPassword)
+			const ok = await signup(username, email, password)
 			setIsFetching(false)
 			if (ok)
 				history.push('/auth/signin')
 		} else {
-			const ok = await signin(signInUsername, signInPassword)
+			const ok = await signin(username, password)
 			setIsFetching(false)
 			if (ok)
 				history.push('/')

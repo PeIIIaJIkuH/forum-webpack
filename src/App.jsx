@@ -24,9 +24,9 @@ import User from './components/User/User'
 toast.configure()
 
 // TODO:
-// requestUserPosts gives commentsNumber = 0 for every post
 // check all the features and functions
-// finish edit and delete post
+// finish edit post: update the form of createPost
+// update authForm, from 5 variables to 3
 
 const App = ({initialized, isAuth, initializeApp}) => {
 	React.useEffect(() => {

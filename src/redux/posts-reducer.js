@@ -82,7 +82,6 @@ export const requestUserPosts = id => async dispatch => {
 export const requestRatedPosts = reaction => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(reaction)
-	console.log(data)
 	await dispatch(setPostsAC(data.data, false))
 	dispatch(setProgress(100))
 }

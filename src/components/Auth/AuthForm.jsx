@@ -14,14 +14,14 @@ const tailLayout = {
 const AuthForm = ({onsubmit, isSignup, form, isFetching}) => {
 	return (
 		<Form name='auth' onFinish={onsubmit} form={form}>
-			<Form.Item name={(isSignup ? 'signUp' : 'signIn') + 'Username'} rules={[{
+			<Form.Item name='username' rules={[{
 				required: true,
 				message: 'Please enter your username!'
 			}]}>
 				<Input prefix={<UserOutlined/>} placeholder='Username' autoFocus/>
 			</Form.Item>
 			{isSignup &&
-			<Form.Item name='signUpEmail' rules={[{
+			<Form.Item name='email' rules={[{
 				required: true,
 				type: 'email',
 				message: 'The input is not valid E-mail!'
@@ -29,7 +29,7 @@ const AuthForm = ({onsubmit, isSignup, form, isFetching}) => {
 				<Input prefix='@' placeholder='E-mail'/>
 			</Form.Item>
 			}
-			<Form.Item name={(isSignup ? 'signUp' : 'signIn') + 'Password'} rules={[{
+			<Form.Item name='password' rules={[{
 				required: true,
 				message: 'Please input your password!'
 			}]}>
