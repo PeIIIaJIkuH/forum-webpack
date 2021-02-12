@@ -8,12 +8,14 @@ const SET_POSTS = 'posts/SET_POSTS',
 	SET_RATING = 'posts/SET_RATING',
 	SET_USER = 'posts/SET_USER',
 	SET_COMMENTS = 'posts/SET_COMMENTS',
-	DELETE_POST = 'posts/DELETE_POST'
+	DELETE_POST = 'posts/DELETE_POST',
+	SET_POST_TO_EDIT = 'posts/SET_POST_TO_EDIT'
 
 const initialState = {
 	posts: null,
 	user: null,
-	comments: null
+	comments: null,
+	postToEdit: null
 }
 
 const postsReducer = (state = initialState, action) => {
@@ -35,14 +37,16 @@ const postsReducer = (state = initialState, action) => {
 			return {...state, comments: action.payload}
 		case DELETE_POST:
 			return {...state, posts: state.posts.filter(post => post.id !== action.payload)}
+		case SET_POST_TO_EDIT:
+			return {...state, postToEdit: action.payload}
 		default:
 			return state
 	}
 }
 
-const setPostsAC = (posts, allowNull) => ({
+const setPostsAC = posts => ({
 	type: SET_POSTS,
-	payload: {posts, allowNull}
+	payload: {posts}
 })
 
 const setRatingAC = (id, reaction) => ({
@@ -65,39 +69,49 @@ const deletePostAC = postID => ({
 	payload: postID
 })
 
+const setPostToEditAC = post => ({
+	type: SET_POST_TO_EDIT,
+	payload: post
+})
+
 export const requestAllPosts = () => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await postAPI.all()
-	await dispatch(setPostsAC(data.data, false))
+	await dispatch(setPostsAC(data.data))
 	dispatch(setProgress(100))
 }
 
 export const requestUserPosts = id => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await userAPI.getCreatedPosts(id)
-	await dispatch(setPostsAC(data.data, false))
+	await dispatch(setPostsAC(data.data))
 	dispatch(setProgress(100))
 }
 
 export const requestRatedPosts = reaction => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(reaction)
-	await dispatch(setPostsAC(data.data, false))
+	await dispatch(setPostsAC(data.data))
 	dispatch(setProgress(100))
 }
 
 export const requestPost = id => async dispatch => {
+	let res = false
 	dispatch(setProgress(0))
 	const data = await postAPI.get(id)
-	await dispatch(setPostsAC([data.data], false))
+	if (data.data) {
+		await dispatch(setPostsAC([data.data]))
+		res = true
+	}
 	dispatch(setProgress(100))
+	return res
 }
 
 export const requestPostsByCategories = categories => async dispatch => {
 	dispatch(setProgress(0))
 	if (categories) {
 		const data = await postAPI.getByCategories(categories)
-		await dispatch(setPostsAC(data.data, true))
+		await dispatch(setPostsAC(data.data))
 		history.push('/by-categories')
 	}
 	dispatch(setProgress(100))
@@ -111,10 +125,15 @@ export const setRating = (id, reaction) => async dispatch => {
 }
 
 export const requestUser = id => async dispatch => {
+	let res = false
 	dispatch(setProgress(0))
 	const data = await userAPI.get(id)
-	await dispatch(setUserAC(data.data))
+	if (data.data) {
+		await dispatch(setUserAC(data.data))
+		res = true
+	}
 	dispatch(setProgress(100))
+	return res
 }
 
 export const requestComments = id => async dispatch => {
@@ -133,6 +152,10 @@ export const deletePost = id => async dispatch => {
 		toast.warning('Could not delete this post.', toastOptions)
 	}
 	dispatch(setProgress(100))
+}
+
+export const setPostToEdit = post => async dispatch => {
+	dispatch(setPostToEditAC(post))
 }
 
 export default postsReducer

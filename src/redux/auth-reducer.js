@@ -1,6 +1,4 @@
 import {authAPI} from '../api/requests'
-import {toast} from 'react-toastify'
-import {toastOptions} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
 
 const SET_USER_DATA = 'auth/SET_USER_DATA'
@@ -45,10 +43,7 @@ export const signup = (username, email, password) => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await authAPI.signup(username, email, password)
 	if (data && data.status) {
-		toast.success('Successfully created new user!', toastOptions)
 		res = true
-	} else {
-		toast.error('Can not register, some error happened!', toastOptions)
 	}
 	dispatch(setProgress(100))
 	return res
@@ -60,7 +55,6 @@ export const signin = (username, password) => async dispatch => {
 		await dispatch(requestAuthUserData())
 		return true
 	}
-	toast.error('Can not log in, some error happened!', toastOptions)
 	return false
 }
 

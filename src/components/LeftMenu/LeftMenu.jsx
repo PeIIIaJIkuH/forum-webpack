@@ -1,6 +1,6 @@
 import React from 'react'
 import Menu from 'antd/lib/menu'
-import {getIsAuthSelector} from '../../redux/selectors'
+import {isAuthSelector} from '../../redux/selectors'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {
@@ -35,15 +35,15 @@ const LeftMenu = ({isAuth, location}) => {
 				<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>}/>
 				<MenuItem key='user' title='User Posts' icon={<TeamOutlined/>}/>
 				<MenuItem key='post' title='Comments' icon={<CommentOutlined/>}/>
-				<MenuItem key='auth/signin' title='Authorization' icon={<LoginOutlined/>} forAll available/>
-				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} isAuth={isAuth} available/>
+				<MenuItem key='auth' title='Authorization' icon={<LoginOutlined/>}/>
+				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>}/>
 			</Menu>
 		</Affix>
 	)
 }
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state)
+	isAuth: isAuthSelector(state)
 })
 
 const mapDispatchToProps = {}

@@ -5,45 +5,50 @@ import CommentForm from './CommentForm'
 import Comments from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
-import {getCommentsSelector, getIsAuthSelector, getPostsSelector} from '../../redux/selectors'
+import {commentsSelector, isAuthSelector, getPostsSelector} from '../../redux/selectors'
 import {requestComments, requestPost} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
-import {Error404} from '../common/errors'
+import Error404 from '../common/errors/Error404'
 import Post from './Post/Post'
-import Empty from 'antd/lib/empty'
+import {setUrlTo} from '../../redux/app-reducer'
 
-const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
-	const urlId = match.params.id
+const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost, setUrlTo}) => {
+	const urlId = match.params.id,
+		[check, setCheck] = React.useState(false)
+
+	React.useEffect(() => {
+		const initialize = async () => {
+			const check = await requestPost(+urlId)
+			requestComments(+urlId)
+			if (check) {
+				setCheck(true)
+			}
+		}
+		initialize()
+	}, [urlId, requestPost, requestComments])
 
 	const onSubmit = async ({content}) => {
 		await postAPI.addComment(+urlId, content)
 		await requestComments(+urlId)
 	}
 
-	React.useEffect(() => {
-		requestPost(+urlId)
-		requestComments(+urlId)
-	}, [urlId, requestPost, requestComments])
-
-	if (urlId !== undefined && isNaN(+urlId)) return <Error404/>
+	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
 	return (
 		<>
 			<Helmet><title>Comments | forume</title></Helmet>
 			<section className='posts'>
-				{posts ?
-					posts.map((post, i) => (
-						<Post post={post} key={i}/>
-					)) :
-					<Card><Empty/></Card>
-				}
+				{posts && posts.map((post, i) => (
+					<Post post={post} key={i}/>
+				))}
 			</section>
 			<section className='comments'>
+				{comments &&
 				<Card className={s.commentsCard}>
-					<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
-					<Comments comments={comments}/>
-				</Card>
+					<CommentForm isAuth={isAuth} onSubmit={onSubmit} setUrlTo={setUrlTo}/>
+					<Comments comments={comments} setUrlTo={setUrlTo}/>
+				</Card>}
 			</section>
 		</>
 	)
@@ -51,13 +56,14 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}
 
 const mapStateToProps = state => ({
 	posts: getPostsSelector(state),
-	isAuth: getIsAuthSelector(state),
-	comments: getCommentsSelector(state)
+	isAuth: isAuthSelector(state),
+	comments: commentsSelector(state)
 })
 
 const mapDispatchToProps = {
 	requestComments,
-	requestPost
+	requestPost,
+	setUrlTo
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostPage))

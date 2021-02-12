@@ -5,7 +5,7 @@ import Card from 'antd/lib/card'
 import {PlusOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import ActionsForm from './ActionsForm'
-import {getCategoriesSelector, getIsAuthSelector} from '../../redux/selectors'
+import {categoriesSelector, isAuthSelector, postToEditSelector} from '../../redux/selectors'
 import {requestCategories} from '../../redux/categories-reducer'
 import {connect} from 'react-redux'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
@@ -14,7 +14,7 @@ import Layout from 'antd/lib/layout'
 import {toastOptions} from '../../utils/helpers/helpers'
 import Affix from 'antd/lib/affix'
 
-const Actions = ({isAuth, categories, requestCategories, requestPostsByCategories}) => {
+const Actions = ({isAuth, categories, requestCategories, requestPostsByCategories, postToEdit}) => {
 	const [isFetching, setIsFetching] = React.useState(false)
 
 	const onSubmit = async ({categories}) => {
@@ -31,7 +31,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 		<Affix offsetTop={105}>
 			<div className='actions'>
 				<Link className={s.addPost} to='/create'>
-					<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth}>
+					<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth || postToEdit}>
 						Add post
 					</Button>
 				</Link>
@@ -50,8 +50,9 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 }
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state),
-	categories: getCategoriesSelector(state)
+	isAuth: isAuthSelector(state),
+	categories: categoriesSelector(state),
+	postToEdit: postToEditSelector(state)
 })
 
 const mapDispatchToProps = {

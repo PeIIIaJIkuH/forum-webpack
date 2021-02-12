@@ -1,17 +1,18 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {getIsAuthSelector, getPostsSelector, getUserIDSelector} from '../../redux/selectors'
+import {isAuthSelector, getPostsSelector, userIDSelector} from '../../redux/selectors'
 import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import Post from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
 import {withRouter} from 'react-router-dom'
-import {Error404} from '../common/errors'
+import Error404 from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
+import Error403 from '../common/errors/Error403'
 
 const Posts = ({
 				   type, posts, match, userID, requestUserPosts, requestRatedPosts, requestPostsByCategories,
-				   requestAllPosts
+				   requestAllPosts, isAuth
 			   }) => {
 	const urlId = match.params.id,
 		[title, setTitle] = React.useState('Home')
@@ -37,6 +38,7 @@ const Posts = ({
 		requestAllPosts, userID])
 
 	if (urlId !== undefined && isNaN(+urlId)) return <Error404/>
+	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted')) return <Error403/>
 
 	return (
 		<>
@@ -46,7 +48,9 @@ const Posts = ({
 					posts.map((post, i) => (
 						<Post post={post} key={i}/>
 					)) :
-					<Card><Empty/></Card>
+					<Card>
+						<Empty description='No Posts'/>
+					</Card>
 				}
 			</section>
 		</>
@@ -55,8 +59,8 @@ const Posts = ({
 
 const mapStateToProps = state => ({
 	posts: getPostsSelector(state),
-	userID: getUserIDSelector(state),
-	isAuth: getIsAuthSelector(state)
+	userID: userIDSelector(state),
+	isAuth: isAuthSelector(state)
 })
 
 const mapDispatchToProps = {

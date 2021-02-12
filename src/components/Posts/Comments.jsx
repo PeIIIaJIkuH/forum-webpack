@@ -19,14 +19,22 @@ const Comments = ({comments}) => {
 			}
 		})
 	}
+	
+	const locale = {
+		emptyText: 'No comments'
+	}
 
 	return (
 		<List header={(
 			<div className={s.commentsTitle}>{`${comments ? comments.length : 0} comments`}</div>
-		)} dataSource={data} renderItem={item => (
-			<li><Comment author={(
-				<Link to={`/user/${item.author.id}`}>{item.author.username}</Link>
-			)} content={item.content} datetime={item.datetime}/></li>
+		)} dataSource={data} locale={locale} renderItem={item => (
+			<li>
+				<Comment author={(
+					<Link to={`/user/${item.author.id}`}>
+						{item.author.username}
+					</Link>
+				)} content={item.content} datetime={item.datetime}/>
+			</li>
 		)}/>
 	)
 }

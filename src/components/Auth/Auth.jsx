@@ -3,15 +3,18 @@ import s from './Auth.module.css'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
-import {getIsAuthSelector} from '../../redux/selectors'
+import {isAuthSelector, urlToSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import Card from 'antd/lib/card'
 import Form from 'antd/lib/form'
 import history from '../../history'
-import {Error403} from '../common/errors'
+import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
+import {setUrlTo} from '../../redux/app-reducer'
+import {toast} from 'react-toastify'
+import {toastOptions} from '../../utils/helpers/helpers'
 
-const Auth = ({signup, signin, isAuth, isSignup}) => {
+const Auth = ({signup, signin, isAuth, isSignup, urlTo, setUrlTo}) => {
 	const [form] = Form.useForm()
 	const [isFetching, setIsFetching] = React.useState(false)
 
@@ -20,17 +23,34 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 		if (isSignup) {
 			const ok = await signup(username, email, password)
 			setIsFetching(false)
-			if (ok)
+			if (ok) {
+				toast.success('Successfully created new user!', toastOptions)
+				form.resetFields()
 				history.push('/auth/signin')
+			} else {
+				toast.error('Can not register, some error happened!', toastOptions)
+			}
 		} else {
 			const ok = await signin(username, password)
 			setIsFetching(false)
-			if (ok)
-				history.push('/')
+			if (ok) {
+				if (urlTo) {
+					await setUrlTo(null)
+					history.push(urlTo)
+				} else {
+					history.push('/')
+				}
+			} else {
+				toast.error('Can not log in, some error happened!', toastOptions)
+			}
 		}
 	}
 
-	if (isAuth) return <Error403/>
+	const onClick = () => {
+		form.resetFields()
+	}
+
+	if (isAuth) return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
 
 	return (
 		<>
@@ -38,7 +58,7 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 			<div className={s.wrapper}>
 				<Card className={s.card} title={isSignup ? 'Sign Up' : 'Sign In'}
 					  extra={(
-						  <Link to={isSignup ? '/auth/signin' : '/auth/signup'} onClick={() => form.resetFields()}>
+						  <Link to={isSignup ? '/auth/signin' : '/auth/signup'} onClick={onClick}>
 							  {isSignup ? 'Sign In' : 'Sign Up'}
 						  </Link>
 					  )}>
@@ -50,12 +70,14 @@ const Auth = ({signup, signin, isAuth, isSignup}) => {
 }
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state)
+	isAuth: isAuthSelector(state),
+	urlTo: urlToSelector(state)
 })
 
 const mapDispatchToProps = {
 	signup,
-	signin
+	signin,
+	setUrlTo
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth)

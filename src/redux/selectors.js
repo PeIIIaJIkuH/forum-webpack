@@ -1,12 +1,14 @@
-export const getInitializedSelector = state => state.app.initialized
-export const getProgressSelector = state => state.app.progress
+export const initializedSelector = state => state.app.initialized
+export const progressSelector = state => state.app.progress
+export const urlToSelector = state => state.app.urlTo
 
-export const getIsAuthSelector = state => state.auth.isAuth
-export const getUserIDSelector = state => state.auth.id
-export const getUsernameSelector = state => state.auth.username
+export const isAuthSelector = state => state.auth.isAuth
+export const userIDSelector = state => state.auth.id
+export const usernameSelector = state => state.auth.username
 
-export const getUserSelector = state => state.posts.user
+export const userSelector = state => state.posts.user
 export const getPostsSelector = state => state.posts.posts
-export const getCommentsSelector = state => state.posts.comments
+export const commentsSelector = state => state.posts.comments
+export const postToEditSelector = state => state.posts.postToEdit
 
-export const getCategoriesSelector = state => state.categories.data
+export const categoriesSelector = state => state.categories.data

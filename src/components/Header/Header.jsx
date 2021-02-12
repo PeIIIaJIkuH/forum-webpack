@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './Header.module.css'
-import {getIsAuthSelector, getProgressSelector, getUserIDSelector, getUsernameSelector} from '../../redux/selectors'
+import {isAuthSelector, progressSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
 import {signout} from '../../redux/auth-reducer'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
@@ -45,10 +45,10 @@ const Header = ({isAuth, signout, username, userID, progress, setProgress}) => (
 )
 
 const mapStateToProps = state => ({
-	isAuth: getIsAuthSelector(state),
-	username: getUsernameSelector(state),
-	userID: getUserIDSelector(state),
-	progress: getProgressSelector(state)
+	isAuth: isAuthSelector(state),
+	username: usernameSelector(state),
+	userID: userIDSelector(state),
+	progress: progressSelector(state)
 })
 
 const mapDispatchToProps = {

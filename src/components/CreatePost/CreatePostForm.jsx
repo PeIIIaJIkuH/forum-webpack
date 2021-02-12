@@ -5,7 +5,8 @@ import Input from 'antd/lib/input'
 import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
 import history from '../../history'
-import {CloudUploadOutlined, StopOutlined} from '@ant-design/icons'
+import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
+import {withRouter} from 'react-router-dom'
 
 const layout = {
 	labelCol: {
@@ -26,46 +27,47 @@ const onCancel = () => {
 	history.goBack()
 }
 
-const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit}) => {
+const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit, post, setPost, location}) => {
 	React.useEffect(() => {
 		requestCategories()
-	}, [requestCategories])
+		return () => {
+			setPost(null)
+		}
+	}, [requestCategories, post, setPost, location.pathname])
 
 	return (
 		<Form className={s.form} {...layout} name='createPost' onFinish={onsubmit}>
-			<Form.Item label='Title' name='title' rules={[{
+			<Form.Item label='Title' name='title' initialValue={post && post.title} rules={[{
 				required: true,
 				message: 'Please enter post title!'
 			}]}>
 				<Input autoFocus/>
 			</Form.Item>
-			<Form.Item label='Content' name='content' rules={[{
+			<Form.Item label='Content' name='content' initialValue={post && post.content} rules={[{
 				required: true,
 				message: 'Please enter post content!'
 			}]}>
 				<Input.TextArea allowClear rows={5} autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
-			<Form.Item label='Categories' name='categories'>
-				<Select
-					mode='tags'
-					size='default'
-					placeholder='Please select categories'
-					allowClear
-				>
+			<Form.Item label='Categories' name='categories'
+					   initialValue={post && post.categories ? post.categories.map(e => e.name) : undefined}>
+				<Select mode='tags' size='default' allowClear>
 					{categories && categories.map(e => (
 						<Select.Option key={e}>{e}</Select.Option>
 					))}
 				</Select>
 			</Form.Item>
 			<Form.Item className={s.buttons} {...tailLayout}>
-				<Button className={s.create} type='primary' htmlType='submit' icon={<CloudUploadOutlined/>}
-						loading={isFetching}>
-					Create
+				<Button type='primary' danger onClick={onCancel} icon={<StopOutlined/>}>
+					Cancel
 				</Button>
-				<Button type='primary' danger onClick={onCancel} icon={<StopOutlined/>}>Cancel</Button>
+				<Button className={s.create} type='primary' htmlType='submit'
+						icon={post ? <SaveOutlined/> : <CloudUploadOutlined/>} loading={isFetching}>
+					{post ? 'Save' : 'Create'}
+				</Button>
 			</Form.Item>
 		</Form>
 	)
 }
 
-export default CreatePostForm
+export default withRouter(CreatePostForm)

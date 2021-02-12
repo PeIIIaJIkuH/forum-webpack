@@ -50,3 +50,7 @@ textarea::-webkit-scrollbar-thumb {
 textarea::-webkit-scrollbar-track {
     background: #f0f2f5;
 }
+
+.ant-card {
+    border-radius: 10px;
+}
