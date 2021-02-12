@@ -14,13 +14,13 @@ import {setUrlTo} from '../../redux/app-reducer'
 import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
 
-const Auth = ({signup, signin, isAuth, isSignup, urlTo, setUrlTo}) => {
+const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 	const [form] = Form.useForm()
 	const [isFetching, setIsFetching] = React.useState(false)
 
 	const onSubmit = async ({username, email, password}) => {
 		setIsFetching(true)
-		if (isSignup) {
+		if (register) {
 			const ok = await signup(username, email, password)
 			setIsFetching(false)
 			if (ok) {
@@ -54,15 +54,15 @@ const Auth = ({signup, signin, isAuth, isSignup, urlTo, setUrlTo}) => {
 
 	return (
 		<>
-			<Helmet><title>{isSignup ? 'Sign Up' : 'Sign In'} | forume</title></Helmet>
+			<Helmet><title>{register ? 'Sign Up' : 'Sign In'} | forume</title></Helmet>
 			<div className={s.wrapper}>
-				<Card className={s.card} title={isSignup ? 'Sign Up' : 'Sign In'}
+				<Card className={s.card} title={register ? 'Sign Up' : 'Sign In'}
 					  extra={(
-						  <Link to={isSignup ? '/auth/signin' : '/auth/signup'} onClick={onClick}>
-							  {isSignup ? 'Sign In' : 'Sign Up'}
+						  <Link to={register ? '/auth/signin' : '/auth/signup'} onClick={onClick}>
+							  {register ? 'Sign In' : 'Sign Up'}
 						  </Link>
 					  )}>
-					<AuthForm onsubmit={onSubmit} isSignup={isSignup} form={form} isFetching={isFetching}/>
+					<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
 				</Card>
 			</div>
 		</>

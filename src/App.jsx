@@ -24,7 +24,6 @@ toast.configure()
 
 // TODO:
 // check all the features and functions
-// finish edit post: update the form of createPost
 // create new errors to authorization and edit post from address
 
 const App = ({initialized, isAuth, initializeApp}) => {
@@ -45,7 +44,7 @@ const App = ({initialized, isAuth, initializeApp}) => {
 				</Col>
 				<Col span={10} offset={1}>
 					<Switch>
-						<Route exact path='/auth/signup' render={() => <Auth isSignup/>}/>
+						<Route exact path='/auth/signup' render={() => <Auth register/>}/>
 						<Route exact path='/auth/signin' render={() => <Auth/>}/>
 						<Route exact path={['/create', '/edit']} render={() => <CreatePost/>}/>
 						<Route exact path='/post/:id' render={() => <PostPage/>}/>

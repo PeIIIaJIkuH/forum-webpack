@@ -15,15 +15,15 @@ import {setUrlTo} from '../../redux/app-reducer'
 
 const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost, setUrlTo}) => {
 	const urlId = match.params.id,
-		[check, setCheck] = React.useState(false)
+		[check, setCheck] = React.useState(true)
 
 	React.useEffect(() => {
 		const initialize = async () => {
 			const check = await requestPost(+urlId)
-			requestComments(+urlId)
-			if (check) {
-				setCheck(true)
+			if (!check) {
+				setCheck(false)
 			}
+			requestComments(+urlId)
 		}
 		initialize()
 	}, [urlId, requestPost, requestComments])
@@ -35,20 +35,19 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
-	return (
+	return posts && (
 		<>
 			<Helmet><title>Comments | forume</title></Helmet>
 			<section className='posts'>
-				{posts && posts.map((post, i) => (
+				{posts.map((post, i) => (
 					<Post post={post} key={i}/>
 				))}
 			</section>
 			<section className='comments'>
-				{comments &&
 				<Card className={s.commentsCard}>
 					<CommentForm isAuth={isAuth} onSubmit={onSubmit} setUrlTo={setUrlTo}/>
 					<Comments comments={comments} setUrlTo={setUrlTo}/>
-				</Card>}
+				</Card>
 			</section>
 		</>
 	)

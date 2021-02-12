@@ -7,34 +7,32 @@ import UserInfo from './UserInfo'
 import {Helmet} from 'react-helmet'
 import Post from '../Posts/Post/Post'
 import Error404 from '../common/errors/Error404'
-import Card from 'antd/lib/card'
-import Empty from 'antd/lib/empty'
 
 const User = ({user, match, requestUser, requestUserPosts, posts}) => {
 	const urlId = match.params.id,
-		[check, setCheck] = React.useState(false)
+		[check, setCheck] = React.useState(true)
 
 	React.useEffect(() => {
 		const initialize = async () => {
 			const check = await requestUser(urlId)
-			requestUserPosts(+urlId)
-			if (check) {
-				setCheck(true)
+			if (!check) {
+				setCheck(false)
 			}
+			requestUserPosts(+urlId)
 		}
 		initialize()
-	}, [requestUser, requestUserPosts, urlId])
+	}, [urlId, requestUser, requestUserPosts])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
-	return (
+	return user && (
 		<>
 			<Helmet><title>{user ? user.username : 'User Page'} | forume</title></Helmet>
 			<UserInfo user={user}/>
 			<section className='posts'>
-				{posts ? posts.map((post, i) => (
+				{posts && posts.map((post, i) => (
 					<Post post={post} key={i}/>
-				)) : <Card><Empty description='No Posts'/></Card>}
+				))}
 			</section>
 		</>
 	)

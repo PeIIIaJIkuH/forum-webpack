@@ -3,7 +3,6 @@ import s from './User.module.css'
 import Card from 'antd/lib/card'
 import Typography from 'antd/lib/typography'
 import {getDateDifference} from '../../utils/helpers/helpers'
-import Empty from 'antd/lib/empty'
 
 const {Title} = Typography
 
@@ -14,7 +13,7 @@ const UserInfo = ({user}) => {
 		lastActive = getDateDifference(user.lastActive)
 	}
 
-	return user ? (
+	return user && (
 		<section className={s.userInfo}>
 			<Card title={<Title level={2}>{user.username}</Title>}>
 				<Title level={5}>E-mail: </Title>
@@ -25,7 +24,7 @@ const UserInfo = ({user}) => {
 				<p>{lastActive ? `${lastActive.num} ${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''} ago` : 'Just now'}</p>
 			</Card>
 		</section>
-	) : <Empty/>
+	)
 }
 
 export default UserInfo
