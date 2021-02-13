@@ -25,6 +25,7 @@ toast.configure()
 // TODO:
 // check all the features and functions
 // create new errors to authorization and edit post from address
+// make all requests for several items paginated: take only some portion of it, and just scroll to request more
 
 const App = ({initialized, isAuth, initializeApp}) => {
 	React.useEffect(() => {
@@ -35,6 +36,8 @@ const App = ({initialized, isAuth, initializeApp}) => {
 		return <AppPreloader/>
 	}
 
+	const paths = ['/create', '/edit']
+
 	return (
 		<div className='App'>
 			<Header/>
@@ -44,17 +47,39 @@ const App = ({initialized, isAuth, initializeApp}) => {
 				</Col>
 				<Col span={10} offset={1}>
 					<Switch>
-						<Route exact path='/auth/signup' render={() => <Auth register/>}/>
-						<Route exact path='/auth/signin' render={() => <Auth/>}/>
-						<Route exact path={['/create', '/edit']} render={() => <CreatePost/>}/>
-						<Route exact path='/post/:id' render={() => <PostPage/>}/>
-						<Route exact path='/user/:id' render={() => <User/>}/>
-						<Route exact path='/my' render={() => <Posts type='my'/>}/>
-						<Route exact path='/up-voted' render={() => <Posts type='upvoted'/>}/>
-						<Route exact path='/down-voted' render={() => <Posts type='downvoted'/>}/>
-						<Route exact path='/by-categories' render={() => <Posts type='categories'/>}/>
-						<Route exact path='/' render={() => <Posts/>}/>
-						<Route render={() => <Error404/>}/>
+						<Route exact path='/auth/signup'>
+							<Auth register/>
+						</Route>
+						<Route exact path='/auth/signin'>
+							<Auth/>
+						</Route>
+						<Route exact path={paths}>
+							<CreatePost/>
+						</Route>
+						<Route exact path='/post/:id'>
+							<PostPage/>
+						</Route>
+						<Route exact path='/user/:id'>
+							<User/>
+						</Route>
+						<Route exact path='/my'>
+							<Posts type='my'/>
+						</Route>
+						<Route exact path='/up-voted'>
+							<Posts type='upvoted'/>
+						</Route>
+						<Route exact path='/down-voted'>
+							<Posts type='downvoted'/>
+						</Route>
+						<Route exact path='/by-categories'>
+							<Posts type='categories'/>
+						</Route>
+						<Route exact path='/'>
+							<Posts/>
+						</Route>
+						<Route>
+							<Error404/>
+						</Route>
 					</Switch>
 				</Col>
 				<Col span={3} offset={1}>

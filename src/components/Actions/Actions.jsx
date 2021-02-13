@@ -27,11 +27,13 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 		}
 	}
 
+	const disabled = !isAuth || postToEdit
+
 	return (
 		<Affix offsetTop={105}>
 			<div className='actions'>
 				<Link className={s.addPost} to='/create'>
-					<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth || postToEdit}>
+					<Button type='primary' icon={<PlusOutlined/>} disabled={disabled}>
 						Add post
 					</Button>
 				</Link>

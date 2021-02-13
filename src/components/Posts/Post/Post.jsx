@@ -13,8 +13,12 @@ import Content from './Content'
 import Categories from './Categories'
 import Footer from './Footer'
 import history from '../../../history'
+import Comment from 'antd/lib/comment'
+import {Link} from 'react-router-dom'
+import Comments from '../Comments'
 
-const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit}) => {
+const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit, comments}) => {
+	console.log(comments)
 	const onEdit = async () => {
 		await setPostToEdit(post)
 		history.push('/edit')
@@ -35,6 +39,12 @@ const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, delete
 						<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>
 						<Footer post={post}/>
 					</Col>
+					{comments && (
+						<>
+							<Divider/>
+							<Comments comments={comments}/>
+						</>
+					)}
 				</Row>
 			</Card>}
 		</>

@@ -1,5 +1,5 @@
 import {postAPI, userAPI} from '../api/requests'
-import {getObjectInArray, getPostRating, toastOptions, updateObjectInArray} from '../utils/helpers/helpers'
+import {getObjectInArray, getPostRating, groupBy, toastOptions, updateObjectInArray} from '../utils/helpers/helpers'
 import history from '../history'
 import {toast} from 'react-toastify'
 import {setProgress} from './app-reducer'
@@ -9,7 +9,8 @@ const SET_POSTS = 'posts/SET_POSTS',
 	SET_USER = 'posts/SET_USER',
 	SET_COMMENTS = 'posts/SET_COMMENTS',
 	DELETE_POST = 'posts/DELETE_POST',
-	SET_POST_TO_EDIT = 'posts/SET_POST_TO_EDIT'
+	SET_POST_TO_EDIT = 'posts/SET_POST_TO_EDIT',
+	DELETE_COMMENT = 'posts/DELETE_COMMENT'
 
 const initialState = {
 	posts: null,
@@ -21,8 +22,7 @@ const initialState = {
 const postsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_POSTS:
-			if (!action.payload.posts && action.payload.allowNull) return {...state, posts: null}
-			return {...state, posts: action.payload.posts}
+			return {...state, posts: action.payload, comments: null}
 		case SET_RATING:
 			const post = getObjectInArray(state.posts, action.payload.id, 'id')
 			const [userRating, postRating] = getPostRating(post.userRating, post.postRating, action.payload.reaction)
@@ -39,6 +39,8 @@ const postsReducer = (state = initialState, action) => {
 			return {...state, posts: state.posts.filter(post => post.id !== action.payload)}
 		case SET_POST_TO_EDIT:
 			return {...state, postToEdit: action.payload}
+		case DELETE_COMMENT:
+			return {...state, comments: state.comments.filter(comment => comment.id !== action.payload)}
 		default:
 			return state
 	}
@@ -46,7 +48,7 @@ const postsReducer = (state = initialState, action) => {
 
 const setPostsAC = posts => ({
 	type: SET_POSTS,
-	payload: {posts}
+	payload: posts
 })
 
 const setRatingAC = (id, reaction) => ({
@@ -64,14 +66,19 @@ const setCommentsAC = comments => ({
 	payload: comments
 })
 
-const deletePostAC = postID => ({
+const deletePostAC = id => ({
 	type: DELETE_POST,
-	payload: postID
+	payload: id
 })
 
 const setPostToEditAC = post => ({
 	type: SET_POST_TO_EDIT,
 	payload: post
+})
+
+const deleteCommentAC = id => ({
+	type: DELETE_COMMENT,
+	payload: id
 })
 
 export const requestAllPosts = () => async dispatch => {
@@ -88,9 +95,9 @@ export const requestUserPosts = id => async dispatch => {
 	dispatch(setProgress(100))
 }
 
-export const requestRatedPosts = reaction => async dispatch => {
+export const requestRatedPosts = (userID, reaction) => async dispatch => {
 	dispatch(setProgress(0))
-	const data = await userAPI.getRatedPosts(reaction)
+	const data = await userAPI.getRatedPosts(userID, reaction)
 	await dispatch(setPostsAC(data.data))
 	dispatch(setProgress(100))
 }
@@ -156,6 +163,28 @@ export const deletePost = id => async dispatch => {
 
 export const setPostToEdit = post => async dispatch => {
 	dispatch(setPostToEditAC(post))
+}
+
+export const deleteComment = id => async dispatch => {
+	dispatch(setProgress(0))
+	toast.warning('Not ready!', toastOptions)
+	dispatch(setProgress(100))
+}
+
+export const requestCommentedPosts = id => async dispatch => {
+	dispatch(setProgress(0))
+	const data = await userAPI.getCommentedPosts(id)
+	const commentsByPostId = groupBy('post_id')(data.data)
+	const posts = []
+	for (const postID in commentsByPostId) {
+		if (commentsByPostId.hasOwnProperty(postID)) {
+			const data = await postAPI.get(postID)
+			posts.push(data.data)
+		}
+	}
+	await dispatch(setPostsAC(posts))
+	await dispatch(setCommentsAC(commentsByPostId))
+	dispatch(setProgress(100))
 }
 
 export default postsReducer

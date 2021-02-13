@@ -5,8 +5,8 @@ import CommentForm from './CommentForm'
 import Comments from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
-import {commentsSelector, isAuthSelector, getPostsSelector} from '../../redux/selectors'
-import {requestComments, requestPost} from '../../redux/posts-reducer'
+import {commentsSelector, isAuthSelector, postsSelector} from '../../redux/selectors'
+import {deleteComment, requestComments, requestPost} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import Error404 from '../common/errors/Error404'
@@ -35,18 +35,20 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
+	const postCards = posts && posts.map((post, i) => (
+		<Post post={post} key={i}/>
+	))
+
 	return posts && (
 		<>
 			<Helmet><title>Comments | forume</title></Helmet>
 			<section className='posts'>
-				{posts.map((post, i) => (
-					<Post post={post} key={i}/>
-				))}
+				{postCards}
 			</section>
 			<section className='comments'>
 				<Card className={s.commentsCard}>
 					<CommentForm isAuth={isAuth} onSubmit={onSubmit} setUrlTo={setUrlTo}/>
-					<Comments comments={comments} setUrlTo={setUrlTo}/>
+					<Comments comments={comments} isAuth={isAuth} deleteComment={deleteComment}/>
 				</Card>
 			</section>
 		</>
@@ -54,7 +56,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 }
 
 const mapStateToProps = state => ({
-	posts: getPostsSelector(state),
+	posts: postsSelector(state),
 	isAuth: isAuthSelector(state),
 	comments: commentsSelector(state)
 })
@@ -62,7 +64,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	requestComments,
 	requestPost,
-	setUrlTo
+	setUrlTo,
+	deleteComment
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostPage))

@@ -48,3 +48,10 @@ export const getRandomInt = (min, max) => {
 	max = Math.floor(max)
 	return Math.floor(Math.random() * (max - min)) + min
 }
+
+export const groupBy = key => array =>
+	array && array.reduce((objectsByKeyValue, obj) => {
+		const value = obj[key]
+		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
+		return objectsByKeyValue
+	}, {})

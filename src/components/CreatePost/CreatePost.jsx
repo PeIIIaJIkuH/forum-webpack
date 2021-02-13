@@ -25,27 +25,30 @@ const CreatePost = ({isAuth, requestCategories, categories, postToEdit, setPostT
 			if (data && data.status) {
 				await requestAllPosts()
 				await requestCategories()
+				await setIsFetching(false)
 				history.push('/')
-				setIsFetching(false)
 			} else {
 				toast.warning('Can not create post.', toastOptions)
 			}
 		} else {
 			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories)
+			await setIsFetching(false)
 			history.goBack()
-			setIsFetching(false)
 		}
 	}
 
 	if (!isAuth) return <Error403/>
 	if (location.pathname.indexOf('/edit') === 0 && !postToEdit) return <Error404/>
 
+	const title = (postToEdit ? 'Edit' : 'Create') + ' post',
+		headStyle = {fontSize: '20px', fontWeight: 600}
+
 	return (
 		<>
 			<Helmet><title>Create Post | forume</title></Helmet>
 			<div className={s.wrapper}>
-				<Card className={s.card} title={(postToEdit ? 'Edit' : 'Create') + ' post'}
-					  headStyle={{fontSize: '20px', fontWeight: 600}}>
+				<Card className={s.card} title={title}
+					  headStyle={headStyle}>
 					<CreatePostForm onsubmit={onSubmit} requestCategories={requestCategories} categories={categories}
 									isFetching={isFetching} post={postToEdit} setPost={setPostToEdit}/>
 				</Card>

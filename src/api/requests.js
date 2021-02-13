@@ -42,6 +42,8 @@ export const userAPI = {
 	get: id => defaultAxios.get(`user/${id}`).then(r => r.data).catch(() => 'Can not load user.'),
 	getCreatedPosts: id => defaultAxios.post('post/filter', {option: 'author', authorID: id})
 		.then(r => r.data).catch(() => 'Can not load created user posts.'),
-	getRatedPosts: userRating => defaultAxios.post('post/filter', {option: 'user', userRating})
-		.then(r => r.data).catch(() => 'Can not load rated user posts.')
+	getRatedPosts: (userID, userRating) => defaultAxios.post('post/filter', {option: 'user', userID, userRating})
+		.then(r => r.data).catch(() => 'Can not load rated user posts.'),
+	getCommentedPosts: id => defaultAxios.post('comment/filter', {option: 'user', user_id: id})
+		.then(r => r.data).catch(() => 'Can not load commented posts.')
 }

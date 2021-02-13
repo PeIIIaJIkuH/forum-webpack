@@ -15,27 +15,34 @@ const Comments = ({comments}) => {
 				content: comment.content.split('\n').map((paragraph, i) => (
 					<p key={i}>{paragraph}</p>
 				)),
-				datetime: created ? `${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'
+				datetime: created ?
+					`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'
 			}
 		})
 	}
-	
-	const locale = {
-		emptyText: 'No comments'
+
+	const header = (
+		<div className={s.commentsTitle}>
+			{`${comments ? comments.length : 'No'} comments`}
+		</div>
+	)
+
+	const renderItem = item => {
+		const author = (
+			<Link to={`/user/${item.author.id}`}>
+				{item.author.username}
+			</Link>
+		)
+
+		return (
+			<li>
+				<Comment author={author} content={item.content} datetime={item.datetime}/>
+			</li>
+		)
 	}
 
 	return (
-		<List header={(
-			<div className={s.commentsTitle}>{`${comments ? comments.length : 0} comments`}</div>
-		)} dataSource={data} locale={locale} renderItem={item => (
-			<li>
-				<Comment author={(
-					<Link to={`/user/${item.author.id}`}>
-						{item.author.username}
-					</Link>
-				)} content={item.content} datetime={item.datetime}/>
-			</li>
-		)}/>
+		<List header={header} dataSource={data} renderItem={renderItem}/>
 	)
 }
 

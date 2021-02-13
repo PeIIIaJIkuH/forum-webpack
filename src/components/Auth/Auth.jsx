@@ -52,16 +52,20 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 
 	if (isAuth) return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
 
+	const title = register ? 'Sign Up' : 'Sign In',
+		path = register ? '/auth/signin' : '/auth/signup',
+		extra = (
+			<Link to={path} onClick={onClick}>
+				{title}
+			</Link>
+		)
+
 	return (
 		<>
-			<Helmet><title>{register ? 'Sign Up' : 'Sign In'} | forume</title></Helmet>
+			<Helmet><title>{title} | forume</title></Helmet>
 			<div className={s.wrapper}>
-				<Card className={s.card} title={register ? 'Sign Up' : 'Sign In'}
-					  extra={(
-						  <Link to={register ? '/auth/signin' : '/auth/signup'} onClick={onClick}>
-							  {register ? 'Sign In' : 'Sign Up'}
-						  </Link>
-					  )}>
+				<Card className={s.card} title={title}
+					  extra={extra}>
 					<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
 				</Card>
 			</div>

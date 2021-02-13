@@ -7,7 +7,7 @@ export const userIDSelector = state => state.auth.id
 export const usernameSelector = state => state.auth.username
 
 export const userSelector = state => state.posts.user
-export const getPostsSelector = state => state.posts.posts
+export const postsSelector = state => state.posts.posts
 export const commentsSelector = state => state.posts.comments
 export const postToEditSelector = state => state.posts.postToEdit
 

@@ -17,32 +17,48 @@ import {LogoutOutlined} from '@ant-design/icons'
 import LoadingBar from 'react-top-loading-bar'
 import {setProgress} from '../../redux/app-reducer'
 
-const Header = ({isAuth, signout, username, userID, progress, setProgress}) => (
-	<Affix offsetTop={1} className='headerWrapper'>
-		<Layout.Header className={s.header}>
-			<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-			<Link to='/' className={s.logo}>
-				<Image width={50} src={logo} preview={false} alt='logo'/>
-				foru<span>me</span>
-			</Link>
-			<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'
-						  onSearch={() => toast.warning('This feature will be added soon!', toastOptions)}/>
-			{isAuth ?
-				<span className={s.actions}>
-				<span className={s.profile}>
-					<span className={s.username}>
-						<Link to={`/user/${userID}`}>{username}</Link>
-					</span>
-					<Image width={40} src={profile} alt='profile' preview={false}/>
-				</span>
-				<Button type='link' icon={<LogoutOutlined/>} danger onClick={() => signout()}>
-					Sign Out
-				</Button>
-			</span> :
-				<Link to='/auth/signin'><Button type='link'>Sign In</Button></Link>}
-		</Layout.Header>
-	</Affix>
-)
+const Header = ({isAuth, signout, username, userID, progress, setProgress}) => {
+	const onSignout = () => {
+		signout()
+	}
+
+	const onFinished = () => {
+		setProgress(0)
+	}
+
+	const onSearch = () => {
+		toast.warning('This feature will be added soon!', toastOptions)
+	}
+
+	return (
+		<Affix offsetTop={1} className='headerWrapper'>
+			<Layout.Header className={s.header}>
+				<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={onFinished}/>
+				<Link to='/' className={s.logo}>
+					<Image width={50} src={logo} preview={false} alt='logo'/>
+					foru<span>me</span>
+				</Link>
+				<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'
+							  onSearch={onSearch}/>
+				{isAuth ?
+					<>
+						<span className={s.actions}>
+						<span className={s.profile}>
+							<span className={s.username}>
+								<Link to={`/user/${userID}`}>{username}</Link>
+							</span>
+							<Image width={40} src={profile} alt='profile' preview={false}/>
+						</span>
+						<Button type='link' icon={<LogoutOutlined/>} danger onClick={onSignout}>
+							Sign Out
+						</Button>
+						</span>
+					</> :
+					<Link to='/auth/signin'><Button type='link'>Sign In</Button></Link>}
+			</Layout.Header>
+		</Affix>
+	)
+}
 
 const mapStateToProps = state => ({
 	isAuth: isAuthSelector(state),
