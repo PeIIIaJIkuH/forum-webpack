@@ -56,7 +56,7 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 		path = register ? '/auth/signin' : '/auth/signup',
 		extra = (
 			<Link to={path} onClick={onClick}>
-				{title}
+				{!register ? 'Sign Up' : 'Sign In'}
 			</Link>
 		)
 
