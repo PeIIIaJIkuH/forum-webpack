@@ -5,12 +5,12 @@ import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {deleteComment, deleteUserComment} from '../../redux/posts-reducer'
+import {deleteComment} from '../../redux/posts-reducer'
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
 import Button from 'antd/lib/button'
 import {userIDSelector} from '../../redux/selectors'
 
-const Comments = ({comments, deleteComment, deleteUserComment, userID, userPage}) => {
+const Comments = ({comments, deleteComment, userID, userPage}) => {
 	let data
 	if (comments) {
 		data = comments.map(comment => {
@@ -18,7 +18,7 @@ const Comments = ({comments, deleteComment, deleteUserComment, userID, userPage}
 				if (!userPage) {
 					deleteComment(comment.id)
 				} else {
-					deleteUserComment(comment.id, comment.post_id)
+					deleteComment(comment.id, comment.post_id)
 				}
 			}
 
@@ -45,10 +45,13 @@ const Comments = ({comments, deleteComment, deleteUserComment, userID, userPage}
 	}
 
 	const header = (
-		<div className={s.commentsTitle}>
-			{`${comments ? comments.length : 'No'} comments`}
-		</div>
-	)
+			<div className={s.commentsTitle}>
+				{`${comments ? comments.length : 'No'} comments`}
+			</div>
+		),
+		locale = {
+			emptyText: 'No Comments'
+		}
 
 	const renderItem = item => {
 		const author = (
@@ -62,7 +65,7 @@ const Comments = ({comments, deleteComment, deleteUserComment, userID, userPage}
 		)
 	}
 
-	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem}/>
+	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem} locale={locale}/>
 }
 
 const mapStateToProps = state => ({
@@ -70,8 +73,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-	deleteComment,
-	deleteUserComment
+	deleteComment
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments)

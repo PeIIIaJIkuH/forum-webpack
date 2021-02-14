@@ -13,7 +13,8 @@ const SET_POSTS = 'posts/SET_POSTS',
 	SET_USER_COMMENTS = 'posts/SET_USER_COMMENTS',
 	DELETE_COMMENT = 'posts/DELETE_COMMENT',
 	DELETE_USER_COMMENT = 'posts/DELETE_USER_COMMENT',
-	EDIT_COMMENT = 'posts/EDIT_COMMENT'
+	EDIT_COMMENT = 'posts/EDIT_COMMENT',
+	EDIT_USER_COMMENT = 'posts/EDIT_USER_COMMENT'
 
 const initialState = {
 	posts: null,
@@ -104,9 +105,14 @@ const deleteUserCommentAC = (id, postID) => ({
 	payload: {id, postID}
 })
 
-const editComment = id => ({
+const editCommentAC = id => ({
 	type: EDIT_COMMENT,
 	payload: id
+})
+
+const editUserCommentAC = (id, postID) => ({
+	type: EDIT_USER_COMMENT,
+	payload: {id, postID}
 })
 
 export const requestAllPosts = () => async dispatch => {
@@ -209,23 +215,16 @@ export const requestCommentedPosts = id => async dispatch => {
 	dispatch(setProgress(100))
 }
 
-export const deleteComment = id => async dispatch => {
+export const deleteComment = (id, postID) => async dispatch => {
 	let res = false
 	dispatch(setProgress(0))
 	const data = await postAPI.deleteComment(id)
 	if (data && data.status) {
-		await dispatch(deleteCommentAC(id))
-	}
-	dispatch(setProgress(100))
-	return res
-}
-
-export const deleteUserComment = (id, postID) => async dispatch => {
-	let res = false
-	dispatch(setProgress(0))
-	const data = await postAPI.deleteComment(id)
-	if (data && data.status) {
-		await dispatch(deleteUserCommentAC(id, postID))
+		if (!postID) {
+			await dispatch(deleteCommentAC(id))
+		} else {
+			await dispatch(deleteUserCommentAC(id, postID))
+		}
 	}
 	dispatch(setProgress(100))
 	return res
