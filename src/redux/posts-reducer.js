@@ -7,12 +7,13 @@ import {setProgress} from './app-reducer'
 const SET_POSTS = 'posts/SET_POSTS',
 	SET_RATING = 'posts/SET_RATING',
 	SET_USER = 'posts/SET_USER',
-	SET_COMMENTS = 'posts/SET_COMMENTS',
 	DELETE_POST = 'posts/DELETE_POST',
 	SET_POST_TO_EDIT = 'posts/SET_POST_TO_EDIT',
-	DELETE_COMMENT = 'posts/DELETE_COMMENT',
+	SET_COMMENTS = 'posts/SET_COMMENTS',
 	SET_USER_COMMENTS = 'posts/SET_USER_COMMENTS',
-	DELETE_USER_COMMENT = 'posts/DELETE_USER_COMMENT'
+	DELETE_COMMENT = 'posts/DELETE_COMMENT',
+	DELETE_USER_COMMENT = 'posts/DELETE_USER_COMMENT',
+	EDIT_COMMENT = 'posts/EDIT_COMMENT'
 
 const initialState = {
 	posts: null,
@@ -78,6 +79,11 @@ const setCommentsAC = comments => ({
 	payload: comments
 })
 
+const setUserCommentsAC = comments => ({
+	type: SET_USER_COMMENTS,
+	payload: comments
+})
+
 const deletePostAC = id => ({
 	type: DELETE_POST,
 	payload: id
@@ -93,14 +99,14 @@ const deleteCommentAC = id => ({
 	payload: id
 })
 
-const setUserCommentsAC = comments => ({
-	type: SET_USER_COMMENTS,
-	payload: comments
-})
-
 const deleteUserCommentAC = (id, postID) => ({
 	type: DELETE_USER_COMMENT,
 	payload: {id, postID}
+})
+
+const editComment = id => ({
+	type: EDIT_COMMENT,
+	payload: id
 })
 
 export const requestAllPosts = () => async dispatch => {

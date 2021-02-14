@@ -3,7 +3,7 @@ import s from './Header.module.css'
 import {isAuthSelector, progressSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
 import {signout} from '../../redux/auth-reducer'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
 import profile from '../../assets/img/profile.svg'
 import Button from 'antd/lib/button'
@@ -15,9 +15,9 @@ import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
 import {LogoutOutlined} from '@ant-design/icons'
 import LoadingBar from 'react-top-loading-bar'
-import {setProgress} from '../../redux/app-reducer'
+import {setProgress, setUrlTo} from '../../redux/app-reducer'
 
-const Header = ({isAuth, signout, username, userID, progress, setProgress}) => {
+const Header = ({isAuth, signout, username, userID, progress, setProgress, location, setUrlTo}) => {
 	const onSignout = () => {
 		signout()
 	}
@@ -28,6 +28,10 @@ const Header = ({isAuth, signout, username, userID, progress, setProgress}) => {
 
 	const onSearch = () => {
 		toast.warning('This feature will be added soon!', toastOptions)
+	}
+
+	const onClick = async () => {
+		await setUrlTo(location.pathname)
 	}
 
 	return (
@@ -54,7 +58,9 @@ const Header = ({isAuth, signout, username, userID, progress, setProgress}) => {
 						</Button>
 						</span>
 					</> :
-					<Link to='/auth/signin'><Button type='link'>Sign In</Button></Link>}
+					<Link to='/auth/signin'>
+						<Button type='link' onClick={onClick}>Sign In</Button>
+					</Link>}
 			</Layout.Header>
 		</Affix>
 	)
@@ -69,7 +75,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	signout,
-	setProgress
+	setProgress,
+	setUrlTo
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))

@@ -10,6 +10,7 @@ const Error403 = ({text, setUrlTo, location}) => {
 	const onClick = async () => {
 		await setUrlTo(location.pathname)
 	}
+	
 	return (
 		<>
 			<Helmet><title>Error 403 | forume</title></Helmet>
