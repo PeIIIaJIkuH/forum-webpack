@@ -10,5 +10,6 @@ export const userSelector = state => state.posts.user
 export const postsSelector = state => state.posts.posts
 export const commentsSelector = state => state.posts.comments
 export const postToEditSelector = state => state.posts.postToEdit
+export const userCommentsSelector = state => state.posts.userComments
 
 export const categoriesSelector = state => state.categories.data

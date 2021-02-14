@@ -10,13 +10,16 @@ const SET_POSTS = 'posts/SET_POSTS',
 	SET_COMMENTS = 'posts/SET_COMMENTS',
 	DELETE_POST = 'posts/DELETE_POST',
 	SET_POST_TO_EDIT = 'posts/SET_POST_TO_EDIT',
-	DELETE_COMMENT = 'posts/DELETE_COMMENT'
+	DELETE_COMMENT = 'posts/DELETE_COMMENT',
+	SET_USER_COMMENTS = 'posts/SET_USER_COMMENTS',
+	DELETE_USER_COMMENT = 'posts/DELETE_USER_COMMENT'
 
 const initialState = {
 	posts: null,
 	user: null,
 	comments: null,
-	postToEdit: null
+	postToEdit: null,
+	userComments: null
 }
 
 const postsReducer = (state = initialState, action) => {
@@ -41,6 +44,15 @@ const postsReducer = (state = initialState, action) => {
 			return {...state, postToEdit: action.payload}
 		case DELETE_COMMENT:
 			return {...state, comments: state.comments.filter(comment => comment.id !== action.payload)}
+		case SET_USER_COMMENTS:
+			return {...state, userComments: action.payload}
+		case DELETE_USER_COMMENT:
+			const id = action.payload.id,
+				postID = action.payload.postID,
+				comments = {...state.userComments}
+			const postComments = comments[postID].filter(comment => comment.id !== id)
+			comments[postID] = postComments
+			return {...state, userComments: comments}
 		default:
 			return state
 	}
@@ -79,6 +91,16 @@ const setPostToEditAC = post => ({
 const deleteCommentAC = id => ({
 	type: DELETE_COMMENT,
 	payload: id
+})
+
+const setUserCommentsAC = comments => ({
+	type: SET_USER_COMMENTS,
+	payload: comments
+})
+
+const deleteUserCommentAC = (id, postID) => ({
+	type: DELETE_USER_COMMENT,
+	payload: {id, postID}
 })
 
 export const requestAllPosts = () => async dispatch => {
@@ -165,12 +187,6 @@ export const setPostToEdit = post => async dispatch => {
 	dispatch(setPostToEditAC(post))
 }
 
-export const deleteComment = id => async dispatch => {
-	dispatch(setProgress(0))
-	toast.warning('Not ready!', toastOptions)
-	dispatch(setProgress(100))
-}
-
 export const requestCommentedPosts = id => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await userAPI.getCommentedPosts(id)
@@ -183,8 +199,30 @@ export const requestCommentedPosts = id => async dispatch => {
 		}
 	}
 	await dispatch(setPostsAC(posts))
-	await dispatch(setCommentsAC(commentsByPostId))
+	await dispatch(setUserCommentsAC(commentsByPostId))
 	dispatch(setProgress(100))
+}
+
+export const deleteComment = id => async dispatch => {
+	let res = false
+	dispatch(setProgress(0))
+	const data = await postAPI.deleteComment(id)
+	if (data && data.status) {
+		await dispatch(deleteCommentAC(id))
+	}
+	dispatch(setProgress(100))
+	return res
+}
+
+export const deleteUserComment = (id, postID) => async dispatch => {
+	let res = false
+	dispatch(setProgress(0))
+	const data = await postAPI.deleteComment(id)
+	if (data && data.status) {
+		await dispatch(deleteUserCommentAC(id, postID))
+	}
+	dispatch(setProgress(100))
+	return res
 }
 
 export default postsReducer

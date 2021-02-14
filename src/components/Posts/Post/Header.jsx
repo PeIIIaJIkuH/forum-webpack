@@ -8,6 +8,10 @@ const Header = ({post, userID, deletePost, onEdit}) => {
 	const onClick = () => {
 		history.push(`/post/${post.id}`)
 	}
+	
+	const onDelete = () => {
+		deletePost(post.id)
+	}
 
 	return (
 		<div className={s.header}>
@@ -17,7 +21,7 @@ const Header = ({post, userID, deletePost, onEdit}) => {
 			{userID === post.author.id && (
 				<div>
 					<Button className={s.edit} type='text' icon={<EditOutlined/>} onClick={onEdit}/>
-					<Button danger type='link' icon={<DeleteOutlined/>} onClick={() => deletePost(post.id)}/>
+					<Button danger type='link' icon={<DeleteOutlined/>} onClick={onDelete}/>
 				</div>
 			)}
 		</div>

@@ -54,3 +54,12 @@ textarea::-webkit-scrollbar-track {
 .ant-card {
     border-radius: 10px;
 }
+
+.ant-comment-actions {
+    margin-top: 0;
+}
+
+.ant-comment-inner {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './User.module.css'
-import {commentsSelector, postsSelector, userSelector} from '../../redux/selectors'
+import {postsSelector, userCommentsSelector, userSelector} from '../../redux/selectors'
 import {requestCommentedPosts, requestRatedPosts, requestUser, requestUserPosts} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
@@ -16,7 +16,7 @@ import Empty from 'antd/lib/empty'
 
 const User = ({
 				  user, match, requestUser, requestUserPosts, posts, requestRatedPosts, requestCommentedPosts,
-				  comments
+				  userComments
 			  }) => {
 	const urlId = match.params.id,
 		[check, setCheck] = React.useState(true)
@@ -49,7 +49,7 @@ const User = ({
 	const title = user ? user.username : 'User Page',
 		defaultKeys = ['created'],
 		postCards = posts && posts.map((post, i) => (
-			<Post post={post} key={i} comments={comments && comments[post.id]}/>
+			<Post post={post} key={i} comments={userComments && userComments[post.id]}/>
 		))
 
 	return user && (
@@ -77,7 +77,7 @@ const User = ({
 const mapStateToProps = state => ({
 	user: userSelector(state),
 	posts: postsSelector(state),
-	comments: commentsSelector(state)
+	userComments: userCommentsSelector(state)
 })
 
 const mapDispatchToProps = {

@@ -4,19 +4,42 @@ import Comment from 'antd/lib/comment'
 import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {deleteComment, deleteUserComment} from '../../redux/posts-reducer'
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
+import Button from 'antd/lib/button'
+import {userIDSelector} from '../../redux/selectors'
 
-const Comments = ({comments}) => {
+const Comments = ({comments, deleteComment, deleteUserComment, userID, userPage}) => {
 	let data
 	if (comments) {
 		data = comments.map(comment => {
-			const created = getDateDifference(comment.createdAt)
+			const onDelete = () => {
+				if (!userPage) {
+					deleteComment(comment.id)
+				} else {
+					deleteUserComment(comment.id, comment.post_id)
+				}
+			}
+
+			const onEdit = () => {
+
+			}
+
+			const created = getDateDifference(comment.createdAt),
+				check = comment.author.id === userID,
+				deleteBtn = <Button danger type='link' icon={<DeleteOutlined className={s.icon}/>}
+									onClick={onDelete}/>,
+				editBtn = <Button type='text' icon={<EditOutlined className={s.icon}/>} onClick={onEdit}/>
+
 			return {
 				author: comment.author,
 				content: comment.content.split('\n').map((paragraph, i) => (
 					<p key={i}>{paragraph}</p>
 				)),
 				datetime: created ?
-					`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'
+					`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now',
+				actions: check ? [editBtn, deleteBtn] : null
 			}
 		})
 	}
@@ -35,15 +58,20 @@ const Comments = ({comments}) => {
 		)
 
 		return (
-			<li>
-				<Comment author={author} content={item.content} datetime={item.datetime}/>
-			</li>
+			<li><Comment author={author} content={item.content} datetime={item.datetime} actions={item.actions}/></li>
 		)
 	}
 
-	return (
-		<List header={header} dataSource={data} renderItem={renderItem}/>
-	)
+	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem}/>
 }
 
-export default Comments
+const mapStateToProps = state => ({
+	userID: userIDSelector(state)
+})
+
+const mapDispatchToProps = {
+	deleteComment,
+	deleteUserComment
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comments)
