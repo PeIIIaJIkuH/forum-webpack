@@ -2,8 +2,8 @@ import React from 'react'
 import s from './Posts.module.css'
 import Button from 'antd/lib/button'
 import Form from 'antd/lib/form'
-import Input from 'antd/lib/input'
 import {Link, withRouter} from 'react-router-dom'
+import TextArea from 'antd/lib/input/TextArea'
 
 const CommentForm = ({isAuth, onSubmit, setUrlTo, location}) => {
 	const [form] = Form.useForm()
@@ -29,7 +29,7 @@ const CommentForm = ({isAuth, onSubmit, setUrlTo, location}) => {
 	return (
 		<Form form={form} onFinish={onFinish}>
 			<Form.Item className={s.commentForm} name='content' rules={rules}>
-				<Input.TextArea allowClear rows={5} autoSize={autoSize} showCount disabled={!isAuth}/>
+				<TextArea allowClear rows={5} autoSize={autoSize} showCount disabled={!isAuth}/>
 			</Form.Item>
 			<Form.Item>
 				<Button className={s.addComment} type='primary' htmlType='submit' disabled={!isAuth}

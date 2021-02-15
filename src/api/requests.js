@@ -33,7 +33,9 @@ export const postAPI = {
 		id, authorID, title, content, categories
 	}).then(r => r.data).catch(() => 'Can not edit post.'),
 	deleteComment: id => defaultAxios.delete(`comment/delete/${id}`)
-		.then(r => r.data).catch(() => 'Can not delete comment.')
+		.then(r => r.data).catch(() => 'Can not delete comment.'),
+	editComment: (id, authorID, post_id, content) => defaultAxios.put('comment/edit', {id, authorID, post_id, content})
+		.then(r => r.data).catch(() => 'Can not edit comment.')
 }
 
 export const categoriesAPI = {

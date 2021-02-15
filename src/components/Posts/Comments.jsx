@@ -1,48 +1,40 @@
 import React from 'react'
 import s from './Posts.module.css'
-import Comment from 'antd/lib/comment'
 import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {deleteComment} from '../../redux/posts-reducer'
-import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
+import {DeleteOutlined} from '@ant-design/icons'
 import Button from 'antd/lib/button'
 import {userIDSelector} from '../../redux/selectors'
+import Comment from './Comment'
 
 const Comments = ({comments, deleteComment, userID, userPage}) => {
-	let data
-	if (comments) {
-		data = comments.map(comment => {
-			const onDelete = () => {
-				if (!userPage) {
-					deleteComment(comment.id)
-				} else {
-					deleteComment(comment.id, comment.post_id)
-				}
+	const data = comments ? comments.map((comment, i) => {
+		const onDelete = () => {
+			if (!userPage) {
+				deleteComment(comment.id)
+			} else {
+				deleteComment(comment.id, comment.post_id)
 			}
+		}
 
-			const onEdit = () => {
+		const created = getDateDifference(comment.createdAt),
+			check = comment.author.id === userID,
+			deleteBtn = <Button danger type='link' icon={<DeleteOutlined className={s.icon}/>}
+								onClick={onDelete}/>
 
-			}
-
-			const created = getDateDifference(comment.createdAt),
-				check = comment.author.id === userID,
-				deleteBtn = <Button danger type='link' icon={<DeleteOutlined className={s.icon}/>}
-									onClick={onDelete}/>,
-				editBtn = <Button type='text' icon={<EditOutlined className={s.icon}/>} onClick={onEdit}/>
-
-			return {
-				author: comment.author,
-				content: comment.content.split('\n').map((paragraph, i) => (
-					<p key={i}>{paragraph}</p>
-				)),
-				datetime: created ?
-					`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now',
-				actions: check ? [editBtn, deleteBtn] : null
-			}
-		})
-	}
+		return {
+			author: comment.author,
+			content: comment.content,
+			datetime: created ?
+				`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now',
+			actions: check ? [deleteBtn] : null,
+			comment: comment,
+			check: check
+		}
+	}) : undefined
 
 	const header = (
 			<div className={s.commentsTitle}>
@@ -61,7 +53,10 @@ const Comments = ({comments, deleteComment, userID, userPage}) => {
 		)
 
 		return (
-			<li><Comment author={author} content={item.content} datetime={item.datetime} actions={item.actions}/></li>
+			<li>
+				<Comment author={author} content={item.content} datetime={item.datetime} actions={item.actions}
+				comment={item.comment} check={item.check} userPage={userPage}/>
+			</li>
 		)
 	}
 

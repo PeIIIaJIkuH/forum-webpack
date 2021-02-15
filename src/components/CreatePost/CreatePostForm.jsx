@@ -7,6 +7,7 @@ import s from './CreatePost.module.css'
 import history from '../../history'
 import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
 import {withRouter} from 'react-router-dom'
+import TextArea from 'antd/lib/input/TextArea'
 
 const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit, post, setPost, location}) => {
 	React.useEffect(() => {
@@ -59,7 +60,7 @@ const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit, po
 				<Input autoFocus/>
 			</Form.Item>
 			<Form.Item label='Content' name='content' initialValue={contentValue} rules={contentRules}>
-				<Input.TextArea allowClear rows={5} autoSize={autoSize} showCount/>
+				<TextArea allowClear rows={5} autoSize={autoSize} showCount/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories'
 					   initialValue={categoriesValue}>

@@ -55,6 +55,18 @@ const postsReducer = (state = initialState, action) => {
 			const postComments = comments[postID].filter(comment => comment.id !== id)
 			comments[postID] = postComments
 			return {...state, userComments: comments}
+		case EDIT_COMMENT:
+			const cComments = [...state.comments]
+			const index = cComments.findIndex(comment => comment.id === action.payload.id)
+			cComments[index].content = action.payload.content
+			return {...state, comments: cComments}
+		case EDIT_USER_COMMENT:
+			const ucComments = {...state.userComments}
+			const pComments = [...ucComments[action.payload.postID]]
+			const uIndex = pComments.findIndex(comment => comment.id === action.payload.id)
+			pComments[uIndex].content = action.payload.content
+			ucComments[action.payload.postID] = pComments
+			return {...state, userComments: ucComments}
 		default:
 			return state
 	}
@@ -105,14 +117,14 @@ const deleteUserCommentAC = (id, postID) => ({
 	payload: {id, postID}
 })
 
-const editCommentAC = id => ({
+const editCommentAC = (id, content) => ({
 	type: EDIT_COMMENT,
-	payload: id
+	payload: {id, content}
 })
 
-const editUserCommentAC = (id, postID) => ({
+const editUserCommentAC = (id, postID, content) => ({
 	type: EDIT_USER_COMMENT,
-	payload: {id, postID}
+	payload: {id, postID, content}
 })
 
 export const requestAllPosts = () => async dispatch => {
@@ -220,10 +232,27 @@ export const deleteComment = (id, postID) => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await postAPI.deleteComment(id)
 	if (data && data.status) {
+		res = true
 		if (!postID) {
 			await dispatch(deleteCommentAC(id))
 		} else {
 			await dispatch(deleteUserCommentAC(id, postID))
+		}
+	}
+	dispatch(setProgress(100))
+	return res
+}
+
+export const editComment = (id, authorID, postID, content, isUserPage) => async dispatch => {
+	let res = false
+	dispatch(setProgress(0))
+	const data = await postAPI.editComment(id, authorID, postID, content)
+	if (data && data.status) {
+		res = true
+		if (!isUserPage) {
+			await dispatch(editCommentAC(id, content))
+		} else {
+			await dispatch(editUserCommentAC(id, postID, content))
 		}
 	}
 	dispatch(setProgress(100))

@@ -29,7 +29,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 	}, [urlId, requestPost, requestComments])
 
 	const onSubmit = async ({content}) => {
-		await postAPI.addComment(+urlId, content)
+		await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n'))
 		await requestComments(+urlId)
 	}
 

@@ -63,3 +63,8 @@ textarea::-webkit-scrollbar-track {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.ant-input-textarea span[role='button'],
+.ant-comment span[role='button'] {
+    margin-right: 10px;
+}
