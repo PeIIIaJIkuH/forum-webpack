@@ -12,6 +12,7 @@ import {Helmet} from 'react-helmet'
 import Error404 from '../common/errors/Error404'
 import Post from './Post/Post'
 import {setUrlTo} from '../../redux/app-reducer'
+import {notificationType, openNotification} from '../../utils/helpers/helpers'
 
 const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost, setUrlTo}) => {
 	const urlId = match.params.id,
@@ -28,12 +29,16 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 		initialize()
 	}, [urlId, requestPost, requestComments])
 
-	const onSubmit = async ({content}) => {
-		await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n'))
-		await requestComments(+urlId)
-	}
-
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
+
+	const onSubmit = async ({content}) => {
+		const data = await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n'))
+		if (data && data.status) {
+			await requestComments(+urlId)
+		} else {
+			openNotification(notificationType.ERROR, 'Can not add comment!')
+		}
+	}
 
 	const postCards = posts && posts.map((post, i) => (
 		<Post post={post} key={i} postPage/>

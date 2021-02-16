@@ -32,6 +32,8 @@ const User = ({
 		initialize()
 	}, [urlId, requestUser, requestUserPosts])
 
+	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
+
 	const onClick = e => {
 		if (e.key === 'created') {
 			requestUserPosts(+urlId)
@@ -43,8 +45,6 @@ const User = ({
 			requestCommentedPosts(+urlId)
 		}
 	}
-
-	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
 	const title = user ? user.username : 'User Page',
 		defaultKeys = ['created'],

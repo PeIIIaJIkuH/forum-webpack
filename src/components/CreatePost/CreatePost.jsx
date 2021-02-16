@@ -10,13 +10,16 @@ import history from '../../history'
 import {requestAllPosts, setPostToEdit} from '../../redux/posts-reducer'
 import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
-import {toastOptions} from '../../utils/helpers/helpers'
+import {notificationType, openNotification, toastOptions} from '../../utils/helpers/helpers'
 import {toast} from 'react-toastify'
 import {withRouter} from 'react-router-dom'
 import Error404 from '../common/errors/Error404'
 
 const CreatePost = ({isAuth, requestCategories, categories, postToEdit, setPostToEdit, location}) => {
 	const [isFetching, setIsFetching] = React.useState(false)
+
+	if (!isAuth) return <Error403/>
+	if (location.pathname.indexOf('/edit') === 0 && !postToEdit) return <Error404/>
 
 	const onSubmit = async ({title, content, categories}) => {
 		setIsFetching(true)
@@ -28,7 +31,7 @@ const CreatePost = ({isAuth, requestCategories, categories, postToEdit, setPostT
 				await setIsFetching(false)
 				history.push('/')
 			} else {
-				toast.warning('Can not create post.', toastOptions)
+				openNotification(notificationType.ERROR, `Can not ${!postToEdit ? 'create' : 'edit'} post!`)
 			}
 		} else {
 			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories)
@@ -36,9 +39,6 @@ const CreatePost = ({isAuth, requestCategories, categories, postToEdit, setPostT
 			history.goBack()
 		}
 	}
-
-	if (!isAuth) return <Error403/>
-	if (location.pathname.indexOf('/edit') === 0 && !postToEdit) return <Error404/>
 
 	const title = (postToEdit ? 'Edit' : 'Create') + ' post',
 		headStyle = {fontSize: '20px', fontWeight: 600}

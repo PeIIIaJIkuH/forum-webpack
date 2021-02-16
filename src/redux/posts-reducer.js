@@ -1,7 +1,6 @@
 import {postAPI, userAPI} from '../api/requests'
-import {getObjectInArray, getPostRating, groupBy, toastOptions, updateObjectInArray} from '../utils/helpers/helpers'
+import {getObjectInArray, getPostRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import history from '../history'
-import {toast} from 'react-toastify'
 import {setProgress} from './app-reducer'
 
 const SET_POSTS = 'posts/SET_POSTS',
@@ -171,10 +170,15 @@ export const requestPostsByCategories = categories => async dispatch => {
 }
 
 export const setRating = (id, reaction) => async dispatch => {
+	let res = false
 	dispatch(setProgress(0))
-	await postAPI.rate(id, reaction)
-	await dispatch(setRatingAC(id, reaction))
+	const data = await postAPI.rate(id, reaction)
+	if (data && data.status) {
+		res = true
+		await dispatch(setRatingAC(id, reaction))
+	}
 	dispatch(setProgress(100))
+	return res
 }
 
 export const requestUser = id => async dispatch => {
@@ -197,17 +201,16 @@ export const requestComments = id => async dispatch => {
 }
 
 export const deletePost = id => async dispatch => {
+	let res = false
 	dispatch(setProgress(0))
-	console.log(id)
 	const data = await postAPI.delete(id)
-	console.log(data)
 	if (data && data.status) {
+		res = true
 		await dispatch(deletePostAC(id))
 		await dispatch(setCommentsAC(null))
-	} else {
-		toast.warning('Could not delete this post.', toastOptions)
 	}
 	dispatch(setProgress(100))
+	return res
 }
 
 export const setPostToEdit = post => async dispatch => {

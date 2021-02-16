@@ -1,35 +1,52 @@
 import React from 'react'
 import AntComment from 'antd/lib/comment'
 import Button from 'antd/lib/button'
-import {EditOutlined, SaveOutlined} from '@ant-design/icons'
+import {DeleteOutlined, EditOutlined, SaveOutlined} from '@ant-design/icons'
 import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
-import {editComment} from '../../redux/posts-reducer'
+import {deleteComment, editComment} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
-import {toast} from 'react-toastify'
-import {toastOptions} from '../../utils/helpers/helpers'
+import {notificationType, openNotification} from '../../utils/helpers/helpers'
 
-const Comment = ({author, content, datetime, actions, comment, check, editComment, userPage}) => {
+const Comment = ({author, content, datetime, comment, check, deleteComment, editComment, userPage}) => {
 	const [isEdit, setIsEdit] = React.useState(false),
-		[text, setText] = React.useState(content)
+		[text, setText] = React.useState(content),
+		[deleteLoading, setDeleteLoading] = React.useState(false),
+		[editLoading, setEditLoading] = React.useState(false)
 
 	const paragraphs = content.split('\n').map((paragraph, i) => (<p key={i}>{paragraph}</p>)),
 		autoSize = {minRows: 1, maxRows: 5}
+
+	const onDelete = async () => {
+		let ok
+		setDeleteLoading(true)
+		if (!userPage) {
+			ok = await deleteComment(comment.id)
+		} else {
+			ok = await deleteComment(comment.id, comment.post_id)
+		}
+		setDeleteLoading(false)
+		if (!ok) {
+			openNotification(notificationType.ERROR, 'Can not delete comment!')
+		}
+	}
 
 	const onEdit = async () => {
 		let ok = true
 		if (!isEdit) {
 			setIsEdit(true)
 		} else {
+			setEditLoading(true)
 			if (!userPage) {
 				ok = await editComment(comment.id, comment.author.id, comment.post_id, text, false)
 			} else {
 				ok = await editComment(comment.id, comment.author.id, comment.post_id, text, true)
 			}
+			setEditLoading(false)
 			setIsEdit(false)
 		}
 		if (!ok) {
-			toast.warning('Could not edit comment.', toastOptions)
+			openNotification(notificationType.ERROR, 'Can not edit comment!')
 		}
 	}
 
@@ -40,11 +57,13 @@ const Comment = ({author, content, datetime, actions, comment, check, editCommen
 	const edit = <EditOutlined className={s.icon}/>,
 		save = <SaveOutlined className={s.icon}/>
 
-	const editBtn = <Button type='text' icon={!isEdit ? edit : save} onClick={onEdit}/>,
+	const editBtn = <Button type='text' icon={!isEdit ? edit : save} onClick={onEdit} loading={editLoading}/>,
+		deleteBtn = <Button danger type='text' icon={<DeleteOutlined className={s.icon}/>} onClick={onDelete}
+							loading={deleteLoading}/>,
 		cContent = !isEdit ? paragraphs :
 			<TextArea autoSize={autoSize} defaultValue={content} onChange={onChange} allowClear autoFocus/>
 
-	const cActions = check && [...actions, editBtn]
+	const cActions = check && [deleteBtn, editBtn]
 
 	return <AntComment author={author} content={cContent} datetime={datetime} actions={cActions}/>
 }
@@ -52,6 +71,7 @@ const Comment = ({author, content, datetime, actions, comment, check, editCommen
 const mapStateToProps = state => ({})
 
 const mapDispatchToProps = {
+	deleteComment,
 	editComment
 }
 

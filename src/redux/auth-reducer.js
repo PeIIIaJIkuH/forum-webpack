@@ -95,7 +95,6 @@ export const deleteNotification = () => async dispatch => {
 	let res = false
 	dispatch(setProgress(0))
 	const data = await authAPI.deleteNotification()
-	console.log(data.data)
 	if (data && data.status) {
 		res = true
 		await dispatch(setNotificationsAC(null))

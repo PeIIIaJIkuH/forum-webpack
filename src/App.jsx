@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import {Route, Router, Switch} from 'react-router-dom'
 import {connect, Provider} from 'react-redux'
-import {initializedSelector, isAuthSelector} from './redux/selectors'
+import {initializedSelector} from './redux/selectors'
 import {initializeApp} from './redux/app-reducer'
 import store from './redux/store'
 import Auth from './components/Auth/Auth'
@@ -14,21 +14,19 @@ import Row from 'antd/lib/row'
 import LeftMenu from './components/LeftMenu/LeftMenu'
 import Actions from './components/Actions/Actions'
 import Error404 from './components/common/errors/Error404'
-import {toast} from 'react-toastify'
 import AppPreloader from './components/common/preloaders/AppPreloader'
 import Posts from './components/Posts/Posts'
 import PostPage from './components/Posts/PostPage'
 import User from './components/User/User'
 
-toast.configure()
-
 // TODO:
 // check all the features and functions
 // create new errors to authorization and edit post from address
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
-// change toastify to ant component
+// make loaders to buttons: 
+// make notifications on: 
 
-const App = ({initialized, isAuth, initializeApp}) => {
+const App = ({initialized, initializeApp}) => {
 	React.useEffect(() => {
 		initializeApp()
 	}, [initializeApp])
@@ -92,8 +90,7 @@ const App = ({initialized, isAuth, initializeApp}) => {
 }
 
 const mapStateToProps = state => ({
-	initialized: initializedSelector(state),
-	isAuth: isAuthSelector(state)
+	initialized: initializedSelector(state)
 })
 
 const mapDispatchToProps = {

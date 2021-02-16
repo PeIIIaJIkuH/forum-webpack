@@ -1,5 +1,5 @@
 import moment from 'moment'
-import {Slide, toast} from 'react-toastify'
+import notification from 'antd/lib/notification'
 
 export const updateObjectInArray = (items, itemId, prop, newObjProp) => items.map(e =>
 	e[prop] === itemId ? {...e, ...newObjProp} : e
@@ -38,11 +38,6 @@ export const getDateDifference = createdAt => {
 	})
 }
 
-export const toastOptions = {
-	position: toast.POSITION.BOTTOM_RIGHT,
-	transition: Slide
-}
-
 export const getRandomInt = (min, max) => {
 	min = Math.ceil(min)
 	max = Math.floor(max)
@@ -55,3 +50,15 @@ export const groupBy = key => array =>
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
 		return objectsByKeyValue
 	}, {})
+
+export const notificationType = {
+	SUCCESS: 'success',
+	INFO: 'info',
+	WARNING: 'warning',
+	ERROR: 'error'
+}
+
+
+export const openNotification = (type, message, description) => {
+	notification[type]({message, description, placement: 'bottomRight', duration: 3})
+}

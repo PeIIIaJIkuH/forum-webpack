@@ -3,20 +3,27 @@ import s from './Header.module.css'
 import Badge from 'antd/lib/badge'
 import Popover from 'antd/lib/popover'
 import Button from 'antd/lib/button'
-import {BellOutlined, CloseOutlined} from '@ant-design/icons'
+import {BellOutlined, DeleteOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
-import {getDateDifference} from '../../utils/helpers/helpers'
+import {getDateDifference, notificationType, openNotification} from '../../utils/helpers/helpers'
 
 const Actions = ({notifications, onSignout, userID, username, deleteNotification}) => {
-	const onClose = () => {
-		deleteNotification()
+	const [loading, setLoading] = React.useState(false)
+
+	const onClose = async () => {
+		setLoading(true)
+		const ok = await deleteNotification()
+		setLoading(false)
+		if (!ok) {
+			openNotification(notificationType.ERROR, 'Can not delete notifications!')
+		}
 	}
 
 	const title = (
 		<div className={s.title}>
 			<div>Notifications</div>
-			<Button type='text' size='small' onClick={onClose}
-					icon={<CloseOutlined className={s.closeIcon}/>}/>
+			<Button type='text' size='small' onClick={onClose} loading={loading}
+					icon={<DeleteOutlined className={s.closeIcon}/>}/>
 		</div>
 	)
 

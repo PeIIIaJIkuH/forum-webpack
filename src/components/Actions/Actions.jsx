@@ -9,9 +9,8 @@ import {categoriesSelector, isAuthSelector, postToEditSelector} from '../../redu
 import {requestCategories} from '../../redux/categories-reducer'
 import {connect} from 'react-redux'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
-import {toast} from 'react-toastify'
 import Layout from 'antd/lib/layout'
-import {toastOptions} from '../../utils/helpers/helpers'
+import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import Affix from 'antd/lib/affix'
 
 const Actions = ({isAuth, categories, requestCategories, requestPostsByCategories, postToEdit}) => {
@@ -19,7 +18,7 @@ const Actions = ({isAuth, categories, requestCategories, requestPostsByCategorie
 
 	const onSubmit = async ({categories}) => {
 		if (!categories || !categories.length) {
-			toast.error('You should choose at least one category!', toastOptions)
+			openNotification(notificationType.WARNING, 'Choose at least one category!')
 		} else {
 			setIsFetching(true)
 			await requestPostsByCategories(categories)

@@ -3,17 +3,31 @@ import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
 import history from '../../../history'
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
+import {notificationType, openNotification} from '../../../utils/helpers/helpers'
 
-const Header = ({post, userID, deletePost, onEdit, postPage}) => {
+const Header = ({post, userID, deletePost, setPostToEdit, postPage}) => {
+	const [loading, setLoading] = React.useState(false)
+
 	const onClick = () => {
 		history.push(`/post/${post.id}`)
 	}
 
-	const onDelete = () => {
-		deletePost(post.id)
-		if (postPage) {
-			history.push('/')
+	const onDelete = async () => {
+		setLoading(true)
+		const ok = await deletePost(post.id)
+		setLoading(false)
+		if (ok) {
+			if (postPage) {
+				history.push('/')
+			}
+		} else {
+			openNotification(notificationType.ERROR, 'Can not delete post!')
 		}
+	}
+
+	const onEdit = async () => {
+		await setPostToEdit(post)
+		history.push('/edit')
 	}
 
 	return (
@@ -24,7 +38,7 @@ const Header = ({post, userID, deletePost, onEdit, postPage}) => {
 			{userID === post.author.id && (
 				<div>
 					<Button className={s.edit} type='text' icon={<EditOutlined/>} onClick={onEdit}/>
-					<Button danger type='link' icon={<DeleteOutlined/>} onClick={onDelete}/>
+					<Button danger type='link' icon={<DeleteOutlined/>} onClick={onDelete} loading={loading}/>
 				</div>
 			)}
 		</div>

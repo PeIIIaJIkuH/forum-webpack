@@ -28,7 +28,7 @@ const CommentForm = ({isAuth, onSubmit, setUrlTo, location}) => {
 
 	return (
 		<Form form={form} onFinish={onFinish}>
-			<Form.Item className={s.commentForm} name='content' rules={rules}>
+			<Form.Item name='content' rules={rules}>
 				<TextArea allowClear rows={5} autoSize={autoSize} showCount disabled={!isAuth}/>
 			</Form.Item>
 			<Form.Item>

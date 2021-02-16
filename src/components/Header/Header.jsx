@@ -1,7 +1,11 @@
 import React from 'react'
 import s from './Header.module.css'
 import {
-	isAuthSelector, notificationsSelector, progressSelector, userIDSelector, usernameSelector
+	isAuthSelector,
+	notificationsSelector,
+	progressSelector,
+	userIDSelector,
+	usernameSelector
 } from '../../redux/selectors'
 import {deleteNotification, requestNotifications, signout} from '../../redux/auth-reducer'
 import {connect} from 'react-redux'
@@ -12,8 +16,7 @@ import Input from 'antd/lib/input'
 import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
-import {toast} from 'react-toastify'
-import {toastOptions} from '../../utils/helpers/helpers'
+import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import LoadingBar from 'react-top-loading-bar'
 import {setProgress, setUrlTo} from '../../redux/app-reducer'
 import Actions from './Actions'
@@ -27,7 +30,10 @@ const Header = ({
 	}, [requestNotifications])
 
 	const onSignout = () => {
-		signout()
+		const ok = signout()
+		if (!ok) {
+			openNotification(notificationType.ERROR, 'Can not logout!')
+		}
 	}
 
 	const onFinished = () => {
@@ -35,7 +41,7 @@ const Header = ({
 	}
 
 	const onSearch = () => {
-		toast.warning('This feature will be added soon!', toastOptions)
+		openNotification(notificationType.WARNING, 'This feature will be added soon!')
 	}
 
 	const onClick = async () => {

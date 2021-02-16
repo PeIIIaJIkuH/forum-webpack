@@ -11,12 +11,13 @@ import history from '../../history'
 import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {setUrlTo} from '../../redux/app-reducer'
-import {toast} from 'react-toastify'
-import {toastOptions} from '../../utils/helpers/helpers'
+import {notificationType, openNotification} from '../../utils/helpers/helpers'
 
 const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 	const [form] = Form.useForm()
 	const [isFetching, setIsFetching] = React.useState(false)
+
+	if (isAuth) return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
 
 	const onSubmit = async ({username, email, password}) => {
 		setIsFetching(true)
@@ -24,11 +25,11 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 			const ok = await signup(username, email, password)
 			setIsFetching(false)
 			if (ok) {
-				toast.success('Successfully created new user!', toastOptions)
+				openNotification(notificationType.SUCCESS, 'Created new user!')
 				form.resetFields()
 				history.push('/auth/signin')
 			} else {
-				toast.error('Can not register, some error happened!', toastOptions)
+				openNotification(notificationType.ERROR, 'Can not register!')
 			}
 		} else {
 			const ok = await signin(username, password)
@@ -41,7 +42,7 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 					history.push('/')
 				}
 			} else {
-				toast.error('Can not log in, some error happened!', toastOptions)
+				openNotification(notificationType.ERROR, 'Can not login!')
 			}
 		}
 	}
@@ -49,8 +50,6 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 	const onClick = () => {
 		form.resetFields()
 	}
-
-	if (isAuth) return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
 
 	const title = register ? 'Sign Up' : 'Sign In',
 		path = register ? '/auth/signin' : '/auth/signup',
