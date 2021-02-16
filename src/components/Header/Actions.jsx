@@ -43,7 +43,7 @@ const Actions = ({notifications, onSignout, userID, username, deleteNotification
 		const created = getDateDifference(notification.createdAt)
 
 		return (
-			<div key={notification.id} className='notification'>
+			<div key={notification.id} className={s.notification}>
 				<div>
 					<Link to={`/user/${userID}`}>{username}</Link> {text} your <Link
 					to={`/post/${notification.post_id}`}>post</Link>

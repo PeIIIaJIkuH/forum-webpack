@@ -73,3 +73,7 @@
     display: flex;
     justify-content: space-between;
 }
+
+.notification {
+    margin-bottom: 5px;
+}

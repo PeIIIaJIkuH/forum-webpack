@@ -27,7 +27,7 @@ const Header = ({
 				}) => {
 	React.useEffect(() => {
 		requestNotifications()
-	}, [requestNotifications])
+	}, [requestNotifications, location.pathname])
 
 	const onSignout = () => {
 		const ok = signout()
