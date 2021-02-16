@@ -36,7 +36,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
 	const postCards = posts && posts.map((post, i) => (
-		<Post post={post} key={i}/>
+		<Post post={post} key={i} postPage/>
 	))
 
 	return posts && (

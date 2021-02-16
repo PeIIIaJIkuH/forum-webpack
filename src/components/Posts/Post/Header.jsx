@@ -4,13 +4,16 @@ import Button from 'antd/lib/button'
 import history from '../../../history'
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
 
-const Header = ({post, userID, deletePost, onEdit}) => {
+const Header = ({post, userID, deletePost, onEdit, postPage}) => {
 	const onClick = () => {
 		history.push(`/post/${post.id}`)
 	}
-	
+
 	const onDelete = () => {
 		deletePost(post.id)
+		if (postPage) {
+			history.push('/')
+		}
 	}
 
 	return (

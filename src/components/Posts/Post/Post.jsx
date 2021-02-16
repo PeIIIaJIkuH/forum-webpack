@@ -15,12 +15,15 @@ import Footer from './Footer'
 import history from '../../../history'
 import Comments from '../Comments'
 
-const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit, comments}) => {
+const Post = ({
+				  post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit, comments,
+				  postPage
+			  }) => {
 	const onEdit = async () => {
 		await setPostToEdit(post)
 		history.push('/edit')
 	}
-	
+
 	return (
 		<>
 			{post &&
@@ -30,7 +33,8 @@ const Post = ({post, setRating, isAuth, requestPostsByCategories, userID, delete
 						<Rate isAuth={isAuth} setRating={setRating} post={post}/>
 					</Col>
 					<Col span={21}>
-						<Header post={post} userID={userID} deletePost={deletePost} onEdit={onEdit}/>
+						<Header post={post} userID={userID} deletePost={deletePost} onEdit={onEdit}
+								postPage={postPage}/>
 						<Content content={post.content}/>
 						<Divider className={s.divider}/>
 						<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>

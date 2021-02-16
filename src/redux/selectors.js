@@ -5,6 +5,7 @@ export const urlToSelector = state => state.app.urlTo
 export const isAuthSelector = state => state.auth.isAuth
 export const userIDSelector = state => state.auth.id
 export const usernameSelector = state => state.auth.username
+export const notificationsSelector = state => state.auth.notifications
 
 export const userSelector = state => state.posts.user
 export const postsSelector = state => state.posts.posts

@@ -12,7 +12,11 @@ export const authAPI = {
 		.then(r => r.data).catch(() => undefined),
 	signin: (username, password) => defaultAxios.post('auth/signin', {username, password}).then(r => r.data)
 		.catch(() => undefined),
-	signout: () => defaultAxios.get('auth/signout').then(r => r.data).catch(() => undefined)
+	signout: () => defaultAxios.get('auth/signout').then(r => r.data).catch(() => undefined),
+	getNotifications: () => defaultAxios.get('notifications')
+		.then(r => r.data).catch(() => 'Can not load notifications.'),
+	deleteNotification: () => defaultAxios.delete('notifications/delete/')
+		.then(r => r.data).catch(() => 'Can not delete notifications.')
 }
 
 export const postAPI = {

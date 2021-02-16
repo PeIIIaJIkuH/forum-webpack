@@ -1,11 +1,12 @@
 import React from 'react'
 import s from './Header.module.css'
-import {isAuthSelector, progressSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
-import {signout} from '../../redux/auth-reducer'
+import {
+	isAuthSelector, notificationsSelector, progressSelector, userIDSelector, usernameSelector
+} from '../../redux/selectors'
+import {deleteNotification, requestNotifications, signout} from '../../redux/auth-reducer'
 import {connect} from 'react-redux'
 import {Link, withRouter} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
-import profile from '../../assets/img/profile.svg'
 import Button from 'antd/lib/button'
 import Input from 'antd/lib/input'
 import Image from 'antd/lib/image'
@@ -13,11 +14,18 @@ import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
 import {toast} from 'react-toastify'
 import {toastOptions} from '../../utils/helpers/helpers'
-import {LogoutOutlined} from '@ant-design/icons'
 import LoadingBar from 'react-top-loading-bar'
 import {setProgress, setUrlTo} from '../../redux/app-reducer'
+import Actions from './Actions'
 
-const Header = ({isAuth, signout, username, userID, progress, setProgress, location, setUrlTo}) => {
+const Header = ({
+					isAuth, signout, username, userID, progress, setProgress, location, setUrlTo,
+					notifications, requestNotifications, deleteNotification
+				}) => {
+	React.useEffect(() => {
+		requestNotifications()
+	}, [requestNotifications])
+
 	const onSignout = () => {
 		signout()
 	}
@@ -45,21 +53,10 @@ const Header = ({isAuth, signout, username, userID, progress, setProgress, locat
 				<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'
 							  onSearch={onSearch}/>
 				{isAuth ?
-					<>
-						<span className={s.actions}>
-						<span className={s.profile}>
-							<span className={s.username}>
-								<Link to={`/user/${userID}`}>{username}</Link>
-							</span>
-							<Image width={40} src={profile} alt='profile' preview={false}/>
-						</span>
-						<Button type='link' icon={<LogoutOutlined/>} danger onClick={onSignout}>
-							Sign Out
-						</Button>
-						</span>
-					</> :
+					<Actions notifications={notifications} onSignout={onSignout} userID={userID} username={username}
+							 deleteNotification={deleteNotification}/> :
 					<Link to='/auth/signin'>
-						<Button type='link' onClick={onClick}>Sign In</Button>
+						<Button className={s.auth} type='link' onClick={onClick}>Sign In</Button>
 					</Link>}
 			</Layout.Header>
 		</Affix>
@@ -70,13 +67,16 @@ const mapStateToProps = state => ({
 	isAuth: isAuthSelector(state),
 	username: usernameSelector(state),
 	userID: userIDSelector(state),
-	progress: progressSelector(state)
+	progress: progressSelector(state),
+	notifications: notificationsSelector(state)
 })
 
 const mapDispatchToProps = {
 	signout,
 	setProgress,
-	setUrlTo
+	setUrlTo,
+	requestNotifications,
+	deleteNotification
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))

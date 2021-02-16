@@ -44,3 +44,32 @@
 .username {
     margin-right: 10px;
 }
+
+.notifications {
+    margin-right: 10px;
+}
+
+.auth {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.createdAt {
+    color: #959595;
+    font-size: 10px;
+}
+
+.closeIcon {
+    font-size: 10px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+}

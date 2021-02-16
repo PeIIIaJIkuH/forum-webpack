@@ -26,6 +26,7 @@ toast.configure()
 // check all the features and functions
 // create new errors to authorization and edit post from address
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
+// change toastify to ant component
 
 const App = ({initialized, isAuth, initializeApp}) => {
 	React.useEffect(() => {

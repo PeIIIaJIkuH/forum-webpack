@@ -68,3 +68,7 @@ textarea::-webkit-scrollbar-track {
 .ant-comment span[role='button'] {
     margin-right: 10px;
 }
+
+.ant-popover-inner {
+    border-radius: 5px;
+}

@@ -1,6 +1,5 @@
 import moment from 'moment'
 import {Slide, toast} from 'react-toastify'
-import Auth from '../../components/Auth/Auth'
 
 export const updateObjectInArray = (items, itemId, prop, newObjProp) => items.map(e =>
 	e[prop] === itemId ? {...e, ...newObjProp} : e

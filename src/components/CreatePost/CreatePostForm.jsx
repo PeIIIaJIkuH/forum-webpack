@@ -45,6 +45,10 @@ const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit, po
 			required: true,
 			message: 'Please enter post content!'
 		}],
+		categoriesRules = [{
+			required: true,
+			message: 'Please enter post categories!'
+		}],
 		autoSize = {minRows: 3, maxRows: 10},
 		contentValue = post && post.content,
 		categoriesValue = post && post.categories ? post.categories.map(e => e.name) : undefined,
@@ -56,14 +60,13 @@ const CreatePostForm = ({requestCategories, categories, isFetching, onsubmit, po
 
 	return (
 		<Form className={s.form} {...layout} name='createPost' onFinish={onsubmit}>
-			<Form.Item label='Title' name='title' initialValue={titleValue} rules={titleRules}>
+			<Form.Item label='Title' name='title' initialValue={titleValue} rules={titleRules} autoFocus>
 				<Input autoFocus/>
 			</Form.Item>
 			<Form.Item label='Content' name='content' initialValue={contentValue} rules={contentRules}>
 				<TextArea allowClear rows={5} autoSize={autoSize} showCount/>
 			</Form.Item>
-			<Form.Item label='Categories' name='categories'
-					   initialValue={categoriesValue}>
+			<Form.Item label='Categories' name='categories' initialValue={categoriesValue} rules={categoriesRules}>
 				<Select mode='tags' size='default' allowClear>
 					{tags}
 				</Select>
