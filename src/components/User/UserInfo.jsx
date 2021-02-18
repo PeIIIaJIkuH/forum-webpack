@@ -13,8 +13,8 @@ const UserInfo = ({user}) => {
 		lastActive = getDateDifference(user.lastActive)
 	}
 
-	const created = createdAt ? `${createdAt.num} ${createdAt.type.slice(0, -1)}${createdAt.num > 1 ? 's' : ''}` : 'Just now',
-		active = lastActive ? `${lastActive.num} ${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}` : 'Just now'
+	const created = createdAt ? `${createdAt.num}${createdAt.type}` : 'Just now',
+		active = lastActive ? `${lastActive.num}${lastActive.type}` : 'Just now'
 
 	return user && (
 		<section className={s.userInfo}>
