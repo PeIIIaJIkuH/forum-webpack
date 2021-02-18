@@ -68,7 +68,7 @@ const User = ({
 			</Menu>
 			<section className='posts'>
 				{posts && posts.length ? postCards :
-					<Card className={s.emptyCard}><Empty description='No Posts'/></Card>}
+					<Card><Empty description='No Posts'/></Card>}
 			</section>
 		</>
 	)

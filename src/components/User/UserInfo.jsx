@@ -3,18 +3,18 @@ import s from './User.module.css'
 import Card from 'antd/lib/card'
 import Typography from 'antd/lib/typography'
 import {getDateDifference} from '../../utils/helpers/helpers'
+import moment from 'moment'
 
 const {Title} = Typography
 
 const UserInfo = ({user}) => {
-	let createdAt, lastActive
+	let lastActive
 	if (user) {
-		createdAt = getDateDifference(user.createdAt)
-		lastActive = getDateDifference(user.lastActive)
+		lastActive = getDateDifference(user.lastActive, true)
 	}
 
-	const created = createdAt ? `${createdAt.num}${createdAt.type}` : 'Just now',
-		active = lastActive ? `${lastActive.num}${lastActive.type}` : 'Just now'
+	const created = moment(user.createdAt * 1000).format('DD MM YYYY hh:mm:ss')
+	const active = lastActive ? `${lastActive.num}${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}` : 'Just now'
 
 	return user && (
 		<section className={s.userInfo}>

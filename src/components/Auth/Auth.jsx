@@ -63,8 +63,7 @@ const Auth = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
 		<>
 			<Helmet><title>{title} | forume</title></Helmet>
 			<div className={s.wrapper}>
-				<Card className={s.card} title={title}
-					  extra={extra}>
+				<Card className={s.card} title={title} extra={extra}>
 					<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
 				</Card>
 			</div>
