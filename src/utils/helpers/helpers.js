@@ -28,10 +28,15 @@ export const getPostRating = (userRating, postRating, reaction) => {
 export const getDateDifference = createdAt => {
 	const date = moment(new Date(createdAt * 1000))
 	const now = moment()
-	const arr = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'].map(e => ({
+	const arr = ['months', 'days', 'hours', 'minutes', 'seconds'].map(e => ({
 		num: now.diff(date, e),
 		type: e
 	}))
+	arr[0].type = 'M'
+	arr[1].type = 'D'
+	arr[2].type = 'h'
+	arr[3].type = 'm'
+	arr[4].type = 's'
 	return arr.find(e => {
 		if (e.num > 0) return `${+e.num} ${e.type}`
 		return false

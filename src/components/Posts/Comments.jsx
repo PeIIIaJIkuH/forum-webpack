@@ -17,7 +17,7 @@ const Comments = ({comments, deleteComment, userID, userPage}) => {
 			author: comment.author,
 			content: comment.content,
 			datetime: created ?
-				`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now',
+				`${created.num}${created.type}` : 'Just now',
 			comment: comment,
 			check: check
 		}

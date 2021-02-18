@@ -7,7 +7,7 @@ import {getDateDifference} from '../../../utils/helpers/helpers'
 
 const Footer = ({post}) => {
 	const created = getDateDifference(post.createdAt)
-	
+
 	const onClick = () => {
 		history.push(`/user/${post.author.id}`)
 	}
@@ -20,7 +20,7 @@ const Footer = ({post}) => {
 				</Button>
 			</div>
 			<div>
-				{created ? `${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'}
+				{created ? `${created.num}${created.type}` : 'Just now'}
 			</div>
 			<Button type='text' onClick={() => history.push(`/post/${post.id}`)}>
 				<span>{post && post.commentsNumber}</span>

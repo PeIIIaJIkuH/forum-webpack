@@ -59,7 +59,7 @@ const Notifications = ({notifications, deleteNotification}) => {
 				</div>
 				<div className={s.wrapper}>
 					<div className={s.createdAt}>{created ?
-						`${created.num} ${created.type.slice(0, -1)}${created.num > 1 ? 's' : ''} ago` : 'Just now'}
+						`${created.num}${created.type}` : 'Just now'}
 					</div>
 				</div>
 			</div>

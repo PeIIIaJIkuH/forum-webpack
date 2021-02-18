@@ -11,10 +11,9 @@ import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import Error404 from '../common/errors/Error404'
 import Post from './Post/Post'
-import {setUrlTo} from '../../redux/app-reducer'
 import {notificationType, openNotification} from '../../utils/helpers/helpers'
 
-const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost, setUrlTo}) => {
+const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
 	const urlId = match.params.id,
 		[check, setCheck] = React.useState(true)
 
@@ -52,7 +51,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 			</section>
 			<section className={s.comments}>
 				<Card className={s.commentsCard}>
-					<CommentForm isAuth={isAuth} onSubmit={onSubmit} setUrlTo={setUrlTo}/>
+					<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
 					<Comments comments={comments} isAuth={isAuth} deleteComment={deleteComment}/>
 				</Card>
 			</section>
@@ -69,7 +68,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	requestComments,
 	requestPost,
-	setUrlTo,
 	deleteComment
 }
 

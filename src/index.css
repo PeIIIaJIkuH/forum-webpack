@@ -88,7 +88,18 @@ textarea::-webkit-scrollbar-track {
 
 .posts .ant-card-body {
     display: flex;
-    padding: 20px;
+}
+
+@media (max-width: 1200px) {
+    .posts .ant-card-body {
+        padding: 15px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .posts .ant-card-body {
+        padding: 20px;
+    }
 }
 
 .ant-menu-inline-collapsed {
