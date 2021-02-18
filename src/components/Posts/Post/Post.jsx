@@ -1,7 +1,5 @@
 import React from 'react'
 import s from '../Posts.module.css'
-import Col from 'antd/lib/col'
-import Row from 'antd/lib/row'
 import Card from 'antd/lib/card'
 import Divider from 'antd/lib/divider'
 import {connect} from 'react-redux'
@@ -18,31 +16,43 @@ const Post = ({
 				  post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit, comments,
 				  postPage
 			  }) => {
-	return (
-		<>
-			{post &&
-			<Card className={s.post}>
-				<Row>
-					<Col className={s.rating} span={2}>
-						<Rate isAuth={isAuth} setRating={setRating} post={post}/>
-					</Col>
-					<Col span={21}>
-						<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}
-								setPostToEdit={setPostToEdit}/>
-						<Content content={post.content}/>
-						<Divider className={s.divider}/>
-						<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>
-						<Footer post={post}/>
-						{comments && (
-							<>
-								<Divider/>
-								<Comments comments={comments} userPage/>
-							</>
-						)}
-					</Col>
-				</Row>
-			</Card>}
-		</>
+	return post && (
+		<Card className={s.post}>
+			<Rate isAuth={isAuth} setRating={setRating} post={post}/>
+			<div className={s.main}>
+				<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}
+						setPostToEdit={setPostToEdit}/>
+				<Content content={post.content}/>
+				<Divider className={s.divider}/>
+				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>
+				<Footer post={post}/>
+				{comments && (
+					<>
+						<Divider/>
+						<Comments comments={comments} userPage/>
+					</>
+				)}
+			</div>
+			{/*<Row>*/}
+			{/*	<Col className={s.rating} span={2}>*/}
+			{/*		<Rate isAuth={isAuth} setRating={setRating} post={post}/>*/}
+			{/*	</Col>*/}
+			{/*	<Col span={22}>*/}
+			{/*		<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}*/}
+			{/*				setPostToEdit={setPostToEdit}/>*/}
+			{/*		<Content content={post.content}/>*/}
+			{/*		<Divider className={s.divider}/>*/}
+			{/*		<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>*/}
+			{/*		<Footer post={post}/>*/}
+			{/*		{comments && (*/}
+			{/*			<>*/}
+			{/*				<Divider/>*/}
+			{/*				<Comments comments={comments} userPage/>*/}
+			{/*			</>*/}
+			{/*		)}*/}
+			{/*	</Col>*/}
+			{/*</Row>*/}
+		</Card>
 	)
 }
 

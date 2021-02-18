@@ -3,9 +3,18 @@
     align-items: center;
     justify-content: space-between;
     background: white;
-    padding-left: 12.5%;
-    padding-right: 12.5%;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
+}
+
+.inner {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .logo {
@@ -23,12 +32,13 @@
 }
 
 .search {
-    width: 350px;
+    width: 200px;
 }
 
 .actions {
     display: flex;
     align-items: center;
+    height: fit-content;
 }
 
 .profile {
@@ -42,7 +52,7 @@
 }
 
 .username {
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .notifications {
@@ -76,4 +86,10 @@
 
 .notification {
     margin-bottom: 5px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

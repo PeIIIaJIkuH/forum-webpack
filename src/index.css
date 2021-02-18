@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -15,6 +19,7 @@ code {
 }
 
 #root {
+    min-height: 100%;
     height: 100%;
 }
 
@@ -70,4 +75,41 @@ textarea::-webkit-scrollbar-track {
 
 .ant-popover-inner {
     border-radius: 5px;
+}
+
+.ant-layout-header {
+    padding: 0;
+}
+
+.ant-comment-content-author-time {
+    display: flex;
+    align-items: center;
+}
+
+.posts .ant-card-body {
+    display: flex;
+    padding: 20px;
+}
+
+.ant-menu-inline-collapsed {
+    width: 50px;
+}
+
+.ant-empty {
+    margin: auto;
+}
+
+.ant-popover-inner-content {
+    padding: 8px;
+}
+
+.ant-popover-title {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+@media (max-width: 1200px) {
+    .posts {
+        margin-bottom: 20px;
+    }
 }

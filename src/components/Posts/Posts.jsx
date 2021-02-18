@@ -1,4 +1,5 @@
 import React from 'react'
+import s from './Posts.module.css'
 import {connect} from 'react-redux'
 import {isAuthSelector, postsSelector, userIDSelector} from '../../redux/selectors'
 import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
@@ -51,7 +52,7 @@ const Posts = ({
 				{posts ?
 					postCards :
 					<Card>
-						<Empty description='No Posts'/>
+						<Empty className={s.empty} description='No Posts'/>
 					</Card>
 				}
 			</section>

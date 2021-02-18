@@ -1,18 +1,20 @@
 import React from 'react'
 import AntComment from 'antd/lib/comment'
 import Button from 'antd/lib/button'
-import {DeleteOutlined, EditOutlined, SaveOutlined} from '@ant-design/icons'
+import {DeleteOutlined, EditOutlined, MoreOutlined, SaveOutlined} from '@ant-design/icons'
 import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
 import {deleteComment, editComment} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {notificationType, openNotification} from '../../utils/helpers/helpers'
+import Popover from 'antd/lib/popover'
 
 const Comment = ({author, content, datetime, comment, check, deleteComment, editComment, userPage}) => {
 	const [isEdit, setIsEdit] = React.useState(false),
 		[text, setText] = React.useState(content),
 		[deleteLoading, setDeleteLoading] = React.useState(false),
-		[editLoading, setEditLoading] = React.useState(false)
+		[editLoading, setEditLoading] = React.useState(false),
+		[visible, setVisible] = React.useState(false)
 
 	const paragraphs = content.split('\n').map((paragraph, i) => (<p key={i}>{paragraph}</p>)),
 		autoSize = {minRows: 1, maxRows: 5}
@@ -63,9 +65,26 @@ const Comment = ({author, content, datetime, comment, check, deleteComment, edit
 		cContent = !isEdit ? paragraphs :
 			<TextArea autoSize={autoSize} defaultValue={content} onChange={onChange} allowClear autoFocus/>
 
-	const cActions = check && [deleteBtn, editBtn]
+	const handleVisibleChange = visible => {
+		setVisible(visible)
+	}
 
-	return <AntComment author={author} content={cContent} datetime={datetime} actions={cActions}/>
+	return <AntComment author={(
+		<>
+			{author}
+			{check && (
+				<Popover trigger='click' placement='top' visible={visible} onVisibleChange={handleVisibleChange}
+						 content={(
+							 <div className='actions'>
+								 {editBtn}
+								 {deleteBtn}
+							 </div>
+						 )}>
+					<Button type='text' icon={<MoreOutlined/>} size='small'/>
+				</Popover>
+			)}
+		</>
+	)} content={cContent} datetime={datetime}/>
 }
 
 const mapStateToProps = state => ({})

@@ -33,7 +33,7 @@ const Rate = ({isAuth, setRating, post}) => {
 	}
 
 	return (
-		<div>
+		<div className={s.rating}>
 			<Button className={`${s.up} ${isRatedUp && s.ratedUp}`} icon={<UpOutlined/>} ref={upRef}
 					disabled={!isAuth} onClick={onUpClick} loading={upLoading}/>
 			<div className={s.ratingNumber}>{post.postRating}</div>

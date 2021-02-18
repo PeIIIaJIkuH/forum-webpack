@@ -12,25 +12,29 @@ import {connect} from 'react-redux'
 import {Link, withRouter} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
 import Button from 'antd/lib/button'
-import Input from 'antd/lib/input'
 import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
 import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import LoadingBar from 'react-top-loading-bar'
-import {setProgress, setUrlTo} from '../../redux/app-reducer'
+import {setMenuOpen, setProgress, setUrlTo} from '../../redux/app-reducer'
 import Actions from './Actions'
+import {useMediaQuery} from 'react-responsive/src'
+import MobileActions from './MobileActions'
 
 const Header = ({
-					isAuth, signout, username, userID, progress, setProgress, location, setUrlTo,
-					notifications, requestNotifications, deleteNotification
+					isAuth, signout, username, userID, progress, setProgress, location, setUrlTo, notifications,
+					requestNotifications, deleteNotification, setMenuOpen
 				}) => {
 	React.useEffect(() => {
 		requestNotifications()
 	}, [requestNotifications, location.pathname])
 
+	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
+
 	const onSignout = () => {
 		const ok = signout()
+		setMenuOpen(false)
 		if (!ok) {
 			openNotification(notificationType.ERROR, 'Can not logout!')
 		}
@@ -40,30 +44,29 @@ const Header = ({
 		setProgress(0)
 	}
 
-	const onSearch = () => {
-		openNotification(notificationType.WARNING, 'This feature will be added soon!')
-	}
-
-	const onClick = async () => {
+	const onAuth = async () => {
 		await setUrlTo(location.pathname)
 	}
 
 	return (
 		<Affix offsetTop={1} className='headerWrapper'>
-			<Layout.Header className={s.header}>
-				<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={onFinished}/>
-				<Link to='/' className={s.logo}>
-					<Image width={50} src={logo} preview={false} alt='logo'/>
-					foru<span>me</span>
-				</Link>
-				<Input.Search className={s.search} placeholder='Search something' enterButton size='middle'
-							  onSearch={onSearch}/>
-				{isAuth ?
-					<Actions notifications={notifications} onSignout={onSignout} userID={userID} username={username}
-							 deleteNotification={deleteNotification}/> :
-					<Link to='/auth/signin'>
-						<Button className={s.auth} type='link' onClick={onClick}>Sign In</Button>
-					</Link>}
+			<Layout.Header className={s.header} theme='light'>
+				<div className={s.inner}>
+					<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={onFinished}/>
+					<Link to='/' className={s.logo}>
+						<Image width={50} src={logo} preview={false} alt='logo'/>
+						foru<span>me</span>
+					</Link>
+					{isAuth ? (!isTabletOrMobile ? (
+						<Actions userID={userID} username={username} onSignout={onSignout}/>
+					) : (
+						<MobileActions userID={userID} username={username} onSignout={onSignout}/>
+					)) : (
+						<Link to='/auth/signin'>
+							<Button className={s.auth} type='link' onClick={onAuth}>Sign In</Button>
+						</Link>
+					)}
+				</div>
 			</Layout.Header>
 		</Affix>
 	)
@@ -82,7 +85,8 @@ const mapDispatchToProps = {
 	setProgress,
 	setUrlTo,
 	requestNotifications,
-	deleteNotification
+	deleteNotification,
+	setMenuOpen
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))

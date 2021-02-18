@@ -2,12 +2,20 @@
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
 }
 
-.post {
-    margin-bottom: 40px;
+@media (max-width: 1200px) {
+    .post + .post {
+        margin-top: 20px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .post + .post {
+        margin-top: 40px;
+    }
 }
 
 .title {
-    font-size: 28px;
+    font-size: 20px;
     color: black;
     padding-left: 0;
     padding-right: 0;
@@ -21,19 +29,6 @@
 
 .author {
     margin-right: 40px;
-}
-
-.rating {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    font-size: 20px;
-}
-
-.rating div {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
 }
 
 .ratingNumber {
@@ -87,9 +82,21 @@
     margin-bottom: 5px;
 }
 
+@media (max-width: 1200px) {
+    .comments {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .comments {
+        margin-top: 40px;
+    }
+}
+
 .commentsCard {
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
-    margin-bottom: 40px;
 }
 
 .commentsTitle {
@@ -107,16 +114,13 @@
 
 .header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .user {
     padding: 0;
-}
-
-.edit {
-    margin-right: 5px;
 }
 
 .addComment {
@@ -125,4 +129,28 @@
 
 .icon {
     font-size: 12px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.more {
+
+}
+
+.rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.empty {
+    margin: auto;
+}
+
+.main {
+    width: 100%;
 }

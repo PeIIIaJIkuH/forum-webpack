@@ -50,7 +50,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost,
 			<section className='posts'>
 				{postCards}
 			</section>
-			<section className='comments'>
+			<section className={s.comments}>
 				<Card className={s.commentsCard}>
 					<CommentForm isAuth={isAuth} onSubmit={onSubmit} setUrlTo={setUrlTo}/>
 					<Comments comments={comments} isAuth={isAuth} deleteComment={deleteComment}/>

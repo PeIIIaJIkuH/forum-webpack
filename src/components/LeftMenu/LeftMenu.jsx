@@ -4,35 +4,48 @@ import {isAuthSelector} from '../../redux/selectors'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {
-	CommentOutlined, DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, LoginOutlined, TagsOutlined,
-	TeamOutlined, UserOutlined
+	CommentOutlined,
+	DislikeOutlined,
+	FormOutlined,
+	HomeOutlined,
+	LikeOutlined,
+	LoginOutlined,
+	TagsOutlined,
+	TeamOutlined,
+	UserOutlined
 } from '@ant-design/icons'
 import history from '../../history'
-import Affix from 'antd/lib/affix'
 import MenuItem from './MenuItem'
+import CategoriesModal from './CategoriesModal'
 
-const LeftMenu = ({isAuth, location}) => {
+const LeftMenu = ({isAuth, location, mobile}) => {
 	const options = [location.pathname.split('/')[1] || 'home'],
-		defaultKeys = ['home']
+		defaultKeys = ['home'],
+		[modalVisible, setModalVisible] = React.useState(false)
 
 	const onClick = e => {
-		history.push(`/${e.key === 'home' ? '' : e.key}`)
+		if (e.key !== 'by-categories') {
+			history.push(`/${e.key === 'home' ? '' : e.key}`)
+		} else {
+			setModalVisible(true)
+		}
 	}
 
 	return (
-		<Affix offsetTop={105}>
-			<Menu mode='inline' defaultSelectedKeys={defaultKeys} selectedKeys={options} onClick={onClick}>
-				<MenuItem key='home' title='Home' icon={<HomeOutlined/>} isAuth={isAuth} forAll available/>
-				<MenuItem key='my' title='My Posts' icon={<UserOutlined/>} isAuth={isAuth} available/>
-				<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} isAuth={isAuth} available/>
-				<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} isAuth={isAuth} available/>
-				<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>}/>
-				<MenuItem key='user' title='User Posts' icon={<TeamOutlined/>}/>
-				<MenuItem key='post' title='Comments' icon={<CommentOutlined/>}/>
-				<MenuItem key='auth' title='Authorization' icon={<LoginOutlined/>}/>
-				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>}/>
-			</Menu>
-		</Affix>
+		<Menu mode='inline' defaultSelectedKeys={defaultKeys} selectedKeys={options} onClick={onClick}>
+			<MenuItem key='home' title='Home' icon={<HomeOutlined/>} isAuth={isAuth} forAll available/>
+			<MenuItem key='auth' title='Authorization' icon={<LoginOutlined/>} available={mobile}/>
+			<MenuItem key='my' title='My Posts' icon={<UserOutlined/>} isAuth={isAuth} available/>
+			<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} isAuth={isAuth} available/>
+			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} isAuth={isAuth} available/>
+			<MenuItem key='user' title='User Posts' icon={<TeamOutlined/>}/>
+			<MenuItem key='post' title='Comments' icon={<CommentOutlined/>}/>
+			<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>} available forAll={mobile}/>
+			{mobile && (
+				<CategoriesModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+			)}
+			<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} forAll={mobile} available={mobile}/>
+		</Menu>
 	)
 }
 
