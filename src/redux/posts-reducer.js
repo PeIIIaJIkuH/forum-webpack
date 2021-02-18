@@ -1,7 +1,7 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getPostRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
-import history from '../history'
 import {setProgress} from './app-reducer'
+import history from '../history'
 
 const SET_POSTS = 'posts/SET_POSTS',
 	SET_RATING = 'posts/SET_RATING',
@@ -161,11 +161,9 @@ export const requestPost = id => async dispatch => {
 
 export const requestPostsByCategories = categories => async dispatch => {
 	dispatch(setProgress(0))
-	if (categories) {
-		const data = await postAPI.getByCategories(categories)
-		await dispatch(setPostsAC(data.data))
-		history.push('/by-categories')
-	}
+	const data = await postAPI.getByCategories(categories)
+	await dispatch(setPostsAC(data.data))
+	history.push('/by-categories')
 	dispatch(setProgress(100))
 }
 

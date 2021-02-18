@@ -9,7 +9,7 @@ const CategoriesModal = ({modalVisible, setModalVisible}) => {
 
 	return (
 		<Modal title='Search by Categories' visible={modalVisible} footer={null} onCancel={close}>
-			<CategoriesSearch closeModal={close}/>
+			<CategoriesSearch closeModal={close} mobile/>
 		</Modal>
 	)
 }

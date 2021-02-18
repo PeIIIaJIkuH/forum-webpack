@@ -7,11 +7,15 @@ import {getDateDifference} from '../../../utils/helpers/helpers'
 
 const Footer = ({post}) => {
 	const created = getDateDifference(post.createdAt)
+	
+	const onClick = () => {
+		history.push(`/user/${post.author.id}`)
+	}
 
 	return (
 		<div className={s.footer}>
 			<div className={s.author}>
-				<Button className={s.user} type='text' onClick={() => history.push(`/user/${post.author.id}`)}>
+				<Button className={s.user} type='text' onClick={onClick}>
 					{post.author.username}
 				</Button>
 			</div>

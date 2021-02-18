@@ -30,7 +30,6 @@ const Posts = ({
 			requestRatedPosts(userID, type)
 		} else if (type === 'categories') {
 			setTitle('Search by Categories')
-			requestPostsByCategories()
 		} else {
 			setTitle('Home')
 			requestAllPosts()

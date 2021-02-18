@@ -9,11 +9,16 @@ import {requestCategories} from '../../redux/categories-reducer'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
 import {setMenuOpen} from '../../redux/app-reducer'
 
-const CategoriesSearch = ({categories, requestCategories, requestPostsByCategories, closeModal, setMenuOpen}) => {
+const CategoriesSearch = ({
+							  categories, requestCategories, requestPostsByCategories, closeModal, setMenuOpen,
+							  mobile
+						  }) => {
 	const [isFetching, setIsFetching] = React.useState(false)
 
 	const onSubmit = async ({categories}) => {
-		closeModal()
+		if (mobile) {
+			closeModal()
+		}
 		setMenuOpen(false)
 		if (!categories || !categories.length) {
 			openNotification(notificationType.WARNING, 'Choose at least one category!')

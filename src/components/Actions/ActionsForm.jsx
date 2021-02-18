@@ -22,8 +22,8 @@ const ActionsForm = ({requestCategories, categories, onSubmit, isFetching}) => {
 		}
 	}
 
-	const tags = categories && categories.map((e, i) => (
-		<Select.Option key={i}>{e}</Select.Option>
+	const tags = categories && categories.map(e => (
+		<Select.Option key={e}>{e}</Select.Option>
 	))
 
 	return (

@@ -33,25 +33,6 @@ const Post = ({
 					</>
 				)}
 			</div>
-			{/*<Row>*/}
-			{/*	<Col className={s.rating} span={2}>*/}
-			{/*		<Rate isAuth={isAuth} setRating={setRating} post={post}/>*/}
-			{/*	</Col>*/}
-			{/*	<Col span={22}>*/}
-			{/*		<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}*/}
-			{/*				setPostToEdit={setPostToEdit}/>*/}
-			{/*		<Content content={post.content}/>*/}
-			{/*		<Divider className={s.divider}/>*/}
-			{/*		<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>*/}
-			{/*		<Footer post={post}/>*/}
-			{/*		{comments && (*/}
-			{/*			<>*/}
-			{/*				<Divider/>*/}
-			{/*				<Comments comments={comments} userPage/>*/}
-			{/*			</>*/}
-			{/*		)}*/}
-			{/*	</Col>*/}
-			{/*</Row>*/}
 		</Card>
 	)
 }
