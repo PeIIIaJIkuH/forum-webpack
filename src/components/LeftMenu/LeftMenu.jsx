@@ -3,17 +3,7 @@ import Menu from 'antd/lib/menu'
 import {isAuthSelector} from '../../redux/selectors'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
-import {
-	CommentOutlined,
-	DislikeOutlined,
-	FormOutlined,
-	HomeOutlined,
-	LikeOutlined,
-	LoginOutlined,
-	TagsOutlined,
-	TeamOutlined,
-	UserOutlined
-} from '@ant-design/icons'
+import {DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, TagsOutlined, UserOutlined} from '@ant-design/icons'
 import history from '../../history'
 import MenuItem from './MenuItem'
 import CategoriesModal from './CategoriesModal'
@@ -34,17 +24,15 @@ const LeftMenu = ({isAuth, location, mobile}) => {
 	return (
 		<Menu mode='inline' defaultSelectedKeys={defaultKeys} selectedKeys={options} onClick={onClick}>
 			<MenuItem key='home' title='Home' icon={<HomeOutlined/>} isAuth={isAuth} forAll available/>
-			<MenuItem key='auth' title='Authorization' icon={<LoginOutlined/>} available={mobile}/>
 			<MenuItem key='my' title='My Posts' icon={<UserOutlined/>} isAuth={isAuth} available/>
 			<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} isAuth={isAuth} available/>
 			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} isAuth={isAuth} available/>
-			<MenuItem key='user' title='User Posts' icon={<TeamOutlined/>}/>
-			<MenuItem key='post' title='Comments' icon={<CommentOutlined/>}/>
 			<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>} available forAll={mobile}/>
-			{mobile && (
+			{mobile && <>
 				<CategoriesModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
-			)}
-			<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} forAll={mobile} available={mobile}/>
+				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} forAll={mobile}
+						  available={mobile}/>
+			</>}
 		</Menu>
 	)
 }
