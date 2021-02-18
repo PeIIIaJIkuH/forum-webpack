@@ -18,7 +18,9 @@ const Actions = ({isAuth, postToEdit}) => {
 					Add post
 				</Button>
 			</Link>
-			<CategoriesSearch/>
+			<div className={s.wrapper}>
+				<CategoriesSearch/>
+			</div>
 			<Layout.Footer className={s.footer}>
 				<div>by PeIIIaJIkuH and indecember</div>
 				<div>GO, React, SQLite3</div>

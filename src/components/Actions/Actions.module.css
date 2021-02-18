@@ -1,6 +1,15 @@
+.addPost {
+    margin-bottom: 40px;
+    display: block;
+}
+
 .addPost button {
     width: 100%;
     border-radius: 5px;
+}
+
+.wrapper {
+    margin-bottom: 40px;
 }
 
 .card, .footer {
