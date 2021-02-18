@@ -13,8 +13,8 @@ const UserInfo = ({user}) => {
 		lastActive = getDateDifference(user.lastActive, true)
 	}
 
-	const created = moment(user.createdAt * 1000).format('DD MM YYYY hh:mm:ss')
-	const active = lastActive ? `${lastActive.num}${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}` : 'Just now'
+	const created = moment(user.createdAt * 1000).format('DD.MM.YYYY hh:mm:ss')
+	const active = lastActive ? `${lastActive.num} ${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}` : 'Just now'
 
 	return user && (
 		<section className={s.userInfo}>
