@@ -30,8 +30,7 @@ const LeftMenu = ({isAuth, location, mobile}) => {
 			<MenuItem key='by-categories' title='By Categories' icon={<TagsOutlined/>} available forAll={mobile}/>
 			{mobile && <>
 				<CategoriesModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
-				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} forAll={mobile}
-						  available={mobile}/>
+				<MenuItem key='create' title='Create Post' icon={<FormOutlined/>} forAll={mobile} available={mobile}/>
 			</>}
 		</Menu>
 	)
