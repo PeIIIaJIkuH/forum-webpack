@@ -49,7 +49,7 @@ const User = ({
 	const title = user ? user.username : 'User Page',
 		defaultKeys = ['created'],
 		postCards = posts && posts.map((post, i) => (
-			<Post post={post} key={i} comments={userComments && userComments[post.id]}/>
+			<Post post={post} key={post.id} comments={userComments && userComments[post.id]}/>
 		))
 
 	return user && (

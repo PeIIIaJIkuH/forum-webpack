@@ -31,11 +31,9 @@ const setSelectedCategoriesAC = categories => ({
 })
 
 export const requestCategories = () => async dispatch => {
-	dispatch(setProgress(0))
 	const data = await categoriesAPI.all()
 	const arr = data && data.data ? data.data.map(e => e.name) : null
 	await dispatch(setCategoriesAC(arr))
-	dispatch(setProgress(100))
 }
 
 export const setSelectedCategories = categories => async dispatch => {

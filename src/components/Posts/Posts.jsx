@@ -48,14 +48,14 @@ const Posts = ({
 			{type === 'categories' && (
 				<section className={s.searchByCategories}>
 					<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
-						{selected.map((tag, i) => <Tag key={i}>{tag}</Tag>)}
+						{selected.map((tag, i) => <Tag key={tag.id}>{tag}</Tag>)}
 					</Card>
 				</section>
 			)}
 			<section className='posts'>
 				{posts && posts.length ?
 					posts && posts.map((post, i) => (
-						<Post post={post} key={i}/>
+						<Post post={post} key={post.id}/>
 					)) :
 					<Card>
 						<Empty className={s.empty} description='No Posts'/>

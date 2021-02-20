@@ -192,10 +192,8 @@ export const requestUser = id => async dispatch => {
 }
 
 export const requestComments = id => async dispatch => {
-	dispatch(setProgress(0))
 	const data = await postAPI.getComments(id)
 	await dispatch(setCommentsAC(data.data))
-	dispatch(setProgress(100))
 }
 
 export const deletePost = id => async dispatch => {

@@ -41,7 +41,7 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}
 	}
 
 	const postCards = posts && posts.map((post, i) => (
-		<Post post={post} key={i} postPage/>
+		<Post post={post} key={post.id} postPage/>
 	))
 
 	return posts && (

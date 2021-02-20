@@ -41,7 +41,6 @@ export const requestNotifications = () => async dispatch => {
 	if (data && data.status) {
 		await dispatch(setNotificationsAC(data.data))
 	}
-	dispatch(setProgress(100))
 }
 
 export const requestAuthUserData = () => async dispatch => {
