@@ -23,6 +23,7 @@ const CreatePost = ({isAuth, requestCategories, categories, postToEdit, setPostT
 	const onSubmit = async ({title, content, categories}) => {
 		setIsFetching(true)
 		content = content.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
+		categories = categories.map(tag => tag.trim())
 		if (!postToEdit) {
 			const data = await postAPI.create(title.trim(), content, categories)
 			if (data && data.status) {
