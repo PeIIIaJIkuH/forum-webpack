@@ -15,3 +15,4 @@ export const postToEditSelector = state => state.posts.postToEdit
 export const userCommentsSelector = state => state.posts.userComments
 
 export const categoriesSelector = state => state.categories.data
+export const selectedCategoriesSelector = state => state.categories.selected

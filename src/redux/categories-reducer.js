@@ -1,32 +1,45 @@
 import {categoriesAPI} from '../api/requests'
 import {setProgress} from './app-reducer'
 
-const SET_CATEGORIES = 'categories/SET_CATEGORIES'
+const SET_CATEGORIES = 'categories/SET_CATEGORIES',
+	SET_SELECTED_CATEGORIES = 'categories/SET_SELECTED_CATEGORIES'
 
 const initialState = {
-	data: null
+	data: null,
+	selected: null
 }
 
 const categoriesReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_CATEGORIES:
 			return {...state, data: action.payload}
+		case SET_SELECTED_CATEGORIES:
+			return {...state, selected: action.payload}
 		default:
 			return state
 	}
 }
 
-const setCategories = data => ({
+const setCategoriesAC = categories => ({
 	type: SET_CATEGORIES,
-	payload: data
+	payload: categories
+})
+
+const setSelectedCategoriesAC = categories => ({
+	type: SET_SELECTED_CATEGORIES,
+	payload: categories
 })
 
 export const requestCategories = () => async dispatch => {
 	dispatch(setProgress(0))
 	const data = await categoriesAPI.all()
 	const arr = data && data.data ? data.data.map(e => e.name) : null
-	await dispatch(setCategories(arr))
+	await dispatch(setCategoriesAC(arr))
 	dispatch(setProgress(100))
+}
+
+export const setSelectedCategories = categories => async dispatch => {
+	dispatch(setSelectedCategoriesAC(categories))
 }
 
 export default categoriesReducer

@@ -37,7 +37,7 @@ export const getDateDifference = (createdAt, long) => {
 		arr[1].type = 'D'
 		arr[2].type = 'h'
 		arr[3].type = 'm'
-		arr[4].type = 's'	
+		arr[4].type = 's'
 	}
 	return arr.find(e => {
 		if (e.num > 0) return `${+e.num} ${e.type}`
@@ -69,3 +69,26 @@ export const notificationType = {
 export const openNotification = (type, message, description) => {
 	notification[type]({message, description, placement: 'bottomRight', duration: 3})
 }
+
+export const defaultValidator = field => ({
+	validator: async (_, value) => new Promise((resolve, reject) => {
+		if (!value)
+			reject(`Please enter ${field.toLowerCase()}!`)
+		if (field === 'Categories') {
+			value.forEach(tag => {
+				if (!tag.trim())
+					reject(`Category can not be empty!`)
+			})
+		} else {
+			if (!value.trim())
+				reject(`${field} can not be empty!`)
+			if (field === 'Username' && !RegExp(/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)
+				.test(value))
+				reject('Incorrect username!')
+			if (field === 'Password' && !RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z._]{6,20}$/)
+				.test(value))
+				reject('Incorrect password!')
+		}
+		resolve()
+	})
+})

@@ -1,7 +1,7 @@
 import React from 'react'
 import s from './Posts.module.css'
 import {connect} from 'react-redux'
-import {isAuthSelector, postsSelector, userIDSelector} from '../../redux/selectors'
+import {isAuthSelector, postsSelector, selectedCategoriesSelector, userIDSelector} from '../../redux/selectors'
 import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import Post from './Post/Post'
 import Card from 'antd/lib/card'
@@ -10,10 +10,12 @@ import {withRouter} from 'react-router-dom'
 import Error404 from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
 import Error403 from '../common/errors/Error403'
+import Tag from 'antd/lib/tag'
+import Typography from 'antd/lib/typography'
 
 const Posts = ({
 				   type, posts, match, userID, requestUserPosts, requestRatedPosts, requestPostsByCategories,
-				   requestAllPosts, isAuth
+				   requestAllPosts, isAuth, selected
 			   }) => {
 	const urlId = match.params.id,
 		[title, setTitle] = React.useState('Home')
@@ -37,19 +39,24 @@ const Posts = ({
 	}, [type, urlId, requestUserPosts, requestRatedPosts, requestPostsByCategories,
 		requestAllPosts, userID])
 
-	if (urlId !== undefined && isNaN(+urlId)) return <Error404/>
+	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected)) return <Error404/>
 	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted')) return <Error403/>
-
-	const postCards = posts && posts.map((post, i) => (
-		<Post post={post} key={i}/>
-	))
 
 	return (
 		<>
 			<Helmet><title>{title} | forume</title></Helmet>
+			{type === 'categories' && (
+				<section className={s.searchByCategories}>
+					<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
+						{selected.map((tag, i) => <Tag key={i}>{tag}</Tag>)}
+					</Card>
+				</section>
+			)}
 			<section className='posts'>
-				{posts ?
-					postCards :
+				{posts && posts.length ?
+					posts && posts.map((post, i) => (
+						<Post post={post} key={i}/>
+					)) :
 					<Card>
 						<Empty className={s.empty} description='No Posts'/>
 					</Card>
@@ -62,7 +69,8 @@ const Posts = ({
 const mapStateToProps = state => ({
 	posts: postsSelector(state),
 	userID: userIDSelector(state),
-	isAuth: isAuthSelector(state)
+	isAuth: isAuthSelector(state),
+	selected: selectedCategoriesSelector(state)
 })
 
 const mapDispatchToProps = {

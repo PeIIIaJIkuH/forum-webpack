@@ -4,11 +4,10 @@ import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {deleteComment} from '../../redux/posts-reducer'
 import {userIDSelector} from '../../redux/selectors'
 import Comment from './Comment'
 
-const Comments = ({comments, deleteComment, userID, userPage}) => {
+const Comments = ({comments, userID, userPage}) => {
 	const data = comments ? comments.map((comment, i) => {
 		const created = getDateDifference(comment.createdAt),
 			check = comment.author.id === userID
@@ -54,8 +53,6 @@ const mapStateToProps = state => ({
 	userID: userIDSelector(state)
 })
 
-const mapDispatchToProps = {
-	deleteComment
-}
+const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments)

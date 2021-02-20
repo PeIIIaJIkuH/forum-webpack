@@ -27,7 +27,8 @@ import RightMenu from './components/RightMenu/RightMenu'
 // check all the features and functions
 // create new errors to authorization and edit post from address
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
-// make responsive design
+// make by categories header with tags, clear actions form after enter
+// change user description
 
 const App = ({initialized, initializeApp, setMenuOpen, location}) => {
 	React.useEffect(() => {

@@ -130,3 +130,7 @@ textarea::-webkit-scrollbar-track {
         margin-bottom: 20px;
     }
 }
+
+.inputInfo {
+    color: rgba(0, 0, 0, .45)
+}

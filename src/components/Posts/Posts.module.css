@@ -162,3 +162,21 @@
 .main {
     width: 100%;
 }
+
+.searchByCategories {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
+}
+
+@media (max-width: 1200px) {
+    .searchByCategories {
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .searchByCategories {
+        margin-bottom: 40px;
+    }
+}

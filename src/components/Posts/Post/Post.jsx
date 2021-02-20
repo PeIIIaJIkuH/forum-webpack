@@ -11,10 +11,11 @@ import Content from './Content'
 import Categories from './Categories'
 import Footer from './Footer'
 import Comments from '../Comments'
+import {setSelectedCategories} from '../../../redux/categories-reducer'
 
 const Post = ({
 				  post, setRating, isAuth, requestPostsByCategories, userID, deletePost, setPostToEdit, comments,
-				  postPage
+				  postPage, setSelectedCategories
 			  }) => {
 	return post && (
 		<Card className={s.post}>
@@ -24,7 +25,8 @@ const Post = ({
 						setPostToEdit={setPostToEdit}/>
 				<Content content={post.content}/>
 				<Divider className={s.divider}/>
-				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}/>
+				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}
+							setSelectedCategories={setSelectedCategories}/>
 				<Footer post={post}/>
 				{comments && (
 					<>
@@ -46,7 +48,8 @@ const mapDispatchToProps = {
 	setRating,
 	requestPostsByCategories,
 	deletePost,
-	setPostToEdit
+	setPostToEdit,
+	setSelectedCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post)

@@ -31,7 +31,8 @@ const PostPage = ({isAuth, comments, requestComments, match, posts, requestPost}
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
 
 	const onSubmit = async ({content}) => {
-		const data = await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n'))
+		const data = await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n').split('\n')
+			.map(line => line.trim()).join('\n'))
 		if (data && data.status) {
 			await requestComments(+urlId)
 		} else {

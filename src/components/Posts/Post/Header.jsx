@@ -12,17 +12,17 @@ const Header = ({post, userID, deletePost, setPostToEdit, postPage}) => {
 		[visible, setVisible] = React.useState(false)
 
 	const onDelete = async () => {
+		setVisible(false)
 		setLoading(true)
 		const ok = await deletePost(post.id)
-		setLoading(false)
 		if (ok) {
 			if (postPage) {
 				history.push('/')
 			}
 		} else {
+			setLoading(false)
 			openNotification(notificationType.ERROR, 'Can not delete post!')
 		}
-		setVisible(false)
 	}
 
 	const onEdit = async () => {

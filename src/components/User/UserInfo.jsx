@@ -4,6 +4,7 @@ import Card from 'antd/lib/card'
 import Typography from 'antd/lib/typography'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import moment from 'moment'
+import Descriptions from 'antd/lib/descriptions'
 
 const {Title} = Typography
 
@@ -19,12 +20,11 @@ const UserInfo = ({user}) => {
 	return user && (
 		<section className={s.userInfo}>
 			<Card title={<Title level={2}>{user.username}</Title>}>
-				<Title level={5}>E-mail: </Title>
-				<p>{user.email}</p>
-				<Title level={5}>Created: </Title>
-				<p>{created}</p>
-				<Title level={5}>Last active: </Title>
-				<p>{active}</p>
+				<Descriptions title='User info' column={1}>
+					<Descriptions.Item label='E-mail'>{user.username}</Descriptions.Item>
+					<Descriptions.Item label='Created at'>{created}</Descriptions.Item>
+					<Descriptions.Item label='Last active'>{active}</Descriptions.Item>
+				</Descriptions>
 			</Card>
 		</section>
 	)
