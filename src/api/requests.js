@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const defaultAxios = axios.create({
 	baseURL: 'https://localhost:8081/api/',
-	// baseURL: 'http://167.99.251.68:8081/api/',
+	// baseURL: 'http://139.59.211.109:8081/api/',
 	withCredentials: true
 })
 
