@@ -1,7 +1,8 @@
 import {authAPI} from '../api/requests'
 import {setProgress} from './app-reducer'
-import {ThunkAction} from 'redux-thunk'
+import {ThunkDispatch} from 'redux-thunk'
 import {State} from './store'
+import {TNotification} from '../types/types'
 
 const SET_USER_DATA = 'auth/SET_USER_DATA',
 	SET_NOTIFICATIONS = 'auth/SET_NOTIFICATIONS'
@@ -13,7 +14,7 @@ type InitialState = {
 	createdAt: number | null
 	lastActive: number | null
 	isAuth: boolean
-	notifications: any
+	notifications: TNotification[] | null
 }
 const initialState: InitialState = {
 	id: null,
@@ -58,17 +59,17 @@ const setUserDataAC = (id: number | null, username: string | null, email: string
 
 type SetNotificationsAC = {
 	type: typeof SET_NOTIFICATIONS
-	notifications: any
+	notifications: TNotification[] | null
 }
-const setNotificationsAC = (notifications: any): SetNotificationsAC => ({
+const setNotificationsAC = (notifications: TNotification[] | null): SetNotificationsAC => ({
 	type: SET_NOTIFICATIONS,
 	notifications
 })
 
-type Thunk = ThunkAction<Promise<void>, State, unknown, Action>
-type ThunkBoolean = ThunkAction<Promise<boolean>, State, unknown, Action>
+type Dispatch = ThunkDispatch<State, unknown, Action>
 
-export const requestNotifications = (): Thunk => async dispatch => {
+export type RequestNotifications = () => void
+export const requestNotifications = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.getNotifications()
 	if (data && data.status) {
@@ -76,7 +77,7 @@ export const requestNotifications = (): Thunk => async dispatch => {
 	}
 }
 
-export const requestAuthUserData = (): Thunk => async dispatch => {
+export const requestAuthUserData = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.me()
 	if (data && data.status) {
@@ -89,7 +90,8 @@ export const requestAuthUserData = (): Thunk => async dispatch => {
 	await dispatch(setProgress(100))
 }
 
-export const signup = (username: string, email: string, password: string): ThunkBoolean => async dispatch => {
+export type Signup = (username: string, email: string, password: string) => void
+export const signup = (username: string, email: string, password: string) => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.signup(username, email, password)
@@ -100,7 +102,8 @@ export const signup = (username: string, email: string, password: string): Thunk
 	return res
 }
 
-export const signin = (username: string, password: string): ThunkBoolean => async dispatch => {
+export type Signin = (username: string, password: string) => void
+export const signin = (username: string, password: string) => async (dispatch: Dispatch) => {
 	let res = false
 	const data = await authAPI.signin(username, password)
 	if (data && data.status) {
@@ -110,7 +113,8 @@ export const signin = (username: string, password: string): ThunkBoolean => asyn
 	return res
 }
 
-export const signout = (): ThunkBoolean => async dispatch => {
+export type Signout = () => void
+export const signout = () => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.signout()
@@ -123,7 +127,8 @@ export const signout = (): ThunkBoolean => async dispatch => {
 	return res
 }
 
-export const deleteNotification = (): ThunkBoolean => async dispatch => {
+export type DeleteNotification = () => void
+export const deleteNotification = () => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.deleteNotification()

@@ -1,6 +1,6 @@
 import {requestAuthUserData} from './auth-reducer'
 import {State} from './store'
-import {ThunkAction} from 'redux-thunk'
+import {ThunkDispatch} from 'redux-thunk'
 
 const INITIALIZE_APP = 'app/INITIALIZE_APP',
 	SET_PROGRESS = 'app/SET_PROGRESS',
@@ -28,7 +28,7 @@ const appReducer = (state = initialState, action: Action) => {
 		case SET_PROGRESS:
 			return {...state, progress: action.progress}
 		case SET_URL_TO:
-			return {...state, urlTo: action.url}
+			return {...state, urlTo: action.urlTo}
 		case SET_MENU_OPEN:
 			return {...state, menuOpen: action.menuOpen}
 		default:
@@ -54,11 +54,11 @@ const setProgressAC = (progress: number): SetProgressAC => ({
 
 type SetUrlToAC = {
 	type: typeof SET_URL_TO
-	url: string
+	urlTo: string | null
 }
-const setUrlToAC = (url: string): SetUrlToAC => ({
+const setUrlToAC = (urlTo: string | null): SetUrlToAC => ({
 	type: SET_URL_TO,
-	url
+	urlTo
 })
 
 type SetMenuOpenAC = {
@@ -70,22 +70,26 @@ const setMenuOpenAC = (menuOpen: boolean): SetMenuOpenAC => ({
 	menuOpen
 })
 
-type Thunk = ThunkAction<Promise<void>, State, unknown, Action>
+type Dispatch = ThunkDispatch<State, unknown, Action>
 
-export const initializeApp = (): Thunk => async dispatch => {
+export type InitializeApp = () => void
+export const initializeApp = () => async (dispatch: Dispatch) => {
 	await dispatch(requestAuthUserData())
 	await dispatch(initializeAppAC())
 }
 
-export const setProgress = (progress: number): Thunk => async dispatch => {
+export type SetProgress = (progress: number) => void
+export const setProgress = (progress: number) => async (dispatch: Dispatch) => {
 	await dispatch(setProgressAC(progress))
 }
 
-export const setUrlTo = (url: string): Thunk => async dispatch => {
+export type SetUrlTo = (url: string | null) => void
+export const setUrlTo = (url: string | null) => async (dispatch: Dispatch) => {
 	await dispatch(setUrlToAC(url))
 }
 
-export const setMenuOpen = (menuOpen: boolean): Thunk => async dispatch => {
+export type SetMenuOpen = (menuOpen: boolean) => void
+export const setMenuOpen = (menuOpen: boolean) => async (dispatch: Dispatch) => {
 	if (!menuOpen) document.getElementsByTagName('html')[0].style.overflowY = 'scroll'
 	else document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
 	await dispatch(setMenuOpenAC(menuOpen))

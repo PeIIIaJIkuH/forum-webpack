@@ -1,14 +1,14 @@
 import {categoriesAPI} from '../api/requests'
-import {Category} from '../types/types'
-import {ThunkAction} from 'redux-thunk'
+import {ThunkDispatch} from 'redux-thunk'
 import {State} from './store'
+import {Category} from '../types/types'
 
 const SET_CATEGORIES = 'categories/SET_CATEGORIES',
 	SET_SELECTED_CATEGORIES = 'categories/SET_SELECTED_CATEGORIES'
 
 type InitialState = {
 	all: Category[] | null
-	selected: Category[] | null
+	selected: string[] | null
 }
 const initialState: InitialState = {
 	all: null,
@@ -39,22 +39,24 @@ const setCategoriesAC = (categories: Category[] | null): SetCategoriesAC => ({
 
 type SetSelectedCategoriesAC = {
 	type: typeof SET_SELECTED_CATEGORIES
-	categories: Category[] | null
+	categories: string[] | null
 }
-const setSelectedCategoriesAC = (categories: Category[] | null): SetSelectedCategoriesAC => ({
+const setSelectedCategoriesAC = (categories: string[] | null): SetSelectedCategoriesAC => ({
 	type: SET_SELECTED_CATEGORIES,
 	categories
 })
 
-type Thunk = ThunkAction<Promise<void>, State, unknown, Action>
+type Dispatch = ThunkDispatch<State, unknown, Action>
 
-export const requestCategories = (): Thunk => async dispatch => {
+export type RequestCategories = () => void
+export const requestCategories = () => async (dispatch: Dispatch) => {
 	const data = await categoriesAPI.all()
-	const arr = data && data.data ? data.data.map((category: Category) => category.name) : null
+	const arr = data && data.data ? data.data : null
 	await dispatch(setCategoriesAC(arr))
 }
 
-export const setSelectedCategories = (categories: Category[] | null): Thunk => async dispatch => {
+export type SetSelectedCategories = (categories: string[] | null) => void
+export const setSelectedCategories = (categories: string[] | null) => async (dispatch: Dispatch) => {
 	dispatch(setSelectedCategoriesAC(categories))
 }
 
