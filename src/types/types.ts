@@ -27,9 +27,11 @@ export type TComment = {
 	createdAt: number
 	editedAt: number
 	author: TUser
+	commentRating: number
+	userRating: Reaction
 }
 
-export type Reaction = -1 | 0 | 1 | 'upvoted' | 'downvoted'
+export type Reaction = -1 | 0 | 1
 
 export type Category = {
 	id: number
