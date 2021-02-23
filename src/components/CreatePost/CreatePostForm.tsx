@@ -9,75 +9,102 @@ import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
 import {defaultValidator} from '../../utils/helpers/helpers'
-import {RequestCategories} from '../../redux/categories-reducer'
-import {SetPostToEdit} from '../../redux/posts-reducer'
+import {requestCategories, RequestCategories} from '../../redux/categories-reducer'
+import {requestAllPosts, setPostToEdit, SetPostToEdit} from '../../redux/posts-reducer'
 import {Category, TPost} from '../../types/types'
+import {State} from '../../redux/store'
+import {categoriesSelector, postToEditSelector} from '../../redux/selectors'
+import {connect} from 'react-redux'
+import {postAPI} from '../../api/requests'
+import ImageUpload from './ImageUpload'
+import message from 'antd/lib/message'
 
 const layout = {
-	labelCol: {
-		span: 4
-	},
-	wrapperCol: {
-		span: 20
-	}
+	labelCol: {span: 4},
+	wrapperCol: {span: 20}
 }
 
 const tailLayout = {
-	wrapperCol: {
-		span: 24
-	}
+	wrapperCol: {span: 24}
 }
 
-type Props = {
+type OwnProps = {
 	isFetching: boolean
-	categories: Category[] | null
-	post: TPost | null
-	setPostToEdit: SetPostToEdit
-	requestCategories: RequestCategories
-	onsubmit: (obj: { title: string, content: string, categories: string[] }) => Promise<void>
-	location: RouteComponentProps
-} & RouteComponentProps
+	setIsFetching: (fetching: boolean) => void
+}
+
+type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
 
 const CreatePostForm: FC<Props> = ({
-									   requestCategories,
-									   categories,
-									   isFetching,
-									   onsubmit,
-									   post,
-									   setPostToEdit,
-									   location
+									   requestCategories, categories, isFetching,
+									   postToEdit, setPostToEdit, location,
+									   setIsFetching
 								   }) => {
 	React.useEffect(() => {
 		requestCategories()
-		return () => {
-			setPostToEdit(null)
-		}
-	}, [requestCategories, post, setPostToEdit, location.pathname])
+		return () => setPostToEdit(null)
+	}, [requestCategories, postToEdit, setPostToEdit, location.pathname])
+
+	const [isImage, setIsImage] = React.useState(false),
+		[imagePath, setImagePath] = React.useState('')
 
 	const onCancel = () => {
 		history.goBack()
 	}
 
-	const defaultTitle = post && post.title,
-		defaultContent = post && post.content,
-		defaultCategories = post && post.categories ? post.categories.map(e => e.name) : [],
-		titleRules = [defaultValidator('Title')],
-		contentRules = [defaultValidator('Content')],
-		categoriesRules = [defaultValidator('Categories')]
+	console.log(postToEdit?.imagePath)
+
+	const defaultFileList = [{
+		uid: '1',
+		name: 'test.png',
+		status: 'done',
+		url: `https://${postToEdit?.imagePath}`
+	}]
+
+	type obj = { title: string, content: string, categories: string[] }
+	const onSubmit = async ({title, content, categories}: obj) => {
+		setIsFetching(true)
+		title = title.trim()
+		if (content)
+			content = content.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
+		categories = categories.map(tag => tag.trim())
+		if (!postToEdit) {
+			const data = await postAPI.create(title, content, categories, isImage, imagePath)
+			if (data && data.status) {
+				await requestAllPosts()
+				await requestCategories()
+				await setIsFetching(false)
+				history.push('/')
+			} else {
+				message.error(`Can not ${!postToEdit ? 'create' : 'edit'} post!`)
+			}
+		} else {
+			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories)
+			await setIsFetching(false)
+			history.goBack()
+		}
+	}
 
 	return (
-		<Form className={s.form} {...layout} name='createPost' onFinish={onsubmit}>
-			<Form.Item label='Title' name='title' rules={titleRules} initialValue={defaultTitle}>
-				<Input autoFocus allowClear/>
+		<Form className={s.form} {...layout} name='createPost' onFinish={onSubmit}>
+			<Form.Item label='Title' name='title' rules={[defaultValidator('Title')]} initialValue={postToEdit?.title}>
+				<Input autoFocus/>
 			</Form.Item>
-			<Form.Item label='Content' name='content' initialValue={defaultContent} rules={contentRules}>
+			<Form.Item label='Content' name='content' initialValue={postToEdit?.content}
+					   rules={!isImage ? [defaultValidator('Content')] : undefined}>
 				<TextArea allowClear autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
-			<Form.Item label='Categories' name='categories' rules={categoriesRules}
-					   initialValue={defaultCategories.length === 0 ? undefined : defaultCategories}>
+			<Form.Item label='Image' name='image'>
+				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage}
+							 defaultFileList={postToEdit?.isImage && defaultFileList}/>
+			</Form.Item>
+			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}
+					   initialValue={['text']}>
 				<Select mode='tags' allowClear>
 					{categories?.map(e => (
-						<Select.Option key={e.name} value={e.name}>{e.name}</Select.Option>
+						<Select.Option key={e.name} value={e.name}>
+							{e.name}
+						</Select.Option>
 					))}
 				</Select>
 			</Form.Item>
@@ -86,12 +113,31 @@ const CreatePostForm: FC<Props> = ({
 					Cancel
 				</Button>
 				<Button className={s.create} type='primary' htmlType='submit'
-						icon={post ? <SaveOutlined/> : <CloudUploadOutlined/>} loading={isFetching}>
-					{post ? 'Save' : 'Create'}
+						icon={postToEdit ? <SaveOutlined/> : <CloudUploadOutlined/>} loading={isFetching}>
+					{postToEdit ? 'Save' : 'Create'}
 				</Button>
 			</Form.Item>
 		</Form>
 	)
 }
 
-export default withRouter(CreatePostForm)
+type MapStateToProps = {
+	categories: Category[] | null
+	postToEdit: TPost | null
+}
+const mapStateToProps = (state: State) => ({
+	categories: categoriesSelector(state),
+	postToEdit: postToEditSelector(state)
+})
+
+type MapDispatchToProps = {
+	setPostToEdit: SetPostToEdit
+	requestCategories: RequestCategories
+}
+const mapDispatchToProps: MapDispatchToProps = {
+	setPostToEdit,
+	requestCategories
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreatePostForm))
