@@ -52,8 +52,6 @@ const CreatePostForm: FC<Props> = ({
 		history.goBack()
 	}
 
-	console.log(postToEdit?.imagePath)
-
 	const defaultFileList = [{
 		uid: '1',
 		name: 'test.png',
