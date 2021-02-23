@@ -11,7 +11,6 @@ import {State} from '../../redux/store'
 
 type OwnProps = {
 	mobile?: boolean
-	location: RouteComponentProps
 }
 
 type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
