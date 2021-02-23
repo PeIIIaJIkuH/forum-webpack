@@ -133,7 +133,7 @@
 }
 
 .more {
-
+    transform: translateX(50%);
 }
 
 .rating {
