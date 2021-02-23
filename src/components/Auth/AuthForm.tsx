@@ -15,7 +15,7 @@ const tailLayout = {
 
 type Props = {
 	onsubmit: (obj: { username: string, email: string, password: string }) => Promise<void>
-	isSignup: boolean | undefined
+	isSignup?: boolean
 	form: FormInstance
 	isFetching: boolean
 }
@@ -52,18 +52,20 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 
 	return (
 		<Form name='auth' onFinish={onsubmit} form={form}>
-			<Form.Item name='username' rules={[defaultValidator('Username')]} label={usernameInfo} colon={false}>
+			<Form.Item name='username' rules={[defaultValidator('Username', isSignup)]} label={isSignup && usernameInfo}
+					   colon={false}>
 				<Input prefix={<UserOutlined/>} placeholder='Username' autoFocus/>
 			</Form.Item>
 			{isSignup &&
-			<Form.Item name='email' label={emailInfo} colon={false} rules={[defaultValidator('E-mail'), {
+			<Form.Item name='email' label={emailInfo} colon={false} rules={[defaultValidator('E-mail', true), {
 				type: 'email',
 				message: 'The input is not valid E-mail!'
 			}]}>
 				<Input prefix='@' placeholder='E-mail'/>
 			</Form.Item>
 			}
-			<Form.Item name='password' rules={[defaultValidator('Password')]} label={passwordInfo} colon={false}>
+			<Form.Item name='password' rules={[defaultValidator('Password', isSignup)]} label={isSignup && passwordInfo}
+					   colon={false}>
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			<Form.Item {...tailLayout}>
