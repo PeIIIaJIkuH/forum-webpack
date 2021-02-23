@@ -1,5 +1,5 @@
 import {postAPI, userAPI} from '../api/requests'
-import {getObjectInArray, getPostRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
+import {getObjectInArray, getRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
 import history from '../history'
 import {Reaction, TComment, TPost, TUser} from '../types/types'
@@ -16,7 +16,8 @@ const SET_POSTS = 'posts/SET_POSTS',
 	DELETE_COMMENT = 'posts/DELETE_COMMENT',
 	DELETE_USER_COMMENT = 'posts/DELETE_USER_COMMENT',
 	EDIT_COMMENT = 'posts/EDIT_COMMENT',
-	EDIT_USER_COMMENT = 'posts/EDIT_USER_COMMENT'
+	EDIT_USER_COMMENT = 'posts/EDIT_USER_COMMENT',
+	SET_COMMENT_RATING = 'posts/SET_COMMENT_RATING'
 
 type InitialState = {
 	posts: TPost[] | null
@@ -34,7 +35,7 @@ const initialState: InitialState = {
 }
 
 type Action = SetPostsAC | SetRatingAC | SetUserAC | SetCommentsAC | DeletePostAC | SetPostToEditAC | DeleteCommentAC |
-	SetUserCommentsAC | DeleteUserCommentAC | EditCommentAC | EditUserCommentAC
+	SetUserCommentsAC | DeleteUserCommentAC | EditCommentAC | EditUserCommentAC | SetCommentRatingAC
 
 const postsReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
@@ -42,7 +43,7 @@ const postsReducer = (state = initialState, action: Action) => {
 			return {...state, posts: action.posts, comments: null}
 		case SET_RATING:
 			const post = getObjectInArray(state.posts, action.id, 'id')
-			const [userRating, postRating] = getPostRating(post.userRating, post.postRating, action.reaction)
+			const [userRating, postRating] = getRating(post.userRating, post.postRating, action.reaction)
 			return {
 				...state,
 				posts: updateObjectInArray(state.posts, action.id, 'id',
@@ -87,6 +88,14 @@ const postsReducer = (state = initialState, action: Action) => {
 			pComments[uIndex].content = action.content
 			ucComments[action.postID] = pComments
 			return {...state, userComments: ucComments}
+		case SET_COMMENT_RATING:
+			const comment = getObjectInArray(state.comments, action.id, 'id')
+			const [commentUserRating, commentRating] = getRating(comment.userRating, comment.commentRating, action.reaction)
+			return {
+				...state,
+				comments: updateObjectInArray(state.comments, action.id, 'id',
+					{commentRating, userRating: commentUserRating})
+			}
 		default:
 			return state
 	}
@@ -196,6 +205,16 @@ const editUserCommentAC = (id: number, postID: number, content: string): EditUse
 	id, postID, content
 })
 
+type SetCommentRatingAC = {
+	type: typeof SET_COMMENT_RATING
+	id: number
+	reaction: Reaction
+}
+const setCommentRatingAC = (id: number, reaction: Reaction): SetCommentRatingAC => ({
+	type: SET_COMMENT_RATING,
+	id, reaction
+})
+
 type Dispatch = ThunkDispatch<State, unknown, Action>
 
 export type RequestAllPosts = () => void
@@ -214,8 +233,8 @@ export const requestUserPosts = (id: number) => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(100))
 }
 
-export type RequestRatedPosts = (userID: number, reaction: Reaction) => void
-export const requestRatedPosts = (userID: number, reaction: Reaction) => async (dispatch: Dispatch) => {
+export type RequestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvoted') => void
+export const requestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvoted') => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(userID, reaction)
 	await dispatch(setPostsAC(data.data))
@@ -342,6 +361,19 @@ export const editComment = (id: number, authorID: number, postID: number, conten
 		} else {
 			await dispatch(editUserCommentAC(id, postID, content))
 		}
+	}
+	await dispatch(setProgress(100))
+	return res
+}
+
+export type SetCommentRating = (id: number, reaction: Reaction) => void
+export const setCommentRating = (id: number, reaction: Reaction) => async (dispatch: Dispatch) => {
+	await dispatch(setProgress(0))
+	let res = false
+	const data = await postAPI.rateComment(id, reaction)
+	if (data && data.status) {
+		res = true
+		await dispatch(setCommentRatingAC(id, reaction))
 	}
 	await dispatch(setProgress(100))
 	return res
