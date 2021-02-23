@@ -28,11 +28,7 @@ import RightMenu from './components/RightMenu/RightMenu'
 // create new errors to authorization and edit post from address
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
 
-type OwnProps = {
-	location: RouteComponentProps
-}
-
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
 
 const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => {
 	React.useEffect(() => {
