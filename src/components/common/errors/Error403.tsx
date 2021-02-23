@@ -9,7 +9,6 @@ import {State} from '../../../redux/store'
 
 type OwnProps = {
 	text?: string
-	location: RouteComponentProps
 }
 
 type Props = OwnProps & MapStateToProps & MapDispatchToProps & RouteComponentProps
