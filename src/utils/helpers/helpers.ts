@@ -66,7 +66,7 @@ export const openNotification = (type: string, message: string, description?: st
 	notification[type]({message, description, placement: 'bottomRight', duration: 3})
 }
 
-export const defaultValidator = (field: string) => ({
+export const defaultValidator = (field: string, isSignup?: boolean) => ({
 	validator: async (_: any, value: any) => new Promise<void>((resolve, reject) => {
 		if (!value)
 			reject(`Please enter ${field.toLowerCase()}!`)
@@ -78,12 +78,14 @@ export const defaultValidator = (field: string) => ({
 		} else {
 			if (!value.trim())
 				reject(`${field} can not be empty!`)
-			if (field === 'Username' && !RegExp(/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)
-				.test(value))
-				reject('Incorrect username!')
-			if (field === 'Password' && !RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z._]{6,20}$/)
-				.test(value))
-				reject('Incorrect password!')
+			if (isSignup) {
+				if (field === 'Username' && !RegExp(/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)
+					.test(value))
+					reject('Incorrect username!')
+				if (field === 'Password' && !RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z._]{6,20}$/)
+					.test(value))
+					reject('Incorrect password!')
+			}
 		}
 		resolve()
 	})
