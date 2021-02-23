@@ -23,6 +23,7 @@ import {SetSelectedCategories, setSelectedCategories} from '../../../redux/categ
 import {State} from '../../../redux/store'
 import {TComment, TPost} from '../../../types/types'
 import Comments from '../Comments'
+import Image from 'antd/lib/image'
 
 type OwnProps = {
 	post: TPost | null
@@ -44,6 +45,9 @@ const Post: FC<Props> = ({
 				<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}
 						setPostToEdit={setPostToEdit}/>
 				<Content content={post.content}/>
+				{post.isImage && (
+					<Image src={`https://${post.imagePath}`} alt='post image'/>
+				)}
 				<Divider className={s.divider}/>
 				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}
 							setSelectedCategories={setSelectedCategories}/>
