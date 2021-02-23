@@ -1,15 +1,23 @@
 import React, {ChangeEvent, FC, ReactNode} from 'react'
 import AntComment from 'antd/lib/comment'
 import Button from 'antd/lib/button'
-import {DeleteOutlined, EditOutlined, MoreOutlined, SaveOutlined} from '@ant-design/icons'
+import {DeleteOutlined, DownOutlined, EditOutlined, MoreOutlined, SaveOutlined, UpOutlined} from '@ant-design/icons'
 import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
-import {DeleteComment, deleteComment, EditComment, editComment} from '../../redux/posts-reducer'
+import {
+	DeleteComment,
+	deleteComment,
+	EditComment,
+	editComment,
+	setCommentRating,
+	SetCommentRating
+} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import Popover from 'antd/lib/popover'
 import {State} from '../../redux/store'
 import {TComment} from '../../types/types'
 import message from 'antd/lib/message'
+import {isAuthSelector} from '../../redux/selectors'
 
 type OwnProps = {
 	author: ReactNode
@@ -22,7 +30,12 @@ type OwnProps = {
 
 type Props = MapStateToProps & MapDispatchToProps & OwnProps
 
-const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteComment, editComment, userPage}) => {
+const Comment: FC<Props> = ({
+								author, content,
+								datetime, comment,
+								check, deleteComment, editComment, userPage, isAuth,
+								setCommentRating
+							}) => {
 	const [isEdit, setIsEdit] = React.useState(false),
 		[text, setText] = React.useState(content),
 		[deleteLoading, setDeleteLoading] = React.useState(false),
@@ -50,6 +63,7 @@ const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteCo
 		let ok: any = true
 		if (!isEdit) {
 			setIsEdit(true)
+			setVisible(true)
 		} else {
 			setEditLoading(true)
 			if (!userPage) {
@@ -82,6 +96,51 @@ const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteCo
 		setVisible(visible)
 	}
 
+	const isRatedUp = comment.userRating === 1,
+		isRatedDown = comment.userRating === -1,
+		[upLoading, setUpLoading] = React.useState(false),
+		[downLoading, setDownLoading] = React.useState(false),
+		upRef = React.useRef(null),
+		downRef = React.useRef(null)
+
+	const onUpClick = async () => {
+		setUpLoading(true)
+		const ok: any = await setCommentRating(comment.id, 1)
+		// @ts-ignore
+		upRef.current.blur()
+		setUpLoading(false)
+		if (!ok) {
+			message.error('Can not rate comment!')
+		}
+	}
+
+	const onDownClick = async () => {
+		setDownLoading(true)
+		const ok: any = await setCommentRating(comment.id, -1)
+		// @ts-ignore
+		downRef.current.blur()
+		setDownLoading(false)
+		if (!ok) {
+			message.error('Can not rate comment!')
+		}
+	}
+
+	const upBtn = (
+			<Button className={`${s.commentUp} ${isRatedUp && s.commentRatedUp}`} icon={<UpOutlined/>} ref={upRef}
+					disabled={!isAuth} onClick={onUpClick} loading={upLoading} type='text' size='small'/>
+		),
+		downBtn = (
+			<Button className={`${s.downComment} ${isRatedDown && s.commentRatedDown}`} icon={<DownOutlined/>}
+					ref={downRef}
+					disabled={!isAuth} onClick={onDownClick} loading={downLoading} type='text' size='small'/>
+		)
+
+	const rating = (
+		<div className={s.commentRating}>
+			{comment.commentRating}
+		</div>
+	)
+
 	return <AntComment author={(
 		<>
 			{author}
@@ -97,19 +156,25 @@ const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteCo
 				</Popover>
 			)}
 		</>
-	)} content={cContent} datetime={datetime}/>
+	)} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}/>
 }
 
-type MapStateToProps = {}
-const mapStateToProps = (state: State): MapStateToProps => ({})
+type MapStateToProps = {
+	isAuth: boolean
+}
+const mapStateToProps = (state: State): MapStateToProps => ({
+	isAuth: isAuthSelector(state)
+})
 
 type MapDispatchToProps = {
 	deleteComment: DeleteComment
 	editComment: EditComment
+	setCommentRating: SetCommentRating
 }
 const mapDispatchToProps = {
 	deleteComment,
-	editComment
+	editComment,
+	setCommentRating
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment)
