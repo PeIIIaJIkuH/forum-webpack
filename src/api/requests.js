@@ -42,11 +42,7 @@ export const postAPI = {
 		.then(r => r.data).catch(() => 'Can not delete comment.'),
 	editComment: (id, authorID, post_id, content) => defaultAxios.put('comment/edit', {id, authorID, post_id, content})
 		.then(r => r.data).catch(() => 'Can not edit comment.'),
-	uploadImage: data => defaultAxios.post('image/upload', data, {
-		headers: {
-			'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
-		}
-	}).then(r => r.data).catch(() => 'Can not upload image.')
+	uploadImage: (data, config) => defaultAxios.post('image/upload', data, config).then(r => r.data).catch(() => 'Can not upload image.')
 }
 
 export const categoriesAPI = {
