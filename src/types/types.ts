@@ -16,6 +16,8 @@ export type TPost = {
 	userRating: Reaction
 	createdAt: number
 	commentsNumber: number
+	isImage: boolean
+	imagePath: string
 }
 
 export type TComment = {
