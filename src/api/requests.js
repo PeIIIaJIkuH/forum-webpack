@@ -21,7 +21,9 @@ export const authAPI = {
 
 export const postAPI = {
 	all: () => defaultAxios.get('posts').then(r => r.data).catch(() => 'Can not load posts.'),
-	create: (title, content, categories) => defaultAxios.post('post/create', {title, content, categories})
+	create: (title, content, categories, isImage, imagePath) => defaultAxios.post('post/create', {
+		title, content, categories, isImage, imagePath
+	})
 		.then(r => r.data).catch(() => 'Can not create new post.'),
 	rate: (id, reaction) => defaultAxios.post('post/rate', {id, reaction})
 		.then(r => r.data).catch(() => 'Can not rate post.'),
@@ -39,7 +41,12 @@ export const postAPI = {
 	deleteComment: id => defaultAxios.delete(`comment/delete/${id}`)
 		.then(r => r.data).catch(() => 'Can not delete comment.'),
 	editComment: (id, authorID, post_id, content) => defaultAxios.put('comment/edit', {id, authorID, post_id, content})
-		.then(r => r.data).catch(() => 'Can not edit comment.')
+		.then(r => r.data).catch(() => 'Can not edit comment.'),
+	uploadImage: data => defaultAxios.post('image/upload', data, {
+		headers: {
+			'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+		}
+	}).then(r => r.data).catch(() => 'Can not upload image.')
 }
 
 export const categoriesAPI = {
