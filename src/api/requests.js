@@ -42,7 +42,9 @@ export const postAPI = {
 		.then(r => r.data).catch(() => 'Can not delete comment.'),
 	editComment: (id, authorID, post_id, content) => defaultAxios.put('comment/edit', {id, authorID, post_id, content})
 		.then(r => r.data).catch(() => 'Can not edit comment.'),
-	uploadImage: (data, config) => defaultAxios.post('image/upload', data, config).then(r => r.data).catch(() => 'Can not upload image.')
+	uploadImage: (data, config) => defaultAxios.post('image/upload', data, config).then(r => r.data).catch(() => 'Can not upload image.'),
+	rateComment: (id, reaction) => defaultAxios.post('comment/rate', {id, reaction})
+		.then(r => r.data).catch(() => 'Can not rate comment.')
 }
 
 export const categoriesAPI = {
