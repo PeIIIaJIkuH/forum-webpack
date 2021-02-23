@@ -1,4 +1,5 @@
 import moment from 'moment'
+import {Reaction} from '../../types/types'
 
 export const updateObjectInArray = (items: any, itemProp: any, prop: string, newObjProp: {}) => items.map((e: any) =>
 	e[prop] === itemProp ? {...e, ...newObjProp} : e
@@ -8,20 +9,20 @@ export const getObjectInArray = (items: any, itemProp: any, prop: string) => {
 	return items.find((e: any) => e[prop] === itemProp)
 }
 
-export const getPostRating = (userRating: number, postRating: number, reaction: any) => {
+export const getRating = (userRating: number, rating: number, reaction: Reaction) => {
 	if (userRating !== 0) {
 		if (userRating === reaction) {
 			userRating = 0
-			postRating -= reaction
+			rating -= reaction
 		} else {
 			userRating *= -1
-			postRating += 2 * userRating
+			rating += 2 * userRating
 		}
 	} else {
 		userRating = reaction
-		postRating += reaction
+		rating += reaction
 	}
-	return [userRating, postRating]
+	return [userRating, rating]
 }
 
 export const getDateDifference = (createdAt: number, long?: boolean) => {
