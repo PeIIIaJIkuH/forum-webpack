@@ -3,11 +3,11 @@ import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
 import history from '../../../history'
 import {DeleteOutlined, EditOutlined, MoreOutlined} from '@ant-design/icons'
-import {notificationType, openNotification} from '../../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 import Popover from 'antd/lib/popover'
 import {TPost} from '../../../types/types'
 import {DeletePost, SetPostToEdit} from '../../../redux/posts-reducer'
+import message from 'antd/lib/message'
 
 type Props = {
 	post: TPost
@@ -31,7 +31,7 @@ const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) 
 			}
 		} else {
 			setLoading(false)
-			openNotification(notificationType.ERROR, 'Can not delete post!')
+			message.error('Can not delete post!')
 		}
 	}
 

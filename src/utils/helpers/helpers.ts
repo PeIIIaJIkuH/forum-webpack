@@ -1,5 +1,4 @@
 import moment from 'moment'
-import notification from 'antd/lib/notification'
 
 export const updateObjectInArray = (items: any, itemProp: any, prop: string, newObjProp: {}) => items.map((e: any) =>
 	e[prop] === itemProp ? {...e, ...newObjProp} : e
@@ -52,19 +51,6 @@ export const groupBy = (key: string) => (array: any[]) =>
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
 		return objectsByKeyValue
 	}, {})
-
-export const notificationType = {
-	SUCCESS: 'success',
-	INFO: 'info',
-	WARNING: 'warning',
-	ERROR: 'error'
-}
-
-
-export const openNotification = (type: string, message: string, description?: string) => {
-	// @ts-ignore
-	notification[type]({message, description, placement: 'bottomRight', duration: 3})
-}
 
 export const defaultValidator = (field: string, isSignup?: boolean) => ({
 	validator: async (_: any, value: any) => new Promise<void>((resolve, reject) => {

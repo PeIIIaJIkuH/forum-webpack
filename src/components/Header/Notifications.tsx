@@ -6,11 +6,12 @@ import {BellOutlined, DeleteOutlined} from '@ant-design/icons'
 import Badge from 'antd/lib/badge'
 import {connect} from 'react-redux'
 import {notificationsSelector} from '../../redux/selectors'
-import {getDateDifference, notificationType, openNotification} from '../../utils/helpers/helpers'
+import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
 import {DeleteNotification, deleteNotification} from '../../redux/auth-reducer'
 import {State} from '../../redux/store'
 import {TNotification} from '../../types/types'
+import message from 'antd/lib/message'
 
 type Props = MapStateToProps & MapDispatchToProps
 
@@ -28,7 +29,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 		setLoading(false)
 		setVisible(false)
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not delete notifications!')
+			message.error('Can not delete notifications!')
 		}
 	}
 

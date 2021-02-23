@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import s from './Actions.module.css'
 import CategoriesSearchForm from './CategoriesSearchForm'
 import Card from 'antd/lib/card'
-import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import {categoriesSelector, selectedCategoriesSelector} from '../../redux/selectors'
 import {
 	RequestCategories,
@@ -16,6 +15,7 @@ import {SetMenuOpen, setMenuOpen} from '../../redux/app-reducer'
 import Form from 'antd/lib/form'
 import {State} from '../../redux/store'
 import {Category} from '../../types/types'
+import message from 'antd/lib/message'
 
 type OwnProps = {
 	closeModal?: () => void
@@ -41,7 +41,7 @@ const CategoriesSearch: FC<Props> = ({
 		}
 		setMenuOpen(false)
 		if (!categories || !categories.length) {
-			openNotification(notificationType.WARNING, 'Choose at least one category!')
+			message.warning('Choose at least one category!')
 		} else {
 			form.resetFields()
 			setIsFetching(true)

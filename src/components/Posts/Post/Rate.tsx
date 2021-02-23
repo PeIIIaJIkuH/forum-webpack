@@ -2,9 +2,9 @@ import React, {FC} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
 import {DownOutlined, UpOutlined} from '@ant-design/icons'
-import {notificationType, openNotification} from '../../../utils/helpers/helpers'
 import {SetRating} from '../../../redux/posts-reducer'
 import {TPost} from '../../../types/types'
+import message from 'antd/lib/message'
 
 type Props = {
 	isAuth: boolean
@@ -27,7 +27,7 @@ const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 		upRef.current.blur()
 		setUpLoading(false)
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not rate post!')
+			message.error('Can not rate post!')
 		}
 	}
 
@@ -38,7 +38,7 @@ const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 		downRef.current.blur()
 		setDownLoading(false)
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not rate post!')
+			message.error('Can not rate post!')
 		}
 	}
 

@@ -9,13 +9,13 @@ import Button from 'antd/lib/button'
 import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
-import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import LoadingBar from 'react-top-loading-bar'
 import {SetMenuOpen, setMenuOpen, SetProgress, setProgress, SetUrlTo, setUrlTo} from '../../redux/app-reducer'
 import Actions from './Actions'
 import {useMediaQuery} from 'react-responsive'
 import MobileActions from './MobileActions'
 import {State} from '../../redux/store'
+import message from 'antd/lib/message'
 
 type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
 
@@ -34,7 +34,7 @@ const Header: FC<Props> = ({
 		const ok: any = signout()
 		setMenuOpen(false)
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not logout!')
+			message.error('Can not logout!')
 		}
 	}
 

@@ -11,8 +11,8 @@ import history from '../../history'
 import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {SetUrlTo, setUrlTo} from '../../redux/app-reducer'
-import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import {State} from '../../redux/store'
+import message from 'antd/lib/message'
 
 type OwnProps = {
 	register?: boolean
@@ -36,11 +36,11 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 			const ok: any = await signup(username, email, password)
 			setIsFetching(false)
 			if (ok) {
-				openNotification(notificationType.SUCCESS, 'Created new user!')
+				message.success('Created new user!')
 				form.resetFields()
 				history.push('/auth/signin')
 			} else {
-				openNotification(notificationType.ERROR, 'Can not register!')
+				message.error('Can not register!')
 			}
 		} else {
 			const ok: any = await signin(username, password)
@@ -53,7 +53,7 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 					history.push('/')
 				}
 			} else {
-				openNotification(notificationType.ERROR, 'Can not login!')
+				message.error('Can not login!')
 			}
 		}
 	}

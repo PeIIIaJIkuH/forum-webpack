@@ -6,10 +6,10 @@ import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
 import {DeleteComment, deleteComment, EditComment, editComment} from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
-import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import Popover from 'antd/lib/popover'
 import {State} from '../../redux/store'
 import {TComment} from '../../types/types'
+import message from 'antd/lib/message'
 
 type OwnProps = {
 	author: ReactNode
@@ -42,7 +42,7 @@ const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteCo
 		}
 		setDeleteLoading(false)
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not delete comment!')
+			message.error('Can not delete comment!')
 		}
 	}
 
@@ -61,7 +61,7 @@ const Comment: FC<Props> = ({author, content, datetime, comment, check, deleteCo
 			setIsEdit(false)
 		}
 		if (!ok) {
-			openNotification(notificationType.ERROR, 'Can not edit comment!')
+			message.error('Can not edit comment!')
 		}
 	}
 

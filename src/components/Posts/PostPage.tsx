@@ -18,9 +18,9 @@ import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import Error404 from '../common/errors/Error404'
 import Post from './Post/Post'
-import {notificationType, openNotification} from '../../utils/helpers/helpers'
 import {TComment, TPost} from '../../types/types'
 import {State} from '../../redux/store'
+import message from 'antd/lib/message'
 
 type PathParamsType = {
 	id: string,
@@ -54,7 +54,7 @@ const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, r
 		if (data && data.status) {
 			await requestComments(+urlId)
 		} else {
-			openNotification(notificationType.ERROR, 'Can not add comment!')
+			message.error('Can not add comment!')
 		}
 	}
 
