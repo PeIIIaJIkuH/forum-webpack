@@ -47,7 +47,7 @@ const Header: FC<Props> = ({
 	}
 
 	return (
-		<Affix offsetTop={1} className='headerWrapper'>
+		<Affix offsetTop={1} className={s.headerWrapper}>
 			<Layout.Header className={s.header}>
 				<div className={s.inner}>
 					<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={onFinished}/>
