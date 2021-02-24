@@ -42,15 +42,22 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 	)
 
 	const content = notifications ? notifications.map(notification => {
-		let username, userID, text
+		let username, userID, text, link
 		if (notification.postRating) {
 			username = notification.postRating.author.username
 			userID = notification.postRating.author.id
 			text = notification.postRating.rate === 1 ? 'upvoted' : 'downvoted'
+			link = <Link to={`/post/${notification.post_id}`}>post</Link>
+		} else if (notification.commentRating) {
+			username = notification.commentRating.author.username
+			userID = notification.commentRating.author.id
+			text = notification.commentRating.rate === 1 ? 'upvoted' : 'downvoted'
+			link = <Link to={`/post/${notification.comment.post_id}`}>comment</Link>
 		} else if (notification.comment) {
 			username = notification.comment.author.username
 			userID = notification.comment.author.id
 			text = 'commented'
+			link = <Link to={`/post/${notification.post_id}`}>post</Link>
 		} else {
 			text = 'error'
 		}
@@ -59,8 +66,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 		return (
 			<div key={notification.id} className={s.notification}>
 				<div>
-					<Link to={`/user/${userID}`}>{username}</Link> {text} your <Link
-					to={`/post/${notification.post_id}`}>post</Link>
+					<Link to={`/user/${userID}`}>{username}</Link> {text} your {link}
 				</div>
 				<div className={s.wrapper}>
 					<div className={s.createdAt}>{created ?
@@ -75,7 +81,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 		<Badge className={s.notifications} offset={[-5, 5]} size='small' overflowCount={10}
 			   count={notifications && notifications.length}>
 			<Popover placement='bottom' title={title} content={content} trigger='click' visible={visible}
-					 onVisibleChange={handleVisibleChange}>
+					 onVisibleChange={handleVisibleChange} overlayClassName={s.popoverNotifications}>
 				<Button type='text' icon={<BellOutlined/>}/>
 			</Popover>
 		</Badge>
