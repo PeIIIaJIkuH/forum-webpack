@@ -1,11 +1,8 @@
 import {authAPI} from '../api/requests'
 import {setProgress} from './app-reducer'
 import {ThunkDispatch} from 'redux-thunk'
-import {State} from './store'
+import {ActionTypes, State} from './store'
 import {TNotification} from '../types/types'
-
-const SET_USER_DATA = 'auth/SET_USER_DATA',
-	SET_NOTIFICATIONS = 'auth/SET_NOTIFICATIONS'
 
 type InitialState = {
 	id: number | null
@@ -26,66 +23,45 @@ const initialState: InitialState = {
 	notifications: null
 }
 
-type Action = SetUserDataAC | SetNotificationsAC
+type Action = ActionTypes<typeof authActions>
 
 const authReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
-		case SET_USER_DATA:
+		case 'auth/SET_USER_DATA':
 			return {
 				...state, id: action.id, username: action.username, email: action.email, createdAt: action.createdAt,
 				lastActive: action.lastActive, isAuth: action.isAuth
 			}
-		case SET_NOTIFICATIONS:
+		case 'auth/SET_NOTIFICATIONS':
 			return {...state, notifications: action.notifications}
 		default:
 			return state
 	}
 }
 
-type SetUserDataAC = {
-	type: typeof SET_USER_DATA
-	id: number | null
-	username: string | null
-	email: string | null
-	createdAt: number | null
-	lastActive: number | null
-	isAuth: boolean
+export const authActions = {
+	setUserDataAC: (id: number | null, username: string | null, email: string | null, createdAt: number | null,
+					lastActive: number | null, isAuth: boolean) => ({
+		type: 'auth/SET_USER_DATA',
+		id, username, email, createdAt, lastActive, isAuth
+	} as const),
+	setNotificationsAC: (notifications: TNotification[] | null) => ({
+		type: 'auth/SET_NOTIFICATIONS',
+		notifications
+	} as const)
 }
-const setUserDataAC = (id: number | null, username: string | null, email: string | null, createdAt: number | null,
-					   lastActive: number | null, isAuth: boolean): SetUserDataAC => ({
-	type: SET_USER_DATA,
-	id, username, email, createdAt, lastActive, isAuth
-})
-
-type SetNotificationsAC = {
-	type: typeof SET_NOTIFICATIONS
-	notifications: TNotification[] | null
-}
-const setNotificationsAC = (notifications: TNotification[] | null): SetNotificationsAC => ({
-	type: SET_NOTIFICATIONS,
-	notifications
-})
 
 type Dispatch = ThunkDispatch<State, unknown, Action>
-
-export type RequestNotifications = () => void
-export const requestNotifications = () => async (dispatch: Dispatch) => {
-	await dispatch(setProgress(0))
-	const data = await authAPI.getNotifications()
-	if (data && data.status) {
-		await dispatch(setNotificationsAC(data.data))
-	}
-}
 
 export const requestAuthUserData = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.me()
 	if (data && data.status) {
 		const {id, username, email, createdAt, lastActive} = data.data
-		dispatch(setUserDataAC(id, username, email, createdAt, lastActive, true))
+		dispatch(authActions.setUserDataAC(id, username, email, createdAt, lastActive, true))
 		requestNotifications()
 	} else {
-		console.log('User is not signed in.')
+		console.log(data)
 	}
 	await dispatch(setProgress(100))
 }
@@ -119,12 +95,22 @@ export const signout = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.signout()
 	if (data && data.status) {
-		await dispatch(setUserDataAC(null, null, null, null, null, false))
-		await dispatch(setNotificationsAC(null))
+		await dispatch(authActions.setUserDataAC(null, null, null, null, null, false))
+		await dispatch(authActions.setNotificationsAC(null))
 		res = true
 	}
 	await dispatch(setProgress(100))
 	return res
+}
+
+export type RequestNotifications = () => void
+export const requestNotifications = () => async (dispatch: Dispatch) => {
+	await dispatch(setProgress(0))
+	const data = await authAPI.getNotifications()
+	if (data && data.status) {
+		await dispatch(authActions.setNotificationsAC(data.data))
+	}
+	await dispatch(setProgress(100))
 }
 
 export type DeleteNotification = () => void
@@ -134,7 +120,7 @@ export const deleteNotification = () => async (dispatch: Dispatch) => {
 	const data = await authAPI.deleteNotification()
 	if (data && data.status) {
 		res = true
-		await dispatch(setNotificationsAC(null))
+		await dispatch(authActions.setNotificationsAC(null))
 	}
 	await dispatch(setProgress(100))
 	return res
