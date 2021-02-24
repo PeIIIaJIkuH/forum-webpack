@@ -45,8 +45,8 @@ const CreatePostForm: FC<Props> = ({
 		return () => setPostToEdit(null)
 	}, [requestCategories, postToEdit, setPostToEdit, location.pathname])
 
-	const [isImage, setIsImage] = React.useState(false),
-		[imagePath, setImagePath] = React.useState('')
+	const [isImage, setIsImage] = React.useState(postToEdit?.isImage || false),
+		[imagePath, setImagePath] = React.useState(postToEdit?.imagePath || '')
 
 	const onCancel = () => {
 		history.goBack()
@@ -77,7 +77,7 @@ const CreatePostForm: FC<Props> = ({
 				message.error(`Can not ${!postToEdit ? 'create' : 'edit'} post!`)
 			}
 		} else {
-			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories)
+			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories, isImage, imagePath)
 			await setIsFetching(false)
 			history.goBack()
 		}
