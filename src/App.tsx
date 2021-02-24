@@ -54,7 +54,7 @@ const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => 
 				<Layout className={s.innerLayout}>
 					{!isTabletOrMobile && (
 						<Affix offsetTop={105} className={`${s.affix} ${s.menu}`}>
-							<Sider theme='light' trigger={null}>
+							<Sider theme='light' trigger={null} className={s.sider}>
 								<LeftMenu/>
 							</Sider>
 						</Affix>
@@ -76,7 +76,7 @@ const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => 
 					</Content>
 					{!isTabletOrMobile && (
 						<Affix offsetTop={105} className={`${s.affix} ${s.actions}`}>
-							<Sider theme='light' trigger={null}>
+							<Sider theme='light' trigger={null} className={s.sider}>
 								<Actions/>
 							</Sider>
 						</Affix>
