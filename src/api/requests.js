@@ -35,8 +35,8 @@ export const postAPI = {
 	getByCategories: categories => defaultAxios.post('post/filter', {option: 'categories', categories})
 		.then(r => r.data).catch(() => 'Can not load posts by categories.'),
 	delete: id => defaultAxios.delete(`post/delete/${id}`).then(r => r.data).catch(() => 'Can not delete post.'),
-	edit: (id, authorID, title, content, categories) => defaultAxios.put('post/edit', {
-		id, authorID, title, content, categories
+	edit: (id, authorID, title, content, categories, isImage, imagePath) => defaultAxios.put('post/edit', {
+		id, authorID, title, content, categories, isImage, imagePath
 	}).then(r => r.data).catch(() => 'Can not edit post.'),
 	deleteComment: id => defaultAxios.delete(`comment/delete/${id}`)
 		.then(r => r.data).catch(() => 'Can not delete comment.'),
