@@ -256,7 +256,6 @@ export const requestPost = (id: number) => async (dispatch: Dispatch) => {
 
 export type RequestPostsByCategories = (categories: string[]) => void
 export const requestPostsByCategories = (categories: string[]) => async (dispatch: Dispatch) => {
-	console.log('requesting data by ', categories)
 	await dispatch(setProgress(0))
 	const data = await postAPI.getByCategories(categories)
 	await dispatch(setPostsAC(data.data))
@@ -366,11 +365,11 @@ export const editComment = (id: number, authorID: number, postID: number, conten
 	return res
 }
 
-export type SetCommentRating = (id: number, reaction: Reaction) => void
-export const setCommentRating = (id: number, reaction: Reaction) => async (dispatch: Dispatch) => {
+export type SetCommentRating = (id: number, postID: number, reaction: Reaction) => void
+export const setCommentRating = (id: number, postID: number, reaction: Reaction) => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	let res = false
-	const data = await postAPI.rateComment(id, reaction)
+	const data = await postAPI.rateComment(id, postID, reaction)
 	if (data && data.status) {
 		res = true
 		await dispatch(setCommentRatingAC(id, reaction))
