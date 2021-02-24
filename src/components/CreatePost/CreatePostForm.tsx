@@ -54,7 +54,7 @@ const CreatePostForm: FC<Props> = ({
 
 	const defaultFileList = [{
 		uid: '1',
-		name: 'test.png',
+		name: postToEdit?.imagePath.split('images/')[1],
 		status: 'done',
 		url: `https://${postToEdit?.imagePath}`
 	}]
