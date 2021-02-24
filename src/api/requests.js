@@ -7,12 +7,12 @@ const defaultAxios = axios.create({
 })
 
 export const authAPI = {
-	me: () => defaultAxios.get('auth/me').then(r => r.data).catch(() => undefined),
+	me: () => defaultAxios.get('auth/me').then(r => r.data).catch(() => 'User is not logged in.'),
 	signup: (username, email, password) => defaultAxios.post('auth/signup', {username, email, password})
-		.then(r => r.data).catch(() => undefined),
+		.then(r => r.data).catch(() => 'Can not register.'),
 	signin: (username, password) => defaultAxios.post('auth/signin', {username, password}).then(r => r.data)
-		.catch(() => undefined),
-	signout: () => defaultAxios.get('auth/signout').then(r => r.data).catch(() => undefined),
+		.catch(() => 'Can not sign in.'),
+	signout: () => defaultAxios.get('auth/signout').then(r => r.data).catch(() => 'Can not sign out.'),
 	getNotifications: () => defaultAxios.get('notifications')
 		.then(r => r.data).catch(() => 'Can not load notifications.'),
 	deleteNotification: () => defaultAxios.delete('notifications/delete/')
@@ -43,7 +43,7 @@ export const postAPI = {
 	editComment: (id, authorID, post_id, content) => defaultAxios.put('comment/edit', {id, authorID, post_id, content})
 		.then(r => r.data).catch(() => 'Can not edit comment.'),
 	uploadImage: (data, config) => defaultAxios.post('image/upload', data, config).then(r => r.data).catch(() => 'Can not upload image.'),
-	rateComment: (id, reaction) => defaultAxios.post('comment/rate', {id, reaction})
+	rateComment: (commentID, postID, reaction) => defaultAxios.post('comment/rate', {commentID, postID, reaction})
 		.then(r => r.data).catch(() => 'Can not rate comment.')
 }
 
