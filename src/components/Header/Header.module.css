@@ -1,9 +1,14 @@
+.headerWrapper {
+    z-index: 1035;
+}
+
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: white;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
+    margin-top: -1px;
 }
 
 .inner {
@@ -92,4 +97,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.popoverNotifications {
+    z-index: 1040;
+    position: fixed;
 }
