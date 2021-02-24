@@ -50,10 +50,13 @@ const Comment: FC<Props> = ({
 		setDeleteLoading(true)
 		if (!userPage) {
 			ok = await deleteComment(comment.id)
+			setDeleteLoading(false)
+			setVisible(false)
 		} else {
 			ok = await deleteComment(comment.id, comment.post_id)
+			setDeleteLoading(false)
+			setVisible(false)
 		}
-		setDeleteLoading(false)
 		if (!ok) {
 			message.error('Can not delete comment!')
 		}
@@ -63,7 +66,6 @@ const Comment: FC<Props> = ({
 		let ok: any = true
 		if (!isEdit) {
 			setIsEdit(true)
-			setVisible(true)
 		} else {
 			setEditLoading(true)
 			if (!userPage) {
@@ -105,7 +107,7 @@ const Comment: FC<Props> = ({
 
 	const onUpClick = async () => {
 		setUpLoading(true)
-		const ok: any = await setCommentRating(comment.id, 1)
+		const ok: any = await setCommentRating(comment.id, comment.post_id, 1)
 		// @ts-ignore
 		upRef.current.blur()
 		setUpLoading(false)
@@ -116,7 +118,7 @@ const Comment: FC<Props> = ({
 
 	const onDownClick = async () => {
 		setDownLoading(true)
-		const ok: any = await setCommentRating(comment.id, -1)
+		const ok: any = await setCommentRating(comment.id, comment.post_id, -1)
 		// @ts-ignore
 		downRef.current.blur()
 		setDownLoading(false)
@@ -156,7 +158,7 @@ const Comment: FC<Props> = ({
 				</Popover>
 			)}
 		</>
-	)} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}/>
+	)} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]} key={comment.id}/>
 }
 
 type MapStateToProps = {
