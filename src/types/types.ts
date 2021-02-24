@@ -43,6 +43,14 @@ export type PostRating = {
 	rate: Reaction
 }
 
+export type CommentRating = {
+	id: number
+	userID: number
+	commentID: number
+	rate: Reaction
+	author: TUser
+}
+
 export type TNotification = {
 	id: number
 	receiver_id: number
@@ -53,4 +61,5 @@ export type TNotification = {
 	post: TPost
 	postRating: PostRating
 	comment: TComment
+	commentRating: CommentRating
 }
