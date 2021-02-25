@@ -135,3 +135,7 @@ textarea::-webkit-scrollbar-track {
 .inputInfo {
     color: rgba(0, 0, 0, .45)
 }
+
+.ant-message {
+    z-index: 1040;
+}
