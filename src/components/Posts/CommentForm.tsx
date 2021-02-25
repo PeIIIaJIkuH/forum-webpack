@@ -21,7 +21,7 @@ const CommentForm: FC<Props> = ({isAuth, onSubmit}) => {
 		setIsFetching(false)
 	}
 
-	return (
+	return <>
 		<Form form={form} onFinish={onFinish}>
 			<Form.Item name='content' rules={[defaultValidator('Comment')]}>
 				<TextArea allowClear rows={5} autoSize={{minRows: 2, maxRows: 5}} showCount disabled={!isAuth}/>
@@ -33,7 +33,7 @@ const CommentForm: FC<Props> = ({isAuth, onSubmit}) => {
 				</Button>
 			</Form.Item>
 		</Form>
-	)
+	</>
 }
 
 export default CommentForm

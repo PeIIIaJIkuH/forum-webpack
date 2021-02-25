@@ -42,43 +42,36 @@ const Comment: FC<Props> = ({
 		[editLoading, setEditLoading] = React.useState(false),
 		[visible, setVisible] = React.useState(false)
 
-	const paragraphs = content.split('\n').map((paragraph, i) => (<p key={i}>{paragraph}</p>)),
-		autoSize = {minRows: 1, maxRows: 5}
+	const paragraphs = content.split('\n').map((paragraph, i) => (<p key={i}>{paragraph}</p>))
 
 	const onDelete = async () => {
 		let ok: any
-		setDeleteLoading(true)
-		if (!userPage) {
+		await setDeleteLoading(true)
+		if (!userPage)
 			ok = await deleteComment(comment.id)
-			setDeleteLoading(false)
-			setVisible(false)
-		} else {
+		else
 			ok = await deleteComment(comment.id, comment.post_id)
-			setDeleteLoading(false)
-			setVisible(false)
-		}
-		if (!ok) {
+		await setDeleteLoading(false)
+		await setVisible(false)
+		if (!ok)
 			message.error('Can not delete comment!')
-		}
 	}
 
 	const onEdit = async () => {
 		let ok: any = true
-		if (!isEdit) {
-			setIsEdit(true)
-		} else {
-			setEditLoading(true)
-			if (!userPage) {
+		if (!isEdit)
+			await setIsEdit(true)
+		else {
+			await setEditLoading(true)
+			if (!userPage)
 				ok = await editComment(comment.id, comment.author.id, comment.post_id, text, false)
-			} else {
+			else
 				ok = await editComment(comment.id, comment.author.id, comment.post_id, text, true)
-			}
-			setEditLoading(false)
-			setIsEdit(false)
+			await setEditLoading(false)
+			await setIsEdit(false)
 		}
-		if (!ok) {
+		if (!ok)
 			message.error('Can not edit comment!')
-		}
 	}
 
 	const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -92,7 +85,8 @@ const Comment: FC<Props> = ({
 		deleteBtn = <Button danger type='text' icon={<DeleteOutlined className={s.icon}/>} onClick={onDelete}
 							loading={deleteLoading}/>,
 		cContent = !isEdit ? paragraphs :
-			<TextArea autoSize={autoSize} defaultValue={content} onChange={onChange} allowClear autoFocus/>
+			<TextArea autoSize={{minRows: 1, maxRows: 5}} defaultValue={content} onChange={onChange} allowClear
+					  autoFocus/>
 
 	const handleVisibleChange = (visible: boolean) => {
 		setVisible(visible)
@@ -111,9 +105,8 @@ const Comment: FC<Props> = ({
 		// @ts-ignore
 		upRef.current.blur()
 		setUpLoading(false)
-		if (!ok) {
+		if (!ok)
 			message.error('Can not rate comment!')
-		}
 	}
 
 	const onDownClick = async () => {
@@ -122,43 +115,39 @@ const Comment: FC<Props> = ({
 		// @ts-ignore
 		downRef.current.blur()
 		setDownLoading(false)
-		if (!ok) {
+		if (!ok)
 			message.error('Can not rate comment!')
-		}
 	}
 
-	const upBtn = (
-			<Button className={`${s.commentUp} ${isRatedUp && s.commentRatedUp}`} icon={<UpOutlined/>} ref={upRef}
-					disabled={!isAuth} onClick={onUpClick} loading={upLoading} type='text' size='small'/>
-		),
-		downBtn = (
-			<Button className={`${s.downComment} ${isRatedDown && s.commentRatedDown}`} icon={<DownOutlined/>}
-					ref={downRef}
-					disabled={!isAuth} onClick={onDownClick} loading={downLoading} type='text' size='small'/>
-		)
+	const upBtn = <Button className={`${s.commentUp} ${isRatedUp && s.commentRatedUp}`} icon={<UpOutlined/>} ref={upRef}
+						  disabled={!isAuth} onClick={onUpClick} loading={upLoading} type='text' size='small'/>,
+		downBtn = <Button className={`${s.downComment} ${isRatedDown && s.commentRatedDown}`} icon={<DownOutlined/>}
+						  disabled={!isAuth} onClick={onDownClick} loading={downLoading} type='text' size='small'
+						  ref={downRef}/>
 
-	const rating = (
+	const rating = <>
 		<div className={s.commentRating}>
 			{comment.commentRating}
 		</div>
-	)
+	</>
 
-	return <AntComment author={(
-		<>
-			{author}
-			{check && (
-				<Popover trigger='click' placement='top' visible={visible} onVisibleChange={handleVisibleChange}
-						 content={(
-							 <div className='actions'>
-								 {editBtn}
-								 {deleteBtn}
-							 </div>
-						 )}>
-					<Button type='text' icon={<MoreOutlined/>} size='small'/>
-				</Popover>
-			)}
-		</>
-	)} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]} key={comment.id}/>
+	const updatedAuthor = <>
+		{author}
+		{check && <>
+			<Popover trigger='click' placement='top' visible={visible} onVisibleChange={handleVisibleChange}
+					 content={(
+						 <div className='actions'>
+							 {editBtn}
+							 {deleteBtn}
+						 </div>
+					 )}>
+				<Button type='text' icon={<MoreOutlined/>} size='small'/>
+			</Popover>
+		</>}
+	</>
+
+	return <AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}
+					   key={comment.id}/>
 }
 
 type MapStateToProps = {

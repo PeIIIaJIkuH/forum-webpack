@@ -25,14 +25,13 @@ const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) 
 		setVisible(false)
 		setLoading(true)
 		const ok: any = await deletePost(post.id)
-		if (ok) {
-			if (postPage) {
+		if (ok)
+			if (postPage)
 				history.push('/')
+			else {
+				setLoading(false)
+				message.error('Can not delete post!')
 			}
-		} else {
-			setLoading(false)
-			message.error('Can not delete post!')
-		}
 	}
 
 	const onEdit = async () => {
@@ -45,27 +44,28 @@ const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) 
 		setVisible(visible)
 	}
 
-	return (
+	const content = <>
+		<div className={s.actions}>
+			<Button type='text' icon={<EditOutlined/>} onClick={onEdit}/>
+			<Button danger type='link' icon={<DeleteOutlined/>} onClick={onDelete} loading={loading}/>
+		</div>
+	</>
+
+	return <>
 		<div className={s.header}>
 			<Link className={s.title} to={`/post/${post.id}`}>
 				{post.title}
 			</Link>
-			{userID === post.author.id && (
+			{userID === post.author.id && <>
 				<div className={s.more}>
 					<Popover trigger='click' placement='bottom' visible={visible} onVisibleChange={handleVisibleChange}
-							 content={(
-								 <div className={s.actions}>
-									 <Button type='text' icon={<EditOutlined/>} onClick={onEdit}/>
-									 <Button danger type='link' icon={<DeleteOutlined/>} onClick={onDelete}
-											 loading={loading}/>
-								 </div>
-							 )}>
+							 content={content}>
 						<Button type='text' icon={<MoreOutlined/>}/>
 					</Popover>
 				</div>
-			)}
+			</>}
 		</div>
-	)
+	</>
 }
 
 export default Header

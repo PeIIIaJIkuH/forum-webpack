@@ -32,37 +32,34 @@ const Comments: FC<Props> = ({comments, userID, userPage}) => {
 		}
 	}) : undefined
 
-	const header = (
-			<div className={s.commentsTitle}>
-				{`${comments ? comments.length : 'No'} comments`}
-			</div>
-		),
-		locale = {
-			emptyText: 'No Comments'
-		}
+	const header = <>
+		<div className={s.commentsTitle}>
+			{`${comments ? comments.length : 'No'} comments`}
+		</div>
+	</>
 
-	const renderItem = (item: {
+	type obj = {
 		author: TUser
 		content: string
 		datetime: string
 		comment: TComment
 		check: boolean
-	}) => {
-		const author = (
+	}
+	const renderItem = (item: obj) => {
+		const author = <>
 			<Link to={`/user/${item.author.id}`}>
 				{item.author.username}
 			</Link>
-		)
+		</>
 
-		return (
-			<li>
-				<Comment author={author} content={item.content} datetime={item.datetime} comment={item.comment}
-						 check={item.check} userPage={userPage}/>
-			</li>
-		)
+		return <li>
+			<Comment author={author} content={item.content} datetime={item.datetime} comment={item.comment}
+					 check={item.check} userPage={userPage}/>
+		</li>
 	}
 
-	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem} locale={locale}/>
+	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem}
+				 locale={{emptyText: 'No Comments'}}/>
 }
 
 type MapStateToProps = {

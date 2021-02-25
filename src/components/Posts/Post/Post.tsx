@@ -45,19 +45,15 @@ const Post: FC<Props> = ({
 				<Header post={post} userID={userID} deletePost={deletePost} postPage={postPage}
 						setPostToEdit={setPostToEdit}/>
 				<Content content={post.content}/>
-				{post.isImage && (
-					<Image src={`https://${post.imagePath}`} alt='post image'/>
-				)}
+				{post.isImage && <Image src={`https://${post.imagePath}`} alt='post image'/>}
 				<Divider className={s.divider}/>
 				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategories}
 							setSelectedCategories={setSelectedCategories}/>
 				<Footer post={post}/>
-				{comments && (
-					<>
-						<Divider/>
-						<Comments comments={comments} userPage/>
-					</>
-				)}
+				{comments && <>
+					<Divider/>
+					<Comments comments={comments} userPage/>
+				</>}
 			</div>
 		</Card>
 	)

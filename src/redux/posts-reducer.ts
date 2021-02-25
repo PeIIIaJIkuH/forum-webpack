@@ -153,6 +153,8 @@ export const requestUserPosts = (id: number) => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await userAPI.getCreatedPosts(id)
 	await dispatch(postsActions.setPostsAC(data.data))
+	await dispatch(postsActions.setUserCommentsAC(null))
+	await dispatch(postsActions.setUserCommentsAC(null))
 	await dispatch(setProgress(100))
 }
 
@@ -161,6 +163,7 @@ export const requestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvot
 	await dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(userID, reaction)
 	await dispatch(postsActions.setPostsAC(data.data))
+	await dispatch(postsActions.setUserCommentsAC(null))
 	await dispatch(setProgress(100))
 }
 

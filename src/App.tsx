@@ -25,7 +25,6 @@ import RightMenu from './components/RightMenu/RightMenu'
 
 // TODO:
 // check all the features and functions
-// create new errors to authorization and edit post from address
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
 
 type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
@@ -41,29 +40,26 @@ const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => 
 
 	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
-	if (!initialized) {
+	if (!initialized)
 		return <AppPreloader/>
-	}
-
-	const paths = ['/create', '/edit']
 
 	return (
 		<div className={s.App}>
 			<Layout className={s.layout}>
 				<Header/>
 				<Layout className={s.innerLayout}>
-					{!isTabletOrMobile && (
+					{!isTabletOrMobile && <>
 						<Affix offsetTop={105} className={`${s.affix} ${s.menu}`}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<LeftMenu/>
 							</Sider>
 						</Affix>
-					)}
+					</>}
 					<Content className={s.content}>
 						<Switch>
 							<Route exact path='/auth/signup'><Auth register/></Route>
 							<Route exact path='/auth/signin'><Auth/></Route>
-							<Route exact path={paths}><CreatePost/></Route>
+							<Route exact path={['/create', '/edit']}><CreatePost/></Route>
 							<Route exact path='/post/:id'><PostPage/></Route>
 							<Route exact path='/user/:id'><User/></Route>
 							<Route exact path='/my'><Posts type='my'/></Route>
@@ -74,16 +70,14 @@ const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => 
 							<Route><Error404/></Route>
 						</Switch>
 					</Content>
-					{!isTabletOrMobile && (
+					{!isTabletOrMobile && <>
 						<Affix offsetTop={105} className={`${s.affix} ${s.actions}`}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<Actions/>
 							</Sider>
 						</Affix>
-					)}
-					{isTabletOrMobile && (
-						<RightMenu/>
-					)}
+					</>}
+					{isTabletOrMobile && <RightMenu/>}
 				</Layout>
 			</Layout>
 		</div>

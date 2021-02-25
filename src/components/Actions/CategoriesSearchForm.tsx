@@ -22,7 +22,6 @@ const tailLayout = {
 type Props = {
 	isFetching: boolean
 	categories: Category[] | null
-	selected: string[] | null
 	requestCategories: RequestCategories
 	setSelectedCategories: SetSelectedCategories
 	onSubmit: (obj: { categories: string[] }) => Promise<void>
@@ -31,7 +30,7 @@ type Props = {
 
 const CategoriesSearchForm: FC<Props> = ({
 											 requestCategories, categories, onSubmit, form,
-											 isFetching, selected, setSelectedCategories
+											 isFetching, setSelectedCategories
 										 }) => {
 	React.useEffect(() => {
 		requestCategories()
@@ -41,7 +40,7 @@ const CategoriesSearchForm: FC<Props> = ({
 		setSelectedCategories(values)
 	}
 
-	return (
+	return <>
 		<Form {...layout} name='selectPosts' onFinish={onSubmit} layout='horizontal' form={form}>
 			<Form.Item name='categories'>
 				<Select mode='multiple' placeholder='Select categories' allowClear onChange={onChange}>
@@ -56,7 +55,7 @@ const CategoriesSearchForm: FC<Props> = ({
 				</Button>
 			</Form.Item>
 		</Form>
-	)
+	</>
 }
 
 export default CategoriesSearchForm

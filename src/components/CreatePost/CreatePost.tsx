@@ -13,29 +13,23 @@ import {State} from '../../redux/store'
 
 type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
 
-const CreatePost: FC<Props> = ({
-								   isAuth, postToEdit,
-								   location
-							   }) => {
+const CreatePost: FC<Props> = ({isAuth, postToEdit, location}) => {
 	const [isFetching, setIsFetching] = React.useState(false)
 
-	if (!isAuth) return <Error403/>
-	if (location.pathname.indexOf('/edit') === 0 && !postToEdit) return <Error404/>
+	if (!isAuth)
+		return <Error403/>
+	if (location.pathname.indexOf('/edit') === 0 && !postToEdit)
+		return <Error404/>
 
-	const title = (postToEdit ? 'Edit' : 'Create') + ' post',
-		headStyle = {fontSize: '20px', fontWeight: 600}
-
-	return (
-		<>
-			<Helmet><title>Create Post | forume</title></Helmet>
-			<div className={s.wrapper}>
-				<Card className={s.card} title={title}
-					  headStyle={headStyle}>
-					<CreatePostForm setIsFetching={setIsFetching} isFetching={isFetching}/>
-				</Card>
-			</div>
-		</>
-	)
+	return <>
+		<Helmet><title>Create Post | forume</title></Helmet>
+		<div className={s.wrapper}>
+			<Card className={s.card} title={(postToEdit ? 'Edit' : 'Create') + ' post'}
+				  headStyle={{fontSize: '20px', fontWeight: 600}}>
+				<CreatePostForm setIsFetching={setIsFetching} isFetching={isFetching}/>
+			</Card>
+		</div>
+	</>
 }
 
 type MapStateToProps = {

@@ -9,7 +9,7 @@ import {State} from '../../redux/store'
 type Props = MapStateToProps & MapDispatchToProps
 
 const RightMenu: FC<Props> = ({menuOpen}) => {
-	return (
+	return <>
 		<div className={`${s.wrapper} ${menuOpen ? s.open : ''}`}>
 			<LeftMenu mobile/>
 			<Layout.Footer className={s.footer}>
@@ -18,7 +18,7 @@ const RightMenu: FC<Props> = ({menuOpen}) => {
 				<div>February, 2021</div>
 			</Layout.Footer>
 		</div>
-	)
+	</>
 }
 
 type MapStateToProps = {

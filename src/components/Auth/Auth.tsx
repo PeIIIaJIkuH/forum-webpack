@@ -23,7 +23,8 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 	const [form] = Form.useForm()
 	const [isFetching, setIsFetching] = React.useState(false)
 
-	if (isAuth) return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
+	if (isAuth)
+		return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
 
 	type obj = {
 		username: string
@@ -39,9 +40,8 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 				message.success('Created new user!')
 				form.resetFields()
 				history.push('/auth/signin')
-			} else {
+			} else
 				message.error('Can not register!')
-			}
 		} else {
 			const ok: any = await signin(username, password)
 			setIsFetching(false)
@@ -49,12 +49,9 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 				if (urlTo) {
 					await setUrlTo(null)
 					history.push(urlTo)
-				} else {
+				} else
 					history.push('/')
-				}
-			} else {
-				message.error('Can not login!')
-			}
+			} else message.error('Can not login!')
 		}
 	}
 
@@ -64,22 +61,20 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 
 	const title = register ? 'Sign Up' : 'Sign In',
 		path = register ? '/auth/signin' : '/auth/signup',
-		extra = (
+		extra = <>
 			<Link to={path} onClick={onClick}>
 				{!register ? 'Sign Up' : 'Sign In'}
 			</Link>
-		)
-
-	return (
-		<>
-			<Helmet><title>{title} | forume</title></Helmet>
-			<div className={s.wrapper}>
-				<Card className={s.card} title={title} extra={extra}>
-					<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
-				</Card>
-			</div>
 		</>
-	)
+
+	return <>
+		<Helmet><title>{title} | forume</title></Helmet>
+		<div className={s.wrapper}>
+			<Card className={s.card} title={title} extra={extra}>
+				<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
+			</Card>
+		</div>
+	</>
 }
 
 type MapStateToProps = {

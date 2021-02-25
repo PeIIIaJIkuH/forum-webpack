@@ -43,54 +43,47 @@ const User: FC<Props> = ({
 	React.useEffect(() => {
 		const initialize = async () => {
 			const ok: any = await requestUser(+urlId)
-			if (!ok) {
+			if (!ok)
 				setCheck(false)
-			}
 			requestUserPosts(+urlId)
 		}
 		initialize()
 	}, [urlId, requestUser, requestUserPosts])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
+	if ((urlId !== undefined && isNaN(+urlId)) || !check)
+		return <Error404/>
 
 	const onClick = ({key}: any) => {
-		if (key === 'created') {
+		if (key === 'created')
 			requestUserPosts(+urlId)
-		} else if (key === 'up-voted') {
+		else if (key === 'up-voted')
 			requestRatedPosts(+urlId, 'upvoted')
-		} else if (key === 'down-voted') {
+		else if (key === 'down-voted')
 			requestRatedPosts(+urlId, 'downvoted')
-		} else {
+		else
 			requestCommentedPosts(+urlId)
-		}
 	}
 
 	const title = user ? user.username : 'User Page',
-		defaultKeys = ['created'],
-		postCards = posts && posts.map(post => (
+		postCards = posts?.map(post => (
 			<Post post={post} key={post.id} comments={userComments && userComments[post.id]}/>
 		))
 
-	return user && (
-		<>
-			<Helmet><title>{title} | forume</title></Helmet>
-			<UserInfo user={user}/>
-			<Menu className={s.menu} mode='horizontal' defaultSelectedKeys={defaultKeys} onClick={onClick}>
-				<MenuItem key='created' title='Created Posts' icon={<UserOutlined/>} forAll
-						  available/>
-				<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} forAll
-						  available/>
-				<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>}
-						  forAll available/>
-				<MenuItem key='commented' title='Commented Posts' icon={<CommentOutlined/>}
-						  forAll available/>
-			</Menu>
-			<section className='posts'>
-				{posts && posts.length ? postCards :
-					<Card><Empty description='No Posts'/></Card>}
-			</section>
-		</>
-	)
+	return user && <>
+		<Helmet><title>{title} | forume</title></Helmet>
+		<UserInfo user={user}/>
+		<Menu className={s.menu} mode='horizontal' defaultSelectedKeys={['created']} onClick={onClick}>
+			<MenuItem key='created' title='Created Posts' icon={<UserOutlined/>} forAll available/>
+			<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} forAll available/>
+			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} forAll available/>
+			<MenuItem key='commented' title='Commented Posts' icon={<CommentOutlined/>} forAll available/>
+		</Menu>
+		<section className='posts'>
+			{posts?.length ?
+				postCards :
+				<Card><Empty description='No Posts'/></Card>}
+		</section>
+	</>
 }
 
 type MapStateToProps = {

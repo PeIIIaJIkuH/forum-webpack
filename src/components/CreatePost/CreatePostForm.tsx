@@ -48,6 +48,28 @@ const CreatePostForm: FC<Props> = ({
 	const [isImage, setIsImage] = React.useState(postToEdit?.isImage || false),
 		[imagePath, setImagePath] = React.useState(postToEdit?.imagePath || '')
 
+	type obj = { title: string, content: string, categories: string[] }
+	const onSubmit = async ({title, content, categories}: obj) => {
+		setIsFetching(true)
+		title = title.trim()
+		content = content?.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
+		categories = categories.map(tag => tag.trim())
+		if (!postToEdit) {
+			const data = await postAPI.create(title, content, categories, isImage, imagePath)
+			if (data && data.status) {
+				await requestAllPosts()
+				await requestCategories()
+				await setIsFetching(false)
+				history.push('/')
+			} else
+				message.error(`Can not ${!postToEdit ? 'create' : 'edit'} post!`)
+		} else {
+			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories, isImage, imagePath)
+			await setIsFetching(false)
+			history.goBack()
+		}
+	}
+
 	const onCancel = () => {
 		history.goBack()
 	}
@@ -59,31 +81,7 @@ const CreatePostForm: FC<Props> = ({
 		url: `https://${postToEdit?.imagePath}`
 	}]
 
-	type obj = { title: string, content: string, categories: string[] }
-	const onSubmit = async ({title, content, categories}: obj) => {
-		setIsFetching(true)
-		title = title.trim()
-		if (content)
-			content = content.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
-		categories = categories.map(tag => tag.trim())
-		if (!postToEdit) {
-			const data = await postAPI.create(title, content, categories, isImage, imagePath)
-			if (data && data.status) {
-				await requestAllPosts()
-				await requestCategories()
-				await setIsFetching(false)
-				history.push('/')
-			} else {
-				message.error(`Can not ${!postToEdit ? 'create' : 'edit'} post!`)
-			}
-		} else {
-			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories, isImage, imagePath)
-			await setIsFetching(false)
-			history.goBack()
-		}
-	}
-
-	return (
+	return <>
 		<Form className={s.form} {...layout} name='createPost' onFinish={onSubmit}>
 			<Form.Item label='Title' name='title' rules={[defaultValidator('Title')]} initialValue={postToEdit?.title}>
 				<Input autoFocus/>
@@ -97,11 +95,11 @@ const CreatePostForm: FC<Props> = ({
 							 defaultFileList={postToEdit?.isImage && defaultFileList}/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}
-					   initialValue={['text']}>
+					   initialValue={postToEdit?.categories.map(category => category.name)}>
 				<Select mode='tags' allowClear>
-					{categories?.map(e => (
-						<Select.Option key={e.name} value={e.name}>
-							{e.name}
+					{categories?.map(category => (
+						<Select.Option key={category.name} value={category.name}>
+							{category.name}
 						</Select.Option>
 					))}
 				</Select>
@@ -116,7 +114,7 @@ const CreatePostForm: FC<Props> = ({
 				</Button>
 			</Form.Item>
 		</Form>
-	)
+	</>
 }
 
 type MapStateToProps = {

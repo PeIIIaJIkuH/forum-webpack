@@ -16,12 +16,10 @@ type Props = {
 }
 
 const Actions: FC<Props> = ({isAuth, postToEdit}) => {
-	const disabled = !isAuth || !!postToEdit
-
-	return (
+	return <>
 		<div className='actions'>
 			<Link className={s.addPost} to='/create'>
-				<Button type='primary' icon={<PlusOutlined/>} disabled={disabled}>
+				<Button type='primary' icon={<PlusOutlined/>} disabled={!isAuth || !!postToEdit}>
 					Add post
 				</Button>
 			</Link>
@@ -34,7 +32,7 @@ const Actions: FC<Props> = ({isAuth, postToEdit}) => {
 				<div>February, 2021</div>
 			</Layout.Footer>
 		</div>
-	)
+	</>
 }
 
 const mapStateToProps = (state: State) => ({

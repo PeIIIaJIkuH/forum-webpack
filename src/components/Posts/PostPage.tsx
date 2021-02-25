@@ -45,37 +45,34 @@ const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, r
 		initialize()
 	}, [urlId, requestPost, requestComments])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || !check) return <Error404/>
+	if ((urlId !== undefined && isNaN(+urlId)) || !check)
+		return <Error404/>
 
 	type obj = { content: string }
 	const onSubmit = async ({content}: obj) => {
-		const data = await postAPI.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n').split('\n')
-			.map(line => line.trim()).join('\n'))
-		if (data && data.status) {
+		const data = await postAPI
+			.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n').split('\n')
+				.map(line => line.trim()).join('\n'))
+		if (data && data.status)
 			await requestComments(+urlId)
-		} else {
+		else
 			message.error('Can not add comment!')
-		}
 	}
 
-	const postCards = posts && posts.map(post => (
-		<Post post={post} key={post.id} postPage/>
-	))
+	const postCards = posts?.map(post => <Post post={post} key={post.id} postPage/>)
 
-	return posts && (
-		<>
-			<Helmet><title>Comments | forume</title></Helmet>
-			<section className='posts'>
-				{postCards}
-			</section>
-			<section className={s.comments}>
-				<Card className={s.commentsCard}>
-					<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
-					<Comments comments={comments}/>
-				</Card>
-			</section>
-		</>
-	)
+	return posts && <>
+		<Helmet><title>Comments | forume</title></Helmet>
+		<section className='posts'>
+			{postCards}
+		</section>
+		<section className={s.comments}>
+			<Card className={s.commentsCard}>
+				<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
+				<Comments comments={comments}/>
+			</Card>
+		</section>
+	</>
 }
 
 type MapStateToProp = {

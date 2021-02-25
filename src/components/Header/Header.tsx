@@ -33,9 +33,8 @@ const Header: FC<Props> = ({
 	const onSignout = () => {
 		const ok: any = signout()
 		setMenuOpen(false)
-		if (!ok) {
+		if (!ok)
 			message.error('Can not logout!')
-		}
 	}
 
 	const onFinished = () => {
@@ -55,15 +54,15 @@ const Header: FC<Props> = ({
 						<Image width={50} src={logo} preview={false} alt='logo'/>
 						foru<span>me</span>
 					</Link>
-					{isAuth ? (!isTabletOrMobile ? (
+					{isAuth ? !isTabletOrMobile ?
 						<Actions userID={userID} username={username} onSignout={onSignout}/>
-					) : (
+						:
 						<MobileActions userID={userID} username={username} onSignout={onSignout}/>
-					)) : (
+						:
 						<Link to='/auth/signin'>
 							<Button className={s.auth} type='link' onClick={onAuth}>Sign In</Button>
 						</Link>
-					)}
+					}
 				</div>
 			</Layout.Header>
 		</Affix>

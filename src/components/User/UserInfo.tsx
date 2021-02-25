@@ -15,14 +15,15 @@ type Props = {
 
 const UserInfo: FC<Props> = ({user}) => {
 	let lastActive
-	if (user) {
+	if (user)
 		lastActive = getDateDifference(user.lastActive, true)
-	}
 
 	const created = moment(user && user.createdAt * 1000).format('DD.MM.YYYY hh:mm:ss')
-	const active = lastActive ? `${lastActive.num} ${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}` : 'Just now'
+	const active = lastActive ?
+		`${lastActive.num} ${lastActive.type.slice(0, -1)}${lastActive.num > 1 ? 's' : ''}`
+		: 'Just now'
 
-	return user && (
+	return user && <>
 		<section className={s.userInfo}>
 			<Card title={<Title level={2}>{user.username}</Title>}>
 				<Descriptions title='User info' column={1}>
@@ -32,7 +33,7 @@ const UserInfo: FC<Props> = ({user}) => {
 				</Descriptions>
 			</Card>
 		</section>
-	)
+	</>
 }
 
 export default UserInfo

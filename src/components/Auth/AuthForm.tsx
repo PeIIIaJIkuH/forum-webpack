@@ -7,10 +7,7 @@ import {defaultValidator} from '../../utils/helpers/helpers'
 import Tooltip from 'antd/lib/tooltip'
 
 const tailLayout = {
-	wrapperCol: {
-		offset: 8,
-		span: 16
-	}
+	wrapperCol: {offset: 8, span: 16}
 }
 
 type Props = {
@@ -21,7 +18,7 @@ type Props = {
 }
 
 const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
-	const usernameInfo = (
+	const usernameInfo = <>
 			<Tooltip title={<>
 				<div>4-20 characters long.</div>
 				<div>Allowed: a-z, A-Z, 0-9, _, .</div>
@@ -30,15 +27,15 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 			</>}>
 				<InfoCircleOutlined className='inputInfo'/>
 			</Tooltip>
-		),
-		emailInfo = (
+		</>,
+		emailInfo = <>
 			<Tooltip title={<>
 				<div>Just valid E-mail.</div>
 			</>}>
 				<InfoCircleOutlined className='inputInfo'/>
 			</Tooltip>
-		),
-		passwordInfo = (
+		</>,
+		passwordInfo = <>
 			<Tooltip title={<>
 				<div>6-20 characters long.</div>
 				<div>Allowed: a-z, A-Z, 0-9, _, .</div>
@@ -48,24 +45,24 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 			</>}>
 				<InfoCircleOutlined className='inputInfo'/>
 			</Tooltip>
-		)
+		</>
 
-	return (
+	return <>
 		<Form name='auth' onFinish={onsubmit} form={form}>
-			<Form.Item name='username' rules={[defaultValidator('Username', isSignup)]} label={isSignup && usernameInfo}
-					   colon={false}>
+			<Form.Item name='username' rules={[defaultValidator('Username', isSignup)]} colon={false}
+					   label={isSignup && usernameInfo}>
 				<Input prefix={<UserOutlined/>} placeholder='Username' autoFocus/>
 			</Form.Item>
-			{isSignup &&
-			<Form.Item name='email' label={emailInfo} colon={false} rules={[defaultValidator('E-mail', true), {
-				type: 'email',
-				message: 'The input is not valid E-mail!'
-			}]}>
-				<Input prefix='@' placeholder='E-mail'/>
-			</Form.Item>
-			}
-			<Form.Item name='password' rules={[defaultValidator('Password', isSignup)]} label={isSignup && passwordInfo}
-					   colon={false}>
+			{isSignup && <>
+				<Form.Item name='email' label={emailInfo} colon={false} rules={[defaultValidator('E-mail', true), {
+					type: 'email',
+					message: 'The input is not valid E-mail!'
+				}]}>
+					<Input prefix='@' placeholder='E-mail'/>
+				</Form.Item>
+			</>}
+			<Form.Item name='password' rules={[defaultValidator('Password', isSignup)]} colon={false}
+					   label={isSignup && passwordInfo}>
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			<Form.Item {...tailLayout}>
@@ -74,7 +71,7 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 				</Button>
 			</Form.Item>
 		</Form>
-	)
+	</>
 }
 
 export default AuthForm

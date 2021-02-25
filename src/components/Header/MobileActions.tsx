@@ -35,19 +35,21 @@ const MobileActions: FC<Props> = ({userID, username, onSignout, menuOpen, setMen
 		history.push(`/user/${userID}`)
 	}
 
-	return (
+	const content = <>
+		<div className={s.content}>
+			<Button type='link' onClick={onClick}>
+				Profile
+			</Button>
+			<Button type='link' danger onClick={onSignout}>
+				Sign Out
+			</Button>
+		</div>
+	</>
+
+	return <>
 		<div className='mobileActions'>
 			<Notifications/>
-			<Popover placement='bottom' content={(
-				<div className={s.content}>
-					<Button type='link' onClick={onClick}>
-						Profile
-					</Button>
-					<Button type='link' danger onClick={onSignout}>
-						Sign Out
-					</Button>
-				</div>
-			)} trigger='click'
+			<Popover placement='bottom' content={content} trigger='click'
 					 visible={visible}
 					 onVisibleChange={handleVisibleChange}>
 				<Button type='text'>{username}</Button>
@@ -55,7 +57,7 @@ const MobileActions: FC<Props> = ({userID, username, onSignout, menuOpen, setMen
 			<Button type='text' icon={!menuOpen ? <MenuOutlined/> : <CloseOutlined/>}
 					onClick={toggleMenu}/>
 		</div>
-	)
+	</>
 }
 
 type MapStateToProps = {

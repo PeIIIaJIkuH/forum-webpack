@@ -17,15 +17,14 @@ type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentPro
 
 const LeftMenu: FC<Props> = ({isAuth, location, mobile}) => {
 	const options = [location.pathname.split('/')[1] || 'home'],
-		defaultKeys = ['home'],
-		[modalVisible, setModalVisible] = React.useState(false)
+		[modalVisible, setModalVisible] = React.useState(false),
+		defaultKeys = ['home']
 
 	const onClick = ({key}: any) => {
-		if (key !== 'by-categories') {
+		if (key !== 'by-categories')
 			history.push(`/${key === 'home' ? '' : key}`)
-		} else {
+		else
 			setModalVisible(true)
-		}
 	}
 
 	return (

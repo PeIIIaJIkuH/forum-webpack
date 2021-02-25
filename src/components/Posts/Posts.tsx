@@ -51,39 +51,39 @@ const Posts: FC<Props> = ({
 		} else if (type === 'upvoted' || type === 'downvoted') {
 			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
 			userID && requestRatedPosts(userID, type)
-		} else if (type === 'categories') {
+		} else if (type === 'categories')
 			setTitle('Search by Categories')
-		} else {
+		else {
 			setTitle('Home')
 			requestAllPosts()
 		}
 	}, [type, urlId, requestUserPosts, requestRatedPosts, requestPostsByCategories, requestAllPosts, userID])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected)) return <Error404/>
-	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted')) return <Error403/>
+	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
+		return <Error404/>
+	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))
+		return <Error403/>
 
-	return (
-		<>
-			<Helmet><title>{title} | forume</title></Helmet>
-			{type === 'categories' && (
-				<section className={s.searchByCategories}>
-					<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
-						{selected?.map(tag => <Tag key={tag}>{tag}</Tag>)}
-					</Card>
-				</section>
-			)}
-			<section className='posts'>
-				{posts && posts.length ?
-					posts && posts.map(post => (
-						<Post post={post} key={post.id}/>
-					)) :
-					<Card>
-						<Empty className={s.empty} description='No Posts'/>
-					</Card>
-				}
+	return <>
+		<Helmet><title>{title} | forume</title></Helmet>
+		{type === 'categories' && <>
+			<section className={s.searchByCategories}>
+				<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
+					{selected?.map(tag => <Tag key={tag}>{tag}</Tag>)}
+				</Card>
 			</section>
-		</>
-	)
+		</>}
+		<section className='posts'>
+			{posts?.length ?
+				posts && posts.map(post => (
+					<Post post={post} key={post.id}/>
+				)) :
+				<Card>
+					<Empty className={s.empty} description='No Posts'/>
+				</Card>
+			}
+		</section>
+	</>
 }
 
 type MapStateToProps = {

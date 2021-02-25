@@ -12,17 +12,17 @@ type Props = {
 }
 
 const Categories: FC<Props> = ({categories, requestPostsByCategories, setSelectedCategories}) => {
-	return categories && (
+	return categories && <>
 		<div className={s.categories}>
 			{categories.map(category => (
 				<Tag className={s.tag} key={category.id} onClick={() => {
-					setSelectedCategories([category].map(e => e.name))
-					requestPostsByCategories([category].map(e => e.name))
+					setSelectedCategories([category.name])
+					requestPostsByCategories([category.name])
 				}}>
 					{category.name}
 				</Tag>
 			))}
 		</div>
-	)
+	</>
 }
 export default Categories

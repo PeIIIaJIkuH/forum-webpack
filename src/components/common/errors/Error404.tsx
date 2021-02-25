@@ -9,17 +9,18 @@ type Props = {
 }
 
 export const Error404: FC<Props> = ({text}) => {
-	const extra = <Link to='/'><Button type='primary'>Back Home</Button></Link>,
+	const extra = <>
+			<Link to='/'>
+				<Button type='primary'>Back Home</Button>
+			</Link>
+		</>,
 		subTitle = text || 'Sorry, the page you visited does not exist.'
 
-	return (
-		<>
-			<Helmet><title>Error 404 | forume</title></Helmet>
-			<Result status='404' title='404' subTitle={subTitle}
-					extra={extra}
-			/>
-		</>
-	)
+	return <>
+		<Helmet><title>Error 404 | forume</title></Helmet>
+		<Result status='404' title='404' subTitle={subTitle} extra={extra}
+		/>
+	</>
 }
 
 export default Error404

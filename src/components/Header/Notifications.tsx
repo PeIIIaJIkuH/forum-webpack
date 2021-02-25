@@ -28,18 +28,17 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 		const ok: any = await deleteNotification()
 		setLoading(false)
 		setVisible(false)
-		if (!ok) {
+		if (!ok)
 			message.error('Can not delete notifications!')
-		}
 	}
 
-	const title = (
+	const title = <>
 		<div className={s.title}>
 			<div>Notifications</div>
 			<Button type='text' size='small' onClick={onClose} loading={loading} disabled={!notifications}
 					icon={<DeleteOutlined className={s.closeIcon}/>}/>
 		</div>
-	)
+	</>
 
 	const content = notifications ? notifications.map(notification => {
 		let username, userID, text, link
@@ -58,12 +57,11 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 			userID = notification.comment.author.id
 			text = 'commented'
 			link = <Link to={`/post/${notification.post_id}`}>post</Link>
-		} else {
+		} else
 			text = 'error'
-		}
 		const created = getDateDifference(notification.createdAt)
 
-		return (
+		return <>
 			<div key={notification.id} className={s.notification}>
 				<div>
 					<Link to={`/user/${userID}`}>{username}</Link> {text} your {link}
@@ -74,10 +72,10 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 					</div>
 				</div>
 			</div>
-		)
+		</>
 	}) : <div style={{color: '#959595'}}>No Data</div>
 
-	return (
+	return <>
 		<Badge className={s.notifications} offset={[-5, 5]} size='small' overflowCount={10}
 			   count={notifications && notifications.length}>
 			<Popover placement='bottom' title={title} content={content} trigger='click' visible={visible}
@@ -85,7 +83,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 				<Button type='text' icon={<BellOutlined/>}/>
 			</Popover>
 		</Badge>
-	)
+	</>
 }
 
 type MapStateToProps = {
