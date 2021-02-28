@@ -91,7 +91,7 @@ const CreatePostForm: FC<Props> = ({
 				<TextArea allowClear autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
 			<Form.Item label='Image' name='image'>
-				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage}
+				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage} postToEdit={postToEdit}
 							 defaultFileList={postToEdit?.isImage && defaultFileList}/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}

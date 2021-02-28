@@ -3,14 +3,16 @@ import {InboxOutlined} from '@ant-design/icons'
 import Upload, {RcFile} from 'antd/lib/upload'
 import message from 'antd/lib/message'
 import {postAPI} from '../../api/requests'
+import {TPost} from '../../types/types'
 
 type Props = {
 	setIsImage: (isImage: boolean) => void
 	setImagePath: (path: string) => void
 	defaultFileList: any
+	postToEdit: TPost | null
 }
 
-const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList}) => {
+const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList, postToEdit}) => {
 	const [fileList] = React.useState([])[0],
 		setProgress = React.useState(0)[1]
 
@@ -59,8 +61,11 @@ const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList}) => 
 		}
 	}
 
-	const onRemove = () => {
+	const onRemove = async () => {
+		const data = postAPI.deleteImage(postToEdit?.id)
+		console.log(data)
 		setIsImage(false)
+		setImagePath('')
 	}
 
 	return (
