@@ -44,7 +44,8 @@ export const postAPI = {
 		.then(r => r.data).catch(() => 'Can not edit comment.'),
 	uploadImage: (data, config) => defaultAxios.post('image/upload', data, config).then(r => r.data).catch(() => 'Can not upload image.'),
 	rateComment: (commentID, postID, reaction) => defaultAxios.post('comment/rate', {commentID, postID, reaction})
-		.then(r => r.data).catch(() => 'Can not rate comment.')
+		.then(r => r.data).catch(() => 'Can not rate comment.'),
+	deleteImage: id => defaultAxios.delete(`image/delete/${id}`).then(r => r.data).catch(() => 'Can not delete image.')
 }
 
 export const categoriesAPI = {
