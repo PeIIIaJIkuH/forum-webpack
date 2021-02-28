@@ -51,10 +51,11 @@ const Comment: FC<Props> = ({
 			ok = await deleteComment(comment.id)
 		else
 			ok = await deleteComment(comment.id, comment.post_id)
-		await setDeleteLoading(false)
-		await setVisible(false)
-		if (!ok)
+		if (!ok) {
+			await setDeleteLoading(false)
+			await setVisible(false)
 			message.error('Can not delete comment!')
+		}
 	}
 
 	const onEdit = async () => {
