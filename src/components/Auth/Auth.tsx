@@ -97,4 +97,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	setUrlTo
 }
 
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Auth)
+export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Auth)

@@ -169,4 +169,4 @@ const mapDispatchToProps = {
 	setCommentRating
 }
 
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Comment)
+export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Comment)

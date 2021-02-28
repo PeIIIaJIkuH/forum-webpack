@@ -10,7 +10,6 @@ import {State} from '../../redux/store'
 import {TComment, TUser} from '../../types/types'
 
 type OwnProps = {
-	userID: number | null
 	comments: TComment[] | null
 	userPage?: boolean
 }
@@ -72,4 +71,4 @@ const mapStateToProps = (state: State): MapStateToProps => ({
 type MapDispatchToProps = {}
 const mapDispatchToProps: MapDispatchToProps = {}
 
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Comments)
+export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Comments)

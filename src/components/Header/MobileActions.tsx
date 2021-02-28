@@ -74,4 +74,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	setMenuOpen
 }
 
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(MobileActions)
+export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(MobileActions)

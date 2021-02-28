@@ -10,10 +10,12 @@ import CategoriesSearch from './CategoriesSearch'
 import {TPost} from '../../types/types'
 import {State} from '../../redux/store'
 
-type Props = {
+type OwnProps = {
 	isAuth: boolean
 	postToEdit: TPost | null
 }
+
+type Props = OwnProps & MapStateToProps & MapDispatchToProps
 
 const Actions: FC<Props> = ({isAuth, postToEdit}) => {
 	return <>
