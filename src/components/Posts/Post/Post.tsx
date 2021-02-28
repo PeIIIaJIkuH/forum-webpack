@@ -83,4 +83,4 @@ const mapDispatchToProps = {
 	setSelectedCategories
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post)
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Post)

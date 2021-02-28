@@ -110,4 +110,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	requestCommentedPosts
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(User))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(User))

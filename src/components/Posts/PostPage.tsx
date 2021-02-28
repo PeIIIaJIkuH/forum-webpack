@@ -28,7 +28,7 @@ type PathParamsType = {
 
 type OwnProps = RouteComponentProps<PathParamsType>
 
-type Props = MapStateToProp & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
 
 const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
 	const urlId = match.params.id,
@@ -75,12 +75,12 @@ const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, r
 	</>
 }
 
-type MapStateToProp = {
+type MapStateToProps = {
 	posts: TPost[] | null
 	isAuth: boolean
 	comments: TComment[] | null
 }
-const mapStateToProps = (state: State): MapStateToProp => ({
+const mapStateToProps = (state: State): MapStateToProps => ({
 	posts: postsSelector(state),
 	isAuth: isAuthSelector(state),
 	comments: commentsSelector(state)
@@ -97,4 +97,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	deleteComment
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostPage))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(PostPage))

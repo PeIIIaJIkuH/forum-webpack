@@ -52,4 +52,4 @@ const mapStateToProps = (state: State): MapStateToProps => ({
 type MapDispatchToProps = {}
 const mapDispatchToProps: MapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LeftMenu))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(LeftMenu))

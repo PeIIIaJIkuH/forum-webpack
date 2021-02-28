@@ -97,4 +97,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	setMenuOpen
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter<any, any>(Header))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter<any, any>(Header))

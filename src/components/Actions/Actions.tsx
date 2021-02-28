@@ -35,11 +35,16 @@ const Actions: FC<Props> = ({isAuth, postToEdit}) => {
 	</>
 }
 
-const mapStateToProps = (state: State) => ({
+type MapStateToProps = {
+	isAuth: boolean
+	postToEdit: TPost | null
+}
+const mapStateToProps = (state: State): MapStateToProps => ({
 	isAuth: isAuthSelector(state),
 	postToEdit: postToEditSelector(state)
 })
 
-const mapDispatchToProps = {}
+type MapDispatchToProps = {}
+const mapDispatchToProps: MapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Actions)
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Actions)

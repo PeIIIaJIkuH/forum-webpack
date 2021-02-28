@@ -100,7 +100,7 @@ const mapDispatchToProps: MapDispatchToProps = {
 	setMenuOpen
 }
 
-const AppContainer = connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
+const AppContainer = connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(App))
 
 const MainApp = () => {
 	return (

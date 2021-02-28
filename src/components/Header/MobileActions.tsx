@@ -70,8 +70,8 @@ const mapStateToProps = (state: State): MapStateToProps => ({
 type MapDispatchToProps = {
 	setMenuOpen: SetMenuOpen
 }
-const mapDispatchToProps = {
+const mapDispatchToProps: MapDispatchToProps = {
 	setMenuOpen
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MobileActions)
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(MobileActions)

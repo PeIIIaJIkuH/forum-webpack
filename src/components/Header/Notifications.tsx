@@ -100,4 +100,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	deleteNotification
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications)
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Notifications)

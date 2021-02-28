@@ -48,4 +48,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	setUrlTo
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Error403))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(Error403))

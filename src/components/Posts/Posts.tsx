@@ -112,4 +112,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 	requestPostsByCategories
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Posts))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(Posts))

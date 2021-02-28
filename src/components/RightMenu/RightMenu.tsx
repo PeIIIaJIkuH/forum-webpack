@@ -31,4 +31,4 @@ const mapStateToProps = (state: State): MapStateToProps => ({
 type MapDispatchToProps = {}
 const mapDispatchToProps: MapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(RightMenu)
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(RightMenu)

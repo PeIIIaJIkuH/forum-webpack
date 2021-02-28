@@ -136,4 +136,4 @@ const mapDispatchToProps: MapDispatchToProps = {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreatePostForm))
+export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(CreatePostForm))
