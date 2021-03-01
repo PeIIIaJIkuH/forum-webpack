@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect} from 'react'
 import Button from 'antd/lib/button'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
@@ -9,14 +9,12 @@ import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
 import {defaultValidator} from '../../utils/helpers/helpers'
-import {requestCategories, RequestCategories} from '../../redux/categories-reducer'
-import {requestAllPosts, setPostToEdit, SetPostToEdit} from '../../redux/posts-reducer'
-import {Category, TPost} from '../../types/types'
-import {State} from '../../redux/store'
+import {requestCategories} from '../../redux/categories-reducer'
+import {requestAllPosts, setPostToEdit} from '../../redux/posts-reducer'
 import {categoriesSelector, postToEditSelector} from '../../redux/selectors'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {postAPI} from '../../api/requests'
-import ImageUpload from './ImageUpload'
+import {ImageUpload} from './ImageUpload'
 import message from 'antd/lib/message'
 
 const layout = {
@@ -33,17 +31,20 @@ type OwnProps = {
 	setIsFetching: (fetching: boolean) => void
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = OwnProps & RouteComponentProps
 
-const CreatePostForm: FC<Props> = ({
-									   requestCategories, categories, isFetching,
-									   postToEdit, setPostToEdit, location,
-									   setIsFetching
-								   }) => {
-	React.useEffect(() => {
-		requestCategories()
-		return () => setPostToEdit(null)
-	}, [requestCategories, postToEdit, setPostToEdit, location.pathname])
+const CreatePostForm: FC<Props> = ({isFetching, location, setIsFetching}) => {
+	const categories = useSelector(categoriesSelector),
+		postToEdit = useSelector(postToEditSelector)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(requestCategories())
+		return () => {
+			dispatch(setPostToEdit(null))
+		}
+	}, [dispatch, postToEdit, location.pathname])
 
 	const [isImage, setIsImage] = React.useState(postToEdit?.isImage || false),
 		[imagePath, setImagePath] = React.useState(postToEdit?.imagePath || '')
@@ -91,7 +92,7 @@ const CreatePostForm: FC<Props> = ({
 				<TextArea allowClear autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
 			<Form.Item label='Image' name='image'>
-				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage} postToEdit={postToEdit}
+				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage}
 							 defaultFileList={postToEdit?.isImage && defaultFileList}/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}
@@ -117,23 +118,4 @@ const CreatePostForm: FC<Props> = ({
 	</>
 }
 
-type MapStateToProps = {
-	categories: Category[] | null
-	postToEdit: TPost | null
-}
-const mapStateToProps = (state: State) => ({
-	categories: categoriesSelector(state),
-	postToEdit: postToEditSelector(state)
-})
-
-type MapDispatchToProps = {
-	setPostToEdit: SetPostToEdit
-	requestCategories: RequestCategories
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	setPostToEdit,
-	requestCategories
-}
-
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(withRouter(CreatePostForm))
+export default withRouter(CreatePostForm)

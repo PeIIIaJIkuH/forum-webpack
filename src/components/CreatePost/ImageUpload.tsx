@@ -1,20 +1,22 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import {InboxOutlined} from '@ant-design/icons'
 import Upload, {RcFile} from 'antd/lib/upload'
 import message from 'antd/lib/message'
 import {postAPI} from '../../api/requests'
-import {TPost} from '../../types/types'
+import {useSelector} from 'react-redux'
+import {postToEditSelector} from '../../redux/selectors'
 
 type Props = {
 	setIsImage: (isImage: boolean) => void
 	setImagePath: (path: string) => void
 	defaultFileList: any
-	postToEdit: TPost | null
 }
 
-const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList, postToEdit}) => {
-	const [fileList] = React.useState([])[0],
-		setProgress = React.useState(0)[1]
+export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList}) => {
+	const postToEdit = useSelector(postToEditSelector)
+
+	const [fileList] = useState([])[0],
+		setProgress = useState(0)[1]
 
 	const beforeUpload = (file: RcFile) => {
 		const isCorrectType = file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg' || file.type === 'image/gif'
@@ -79,5 +81,3 @@ const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList, post
 		</Upload.Dragger>
 	)
 }
-
-export default ImageUpload
