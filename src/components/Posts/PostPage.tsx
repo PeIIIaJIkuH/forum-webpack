@@ -16,7 +16,7 @@ import {
 } from '../../redux/posts-reducer'
 import {connect} from 'react-redux'
 import {Helmet} from 'react-helmet'
-import Error404 from '../common/errors/Error404'
+import {Error404} from '../common/errors/Error404'
 import Post from './Post/Post'
 import {TComment, TPost} from '../../types/types'
 import {State} from '../../redux/store'

@@ -7,7 +7,7 @@ import Card from 'antd/lib/card'
 import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
-import Error404 from '../common/errors/Error404'
+import {Error404} from '../common/errors/Error404'
 import {TPost} from '../../types/types'
 import {State} from '../../redux/store'
 
