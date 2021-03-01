@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react'
 import s from './Posts.module.css'
 import {useDispatch, useSelector} from 'react-redux'
 import {isAuthSelector, postsSelector, selectedCategoriesSelector, userIDSelector} from '../../redux/selectors'
-import {requestAllPosts, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
+import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
@@ -13,6 +13,7 @@ import {Error403} from '../common/errors/Error403'
 import Tag from 'antd/lib/tag'
 import Typography from 'antd/lib/typography'
 import {TComment, TPost} from '../../types/types'
+import {setSelectedCategories} from '../../redux/categories-reducer'
 
 type PathParamsType = {
 	id: string,
@@ -35,7 +36,8 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 	const dispatch = useDispatch()
 
 	const urlId = match.params.id,
-		[title, setTitle] = useState('Home')
+		[title, setTitle] = useState('Home'),
+		[selectedFromStorage, setSelectedFromStorage] = useState<string[] | null>(null)
 
 	useEffect(() => {
 		if (type === 'my') {
@@ -47,15 +49,24 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 		} else if (type === 'upvoted' || type === 'downvoted') {
 			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
 			userID && dispatch(requestRatedPosts(userID, type))
-		} else if (type === 'categories')
+		} else if (type === 'categories') {
 			setTitle('Search by Categories')
-		else {
+			const item = localStorage.getItem('selected-categories')
+			if (selected) {
+				setSelectedFromStorage(selected)
+				localStorage.setItem('selected-categories', JSON.stringify(selected))
+			} else if (item !== null) {
+				setSelectedFromStorage(JSON.parse(item))
+				setSelectedCategories(JSON.parse(item))
+				dispatch(requestPostsByCategories(JSON.parse(item)))
+			}
+		} else {
 			setTitle('Home')
 			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, userID, dispatch])
+	}, [type, urlId, userID, selected, dispatch])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
+	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selectedFromStorage))
 		return <Error404/>
 	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))
 		return <Error403/>
@@ -65,7 +76,7 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 		{type === 'categories' && <>
 			<section className={s.searchByCategories}>
 				<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
-					{selected?.map(tag => <Tag key={tag}>{tag}</Tag>)}
+					{selectedFromStorage?.map(tag => <Tag key={tag}>{tag}</Tag>)}
 				</Card>
 			</section>
 		</>}
