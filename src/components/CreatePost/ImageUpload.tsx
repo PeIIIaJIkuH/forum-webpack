@@ -21,11 +21,11 @@ export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileLis
 	const beforeUpload = (file: RcFile) => {
 		const isCorrectType = file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg' || file.type === 'image/gif'
 		if (!isCorrectType) {
-			message.error(`${file.name} is not an image of required type!`)
+			message.error(`${file.name} is not an image of required type!`).then()
 		}
 		const isLt20M = file.size / 1024 / 1024 < 20
 		if (!isLt20M) {
-			message.error('Image must smaller than 20MB!')
+			message.error('Image must smaller than 20MB!').then()
 		}
 		return isCorrectType && isLt20M
 	}

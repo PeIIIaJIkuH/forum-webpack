@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import {history} from '../../../history'
+import {history} from '../../../history/history'
 import {CommentOutlined} from '@ant-design/icons'
 import {getDateDifference} from '../../../utils/helpers/helpers'
 import {TPost} from '../../../types/types'

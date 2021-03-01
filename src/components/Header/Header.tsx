@@ -34,7 +34,7 @@ const HeaderComponent: FC<Props> = ({location}) => {
 		const ok: any = dispatch(signout())
 		dispatch(setMenuOpen(false))
 		if (!ok)
-			message.error('Can not logout!')
+			message.error('Can not logout!').then()
 	}
 
 	const onFinished = () => {

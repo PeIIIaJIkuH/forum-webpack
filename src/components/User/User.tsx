@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react'
 import s from './User.module.css'
-import {userSelector} from '../../redux/selectors'
+import {userCommentsSelector, userSelector} from '../../redux/selectors'
 import {requestCommentedPosts, requestRatedPosts, requestUser, requestUserPosts} from '../../redux/posts-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
@@ -21,7 +21,8 @@ type OwnProps = RouteComponentProps<PathParamsType>
 type Props = OwnProps & RouteComponentProps
 
 const UserComponent: FC<Props> = ({match}) => {
-	const user = useSelector(userSelector)
+	const user = useSelector(userSelector),
+		userComments = useSelector(userCommentsSelector)
 
 	const dispatch = useDispatch()
 
@@ -30,12 +31,12 @@ const UserComponent: FC<Props> = ({match}) => {
 
 	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = await dispatch(requestUser(+urlId))
+			const ok: any = dispatch(requestUser(+urlId))
 			if (!ok)
 				setCheck(false)
 			dispatch(requestUserPosts(+urlId))
 		}
-		initialize()
+		initialize().then()
 	}, [urlId, dispatch])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check)
@@ -63,7 +64,7 @@ const UserComponent: FC<Props> = ({match}) => {
 			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} forAll available/>
 			<MenuItem key='commented' title='Commented Posts' icon={<CommentOutlined/>} forAll available/>
 		</Menu>
-		<Posts/>
+		<Posts userComments={userComments}/>
 	</>
 }
 

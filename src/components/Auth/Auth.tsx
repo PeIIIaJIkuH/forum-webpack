@@ -6,7 +6,7 @@ import {signin, signup} from '../../redux/auth-reducer'
 import {isAuthSelector, urlToSelector} from '../../redux/selectors'
 import {AuthForm} from './AuthForm'
 import Card from 'antd/lib/card'
-import {history} from '../../history'
+import {history} from '../../history/history'
 import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {setUrlTo} from '../../redux/app-reducer'
@@ -37,7 +37,7 @@ export const Auth: FC<Props> = ({register}) => {
 	const onSubmit = async ({username, email, password}: obj) => {
 		setIsFetching(true)
 		if (register) {
-			const ok: any = await dispatch(signup(username, email, password))
+			const ok: any = dispatch(signup(username, email, password))
 			setIsFetching(false)
 			if (ok) {
 				message.success('Created new user!')
@@ -46,7 +46,7 @@ export const Auth: FC<Props> = ({register}) => {
 			} else
 				message.error('Can not register!')
 		} else {
-			const ok: any = await dispatch(signin(username, password))
+			const ok: any = dispatch(signin(username, password))
 			setIsFetching(false)
 			if (ok) {
 				if (urlTo) {

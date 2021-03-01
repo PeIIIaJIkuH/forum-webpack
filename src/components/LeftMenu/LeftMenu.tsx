@@ -4,7 +4,7 @@ import {isAuthSelector} from '../../redux/selectors'
 import {useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, TagsOutlined, UserOutlined} from '@ant-design/icons'
-import {history} from '../../history'
+import {history} from '../../history/history'
 import {MenuItem} from './MenuItem'
 import {CategoriesModal} from './CategoriesModal'
 

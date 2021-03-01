@@ -25,7 +25,7 @@ export const Notifications: FC = () => {
 
 	const onClose = async () => {
 		setLoading(true)
-		const ok: any = await dispatch(deleteNotification())
+		const ok: any = dispatch(deleteNotification())
 		setLoading(false)
 		setVisible(false)
 		if (!ok)

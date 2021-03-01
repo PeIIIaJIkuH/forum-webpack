@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import {history} from '../../../history'
+import {history} from '../../../history/history'
 import {DeleteOutlined, EditOutlined, MoreOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import Popover from 'antd/lib/popover'
@@ -24,7 +24,7 @@ export const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, post
 	const onDelete = async () => {
 		setVisible(false)
 		setLoading(true)
-		const ok: any = await deletePost(post.id)
+		const ok: any = deletePost(post.id)
 		if (ok)
 			if (postPage)
 				history.push('/')

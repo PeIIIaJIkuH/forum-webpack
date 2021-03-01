@@ -27,7 +27,7 @@ export const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 			upRef.current.blur()
 		setUpLoading(false)
 		if (!ok)
-			message.error('Can not rate post!')
+			message.error('Can not rate post!').then()
 	}
 
 	const onDownClick = () => {
@@ -37,7 +37,7 @@ export const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 			downRef.current.blur()
 		setDownLoading(false)
 		if (!ok)
-			message.error('Can not rate post!')
+			message.error('Can not rate post!').then()
 	}
 
 	return <>

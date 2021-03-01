@@ -64,7 +64,6 @@ export const requestAuthUserData = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(100))
 }
 
-export type Signup = (username: string, email: string, password: string) => void
 export const signup = (username: string, email: string, password: string) => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
@@ -76,7 +75,6 @@ export const signup = (username: string, email: string, password: string) => asy
 	return res
 }
 
-export type Signin = (username: string, password: string) => void
 export const signin = (username: string, password: string) => async (dispatch: Dispatch) => {
 	let res = false
 	const data = await authAPI.signin(username, password)
@@ -101,7 +99,6 @@ export const signout = () => async (dispatch: Dispatch) => {
 	return res
 }
 
-export type RequestNotifications = () => void
 export const requestNotifications = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.getNotifications()

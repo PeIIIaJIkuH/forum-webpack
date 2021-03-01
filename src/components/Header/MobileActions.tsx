@@ -7,7 +7,7 @@ import {setMenuOpen} from '../../redux/app-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {menuOpenSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
 import {Notifications} from './Notifications'
-import {history} from '../../history'
+import {history} from '../../history/history'
 
 type Props = {
 	onSignout: () => void

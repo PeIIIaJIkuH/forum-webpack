@@ -1,7 +1,7 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
-import {history} from '../history'
+import {history} from '../history/history'
 import {Reaction, TComment, TPost, TUser} from '../types/types'
 import {ThunkDispatch} from 'redux-thunk'
 import {ActionTypes, State} from './store'
@@ -140,7 +140,6 @@ const postsActions = {
 
 type Dispatch = ThunkDispatch<State, unknown, Action>
 
-export type RequestAllPosts = () => void
 export const requestAllPosts = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await postAPI.all()
@@ -148,7 +147,6 @@ export const requestAllPosts = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(100))
 }
 
-export type RequestUserPosts = (id: number) => void
 export const requestUserPosts = (id: number) => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	const data = await userAPI.getCreatedPosts(id)
@@ -215,7 +213,6 @@ export const requestUser = (id: number) => async (dispatch: Dispatch) => {
 	return res
 }
 
-export type RequestComments = (id: number) => void
 export const requestComments = (id: number) => async (dispatch: Dispatch) => {
 	const data = await postAPI.getComments(id)
 	await dispatch(postsActions.setCommentsAC(data.data))
@@ -257,7 +254,6 @@ export const requestCommentedPosts = (id: number) => async (dispatch: Dispatch) 
 	await dispatch(setProgress(100))
 }
 
-export type DeleteComment = (id: number, postID?: number) => void
 export const deleteComment = (id: number, postID?: number) => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
@@ -274,7 +270,6 @@ export const deleteComment = (id: number, postID?: number) => async (dispatch: D
 	return res
 }
 
-export type EditComment = (id: number, authorID: number, postID: number, content: string, isUserPage: boolean) => void
 export const editComment = (id: number, authorID: number, postID: number, content: string, isUserPage: boolean) => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
@@ -291,7 +286,6 @@ export const editComment = (id: number, authorID: number, postID: number, conten
 	return res
 }
 
-export type SetCommentRating = (id: number, postID: number, reaction: Reaction) => void
 export const setCommentRating = (id: number, postID: number, reaction: Reaction) => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(0))
 	let res = false

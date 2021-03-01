@@ -31,13 +31,13 @@ const PostPageComponent: FC<Props> = ({match}) => {
 
 	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = await dispatch(requestPost(+urlId))
+			const ok: any = dispatch(requestPost(+urlId))
 			if (!ok) {
 				setCheck(false)
 			}
 			dispatch(requestComments(+urlId))
 		}
-		initialize()
+		initialize().then()
 	}, [urlId, dispatch])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check)

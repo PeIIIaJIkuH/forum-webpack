@@ -52,7 +52,6 @@ export const appActions = {
 
 type Dispatch = ThunkDispatch<State, unknown, Action>
 
-export type InitializeApp = () => void
 export const initializeApp = () => async (dispatch: Dispatch) => {
 	await dispatch(requestAuthUserData())
 	await dispatch(appActions.initializeAppAC())
@@ -63,12 +62,10 @@ export const setProgress = (progress: number) => async (dispatch: Dispatch) => {
 	await dispatch(appActions.setProgressAC(progress))
 }
 
-export type SetUrlTo = (url: string | null) => void
 export const setUrlTo = (url: string | null) => async (dispatch: Dispatch) => {
 	await dispatch(appActions.setUrlToAC(url))
 }
 
-export type SetMenuOpen = (menuOpen: boolean) => void
 export const setMenuOpen = (menuOpen: boolean) => async (dispatch: Dispatch) => {
 	if (!menuOpen) document.getElementsByTagName('html')[0].style.overflowY = 'scroll'
 	else document.getElementsByTagName('html')[0].style.overflowY = 'hidden'

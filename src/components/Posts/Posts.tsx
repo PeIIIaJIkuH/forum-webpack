@@ -12,7 +12,7 @@ import {Helmet} from 'react-helmet'
 import {Error403} from '../common/errors/Error403'
 import Tag from 'antd/lib/tag'
 import Typography from 'antd/lib/typography'
-import {TPost} from '../../types/types'
+import {TComment, TPost} from '../../types/types'
 
 type PathParamsType = {
 	id: string,
@@ -21,11 +21,12 @@ type PathParamsType = {
 type OwnProps = & {
 	type?: string
 	postPage?: boolean
+	userComments?: { [key: string]: TComment[] } | null
 }
 
 type Props = OwnProps & RouteComponentProps<PathParamsType>
 
-const PostsComponent: FC<Props> = ({type, match}) => {
+const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 	const posts = useSelector(postsSelector),
 		userID = useSelector(userIDSelector),
 		isAuth = useSelector(isAuthSelector),
@@ -71,7 +72,8 @@ const PostsComponent: FC<Props> = ({type, match}) => {
 		<section className='posts'>
 			{posts?.length ?
 				posts && posts.map((post: TPost) => (
-					<Post post={post} key={post.id} isAuth={isAuth} userID={userID} dispatch={dispatch}/>
+					<Post post={post} key={post.id} isAuth={isAuth} userID={userID} dispatch={dispatch}
+						  comments={userComments ? userComments[post.id] : undefined}/>
 				)) :
 				<Card>
 					<Empty className={s.empty} description='No Posts'/>
