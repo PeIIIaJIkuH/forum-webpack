@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import s from './Preloader.module.css'
 
-const Preloader: FC = () => {
+export const Preloader: FC = () => {
 	return (
 		<div className={s.preloader}>
 			<div/>
@@ -9,5 +9,3 @@ const Preloader: FC = () => {
 		</div>
 	)
 }
-
-export default Preloader

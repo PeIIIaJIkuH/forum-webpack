@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import s from './AppPreloader.module.css'
 
-const AppPreloader: FC = () => (
+export const AppPreloader: FC = () => (
 	<div className={s.wrapper}>
 		<div className={s.boxes}>
 			<div className={s.box}>
@@ -31,5 +31,3 @@ const AppPreloader: FC = () => (
 		</div>
 	</div>
 )
-
-export default AppPreloader
