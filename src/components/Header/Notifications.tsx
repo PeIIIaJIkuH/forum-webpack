@@ -61,7 +61,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 			text = 'error'
 		const created = getDateDifference(notification.createdAt)
 
-		return <>
+		return (
 			<div key={notification.id} className={s.notification}>
 				<div>
 					<Link to={`/user/${userID}`}>{username}</Link> {text} your {link}
@@ -72,7 +72,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 					</div>
 				</div>
 			</div>
-		</>
+		)
 	}) : <div style={{color: '#959595'}}>No Data</div>
 
 	return <>
