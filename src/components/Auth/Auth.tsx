@@ -1,8 +1,8 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from './Auth.module.css'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {Signin, signin, Signup, signup} from '../../redux/auth-reducer'
+import {signin, signup} from '../../redux/auth-reducer'
 import {isAuthSelector, urlToSelector} from '../../redux/selectors'
 import AuthForm from './AuthForm'
 import Card from 'antd/lib/card'
@@ -10,18 +10,21 @@ import Form from 'antd/lib/form'
 import history from '../../history'
 import Error403 from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
-import {SetUrlTo, setUrlTo} from '../../redux/app-reducer'
-import {State} from '../../redux/store'
+import {setUrlTo} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
 
-type OwnProps = {
+type Props = {
 	register?: boolean
 }
-type Props = MapStateToProps & MapDispatchToProps & OwnProps
 
-const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) => {
+export const Auth: FC<Props> = ({register}) => {
+	const isAuth = useSelector(isAuthSelector),
+		urlTo = useSelector(urlToSelector)
+	
+	const dispatch = useDispatch()
+	
 	const [form] = Form.useForm()
-	const [isFetching, setIsFetching] = React.useState(false)
+	const [isFetching, setIsFetching] = useState(false)
 
 	if (isAuth)
 		return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
@@ -34,7 +37,7 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 	const onSubmit = async ({username, email, password}: obj) => {
 		setIsFetching(true)
 		if (register) {
-			const ok: any = await signup(username, email, password)
+			const ok: any = await dispatch(signup(username, email, password))
 			setIsFetching(false)
 			if (ok) {
 				message.success('Created new user!')
@@ -43,11 +46,11 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 			} else
 				message.error('Can not register!')
 		} else {
-			const ok: any = await signin(username, password)
+			const ok: any = await dispatch(signin(username, password))
 			setIsFetching(false)
 			if (ok) {
 				if (urlTo) {
-					await setUrlTo(null)
+					await dispatch(setUrlTo(null))
 					history.push(urlTo)
 				} else
 					history.push('/')
@@ -71,30 +74,8 @@ const Auth: FC<Props> = ({signup, signin, isAuth, register, urlTo, setUrlTo}) =>
 		<Helmet><title>{title} | forume</title></Helmet>
 		<div className={s.wrapper}>
 			<Card className={s.card} title={title} extra={extra}>
-				<AuthForm onsubmit={onSubmit} isSignup={register} form={form} isFetching={isFetching}/>
+				<AuthForm onsubmit={onSubmit} register={register} form={form} isFetching={isFetching}/>
 			</Card>
 		</div>
 	</>
 }
-
-type MapStateToProps = {
-	isAuth: boolean
-	urlTo: string | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	isAuth: isAuthSelector(state),
-	urlTo: urlToSelector(state)
-})
-
-type MapDispatchToProps = {
-	signup: Signup
-	signin: Signin
-	setUrlTo: SetUrlTo
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	signup,
-	signin,
-	setUrlTo
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Auth)

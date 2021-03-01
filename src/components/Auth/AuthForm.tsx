@@ -12,12 +12,12 @@ const tailLayout = {
 
 type Props = {
 	onsubmit: (obj: { username: string, email: string, password: string }) => Promise<void>
-	isSignup?: boolean
+	register?: boolean
 	form: FormInstance
 	isFetching: boolean
 }
 
-const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
+const AuthForm: FC<Props> = ({onsubmit, register, form, isFetching}) => {
 	const usernameInfo = <>
 			<Tooltip title={<>
 				<div>4-20 characters long.</div>
@@ -49,11 +49,11 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 
 	return <>
 		<Form name='auth' onFinish={onsubmit} form={form}>
-			<Form.Item name='username' rules={[defaultValidator('Username', isSignup)]} colon={false}
-					   label={isSignup && usernameInfo}>
+			<Form.Item name='username' rules={[defaultValidator('Username', register)]} colon={false}
+					   label={register && usernameInfo}>
 				<Input prefix={<UserOutlined/>} placeholder='Username' autoFocus/>
 			</Form.Item>
-			{isSignup && <>
+			{register && <>
 				<Form.Item name='email' label={emailInfo} colon={false} rules={[defaultValidator('E-mail', true), {
 					type: 'email',
 					message: 'The input is not valid E-mail!'
@@ -61,8 +61,8 @@ const AuthForm: FC<Props> = ({onsubmit, isSignup, form, isFetching}) => {
 					<Input prefix='@' placeholder='E-mail'/>
 				</Form.Item>
 			</>}
-			<Form.Item name='password' rules={[defaultValidator('Password', isSignup)]} colon={false}
-					   label={isSignup && passwordInfo}>
+			<Form.Item name='password' rules={[defaultValidator('Password', register)]} colon={false}
+					   label={register && passwordInfo}>
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			<Form.Item {...tailLayout}>
