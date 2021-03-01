@@ -22,5 +22,3 @@ export const Error404: FC<Props> = ({text}) => {
 		/>
 	</>
 }
-
-export default Error404
