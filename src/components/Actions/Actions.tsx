@@ -4,20 +4,14 @@ import Button from 'antd/lib/button'
 import {PlusOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import {isAuthSelector, postToEditSelector} from '../../redux/selectors'
-import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 import Layout from 'antd/lib/layout'
-import CategoriesSearch from './CategoriesSearch'
-import {TPost} from '../../types/types'
-import {State} from '../../redux/store'
+import {CategoriesSearch} from './CategoriesSearch'
 
-type OwnProps = {
-	isAuth: boolean
-	postToEdit: TPost | null
-}
+export const Actions: FC = () => {
+	const isAuth = useSelector(isAuthSelector),
+		postToEdit = useSelector(postToEditSelector)
 
-type Props = OwnProps & MapStateToProps & MapDispatchToProps
-
-const Actions: FC<Props> = ({isAuth, postToEdit}) => {
 	return <>
 		<div className='actions'>
 			<Link className={s.addPost} to='/create'>
@@ -36,17 +30,3 @@ const Actions: FC<Props> = ({isAuth, postToEdit}) => {
 		</div>
 	</>
 }
-
-type MapStateToProps = {
-	isAuth: boolean
-	postToEdit: TPost | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	isAuth: isAuthSelector(state),
-	postToEdit: postToEditSelector(state)
-})
-
-type MapDispatchToProps = {}
-const mapDispatchToProps: MapDispatchToProps = {}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Actions)

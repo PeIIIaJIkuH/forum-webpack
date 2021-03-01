@@ -1,21 +1,22 @@
 import React, {FC} from 'react'
 import Menu from 'antd/lib/menu'
 import {isAuthSelector} from '../../redux/selectors'
-import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, TagsOutlined, UserOutlined} from '@ant-design/icons'
 import history from '../../history'
 import MenuItem from './MenuItem'
-import CategoriesModal from './CategoriesModal'
-import {State} from '../../redux/store'
+import {CategoriesModal} from './CategoriesModal'
 
 type OwnProps = {
 	mobile?: boolean
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = OwnProps & RouteComponentProps
 
-const LeftMenu: FC<Props> = ({isAuth, location, mobile}) => {
+const LeftMenu: FC<Props> = ({location, mobile}) => {
+	const isAuth = useSelector(isAuthSelector)
+
 	const options = [location.pathname.split('/')[1] || 'home'],
 		[modalVisible, setModalVisible] = React.useState(false),
 		defaultKeys = ['home']
@@ -42,14 +43,4 @@ const LeftMenu: FC<Props> = ({isAuth, location, mobile}) => {
 	)
 }
 
-type MapStateToProps = {
-	isAuth: boolean
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	isAuth: isAuthSelector(state)
-})
-
-type MapDispatchToProps = {}
-const mapDispatchToProps: MapDispatchToProps = {}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(withRouter(LeftMenu))
+export default withRouter(LeftMenu)

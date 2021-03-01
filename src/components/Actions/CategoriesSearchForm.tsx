@@ -1,11 +1,12 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect} from 'react'
 import s from './Actions.module.css'
 import Button from 'antd/lib/button'
 import Form, {FormInstance} from 'antd/lib/form'
 import Select from 'antd/lib/select'
 import {FilterOutlined} from '@ant-design/icons'
-import {RequestCategories, SetSelectedCategories} from '../../redux/categories-reducer'
-import {Category} from '../../types/types'
+import {requestCategories, setSelectedCategories} from '../../redux/categories-reducer'
+import {useDispatch, useSelector} from 'react-redux'
+import {categoriesSelector} from '../../redux/selectors'
 
 const layout = {
 	wrapperCol: {
@@ -21,23 +22,21 @@ const tailLayout = {
 
 type Props = {
 	isFetching: boolean
-	categories: Category[] | null
-	requestCategories: RequestCategories
-	setSelectedCategories: SetSelectedCategories
 	onSubmit: (obj: { categories: string[] }) => Promise<void>
 	form: FormInstance
 }
 
-const CategoriesSearchForm: FC<Props> = ({
-											 requestCategories, categories, onSubmit, form,
-											 isFetching, setSelectedCategories
-										 }) => {
-	React.useEffect(() => {
-		requestCategories()
-	}, [requestCategories])
+const CategoriesSearchForm: FC<Props> = ({onSubmit, form, isFetching}) => {
+	const categories = useSelector(categoriesSelector)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(requestCategories())
+	}, [dispatch])
 
 	const onChange = (values: string[]) => {
-		setSelectedCategories(values)
+		dispatch(setSelectedCategories(values))
 	}
 
 	return <>

@@ -1,78 +1,42 @@
-import React, {FC} from 'react'
-import {connect} from 'react-redux'
+import React, {FC, useState} from 'react'
+import {useDispatch} from 'react-redux'
 import s from './Actions.module.css'
 import CategoriesSearchForm from './CategoriesSearchForm'
 import Card from 'antd/lib/card'
-import {categoriesSelector} from '../../redux/selectors'
-import {
-	RequestCategories,
-	requestCategories,
-	SetSelectedCategories,
-	setSelectedCategories
-} from '../../redux/categories-reducer'
-import {RequestPostsByCategories, requestPostsByCategories} from '../../redux/posts-reducer'
-import {SetMenuOpen, setMenuOpen} from '../../redux/app-reducer'
-import Form from 'antd/lib/form'
-import {State} from '../../redux/store'
-import {Category} from '../../types/types'
+import {requestPostsByCategories} from '../../redux/posts-reducer'
+import {setMenuOpen} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
+import {useForm} from 'antd/lib/form/Form'
 
-type OwnProps = {
+type Props = {
 	closeModal?: () => void
 	mobile?: boolean
 }
 
-type Props = OwnProps & MapStateToProps & MapDispatchToProps
+export const CategoriesSearch: FC<Props> = ({closeModal, mobile}) => {
+	const dispatch = useDispatch()
 
-const CategoriesSearch: FC<Props> = ({
-										 categories, requestCategories, requestPostsByCategories,
-										 closeModal, setMenuOpen, mobile,
-										 setSelectedCategories
-									 }) => {
-	const [isFetching, setIsFetching] = React.useState(false),
-		[form] = Form.useForm()
+	const [isFetching, setIsFetching] = useState(false),
+		[form] = useForm()
 
 	type obj = { categories: string[] }
 	const onSubmit = async ({categories}: obj) => {
 		if (mobile && closeModal)
 			closeModal()
-		setMenuOpen(false)
+		dispatch(setMenuOpen(false))
 		if (!categories || !categories.length)
 			message.warning('Choose at least one category!')
 		else {
 			form.resetFields()
 			setIsFetching(true)
-			await requestPostsByCategories(categories)
+			dispatch(requestPostsByCategories(categories))
 			setIsFetching(false)
 		}
 	}
 
 	return <>
 		<Card className={s.card}>
-			<CategoriesSearchForm onSubmit={onSubmit} categories={categories} requestCategories={requestCategories}
-								  form={form} setSelectedCategories={setSelectedCategories} isFetching={isFetching}/>
+			<CategoriesSearchForm onSubmit={onSubmit} form={form} isFetching={isFetching}/>
 		</Card>
 	</>
 }
-
-type MapStateToProps = {
-	categories: Category[] | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	categories: categoriesSelector(state)
-})
-
-type MapDispatchToProps = {
-	requestCategories: RequestCategories
-	requestPostsByCategories: RequestPostsByCategories
-	setMenuOpen: SetMenuOpen
-	setSelectedCategories: SetSelectedCategories
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	requestCategories,
-	requestPostsByCategories,
-	setMenuOpen,
-	setSelectedCategories
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(CategoriesSearch)
