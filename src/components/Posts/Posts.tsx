@@ -1,63 +1,58 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import s from './Posts.module.css'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {isAuthSelector, postsSelector, selectedCategoriesSelector, userIDSelector} from '../../redux/selectors'
-import {
-	RequestAllPosts,
-	requestAllPosts,
-	RequestPostsByCategories,
-	requestPostsByCategories,
-	RequestRatedPosts,
-	requestRatedPosts,
-	RequestUserPosts,
-	requestUserPosts
-} from '../../redux/posts-reducer'
-import Post from './Post/Post'
+import {requestAllPosts, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
+import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
-import Error403 from '../common/errors/Error403'
+import {Error403} from '../common/errors/Error403'
 import Tag from 'antd/lib/tag'
 import Typography from 'antd/lib/typography'
 import {TPost} from '../../types/types'
-import {State} from '../../redux/store'
 
 type PathParamsType = {
 	id: string,
 }
 
-type OwnProps = RouteComponentProps<PathParamsType> & {
+type OwnProps = & {
 	type?: string
+	postPage?: boolean
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = OwnProps & RouteComponentProps<PathParamsType>
 
-const Posts: FC<Props> = ({
-							  type, posts, match, userID, requestUserPosts, requestRatedPosts, requestPostsByCategories,
-							  requestAllPosts, isAuth, selected
-						  }) => {
+const PostsComponent: FC<Props> = ({type, match}) => {
+	const posts = useSelector(postsSelector),
+		userID = useSelector(userIDSelector),
+		isAuth = useSelector(isAuthSelector),
+		selected = useSelector(selectedCategoriesSelector)
+
+	const dispatch = useDispatch()
+
 	const urlId = match.params.id,
-		[title, setTitle] = React.useState('Home')
+		[title, setTitle] = useState('Home')
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (type === 'my') {
 			setTitle('My Posts')
-			userID && requestUserPosts(userID)
+			userID && dispatch(requestUserPosts(userID))
 		} else if (type === 'user') {
 			setTitle('user')
-			requestUserPosts(+urlId)
+			dispatch(requestUserPosts(+urlId))
 		} else if (type === 'upvoted' || type === 'downvoted') {
 			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
-			userID && requestRatedPosts(userID, type)
+			userID && dispatch(requestRatedPosts(userID, type))
 		} else if (type === 'categories')
 			setTitle('Search by Categories')
 		else {
 			setTitle('Home')
-			requestAllPosts()
+			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, requestUserPosts, requestRatedPosts, requestPostsByCategories, requestAllPosts, userID])
+	}, [type, urlId, userID, dispatch])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
 		return <Error404/>
@@ -75,8 +70,8 @@ const Posts: FC<Props> = ({
 		</>}
 		<section className='posts'>
 			{posts?.length ?
-				posts && posts.map(post => (
-					<Post post={post} key={post.id}/>
+				posts && posts.map((post: TPost) => (
+					<Post post={post} key={post.id} isAuth={isAuth} userID={userID} dispatch={dispatch}/>
 				)) :
 				<Card>
 					<Empty className={s.empty} description='No Posts'/>
@@ -86,30 +81,4 @@ const Posts: FC<Props> = ({
 	</>
 }
 
-type MapStateToProps = {
-	posts: TPost[] | null
-	userID: number | null
-	isAuth: boolean
-	selected: string[] | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	posts: postsSelector(state),
-	userID: userIDSelector(state),
-	isAuth: isAuthSelector(state),
-	selected: selectedCategoriesSelector(state)
-})
-
-type MapDispatchToProps = {
-	requestAllPosts: RequestAllPosts
-	requestUserPosts: RequestUserPosts
-	requestRatedPosts: RequestRatedPosts
-	requestPostsByCategories: RequestPostsByCategories
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	requestAllPosts,
-	requestUserPosts,
-	requestRatedPosts,
-	requestPostsByCategories
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(Posts))
+export const Posts = withRouter(PostsComponent)

@@ -1,18 +1,19 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from './Posts.module.css'
 import Button from 'antd/lib/button'
 import Form from 'antd/lib/form'
 import TextArea from 'antd/lib/input/TextArea'
 import {defaultValidator} from '../../utils/helpers/helpers'
+import {useForm} from 'antd/lib/form/Form'
 
 type Props = {
 	isAuth: boolean
 	onSubmit: (obj: { content: string }) => Promise<void>
 }
 
-const CommentForm: FC<Props> = ({isAuth, onSubmit}) => {
-	const [form] = Form.useForm()
-	const [isFetching, setIsFetching] = React.useState(false)
+export const CommentForm: FC<Props> = ({isAuth, onSubmit}) => {
+	const [form] = useForm()
+	const [isFetching, setIsFetching] = useState(false)
 
 	const onFinish = async (data: any) => {
 		setIsFetching(true)
@@ -35,5 +36,3 @@ const CommentForm: FC<Props> = ({isAuth, onSubmit}) => {
 		</Form>
 	</>
 }
-
-export default CommentForm

@@ -1,29 +1,16 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import s from './User.module.css'
-import {postsSelector, userCommentsSelector, userSelector} from '../../redux/selectors'
-import {
-	RequestCommentedPosts,
-	requestCommentedPosts,
-	RequestRatedPosts,
-	requestRatedPosts,
-	RequestUser,
-	requestUser,
-	RequestUserPosts,
-	requestUserPosts
-} from '../../redux/posts-reducer'
-import {connect} from 'react-redux'
+import {userSelector} from '../../redux/selectors'
+import {requestCommentedPosts, requestRatedPosts, requestUser, requestUserPosts} from '../../redux/posts-reducer'
+import {useDispatch, useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
-import UserInfo from './UserInfo'
+import {UserInfo} from './UserInfo'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors/Error404'
 import Menu from 'antd/lib/menu'
-import MenuItem from '../LeftMenu/MenuItem'
+import {MenuItem} from '../LeftMenu/MenuItem'
 import {CommentOutlined, DislikeOutlined, LikeOutlined, UserOutlined} from '@ant-design/icons'
-import Card from 'antd/lib/card'
-import Empty from 'antd/lib/empty'
-import {State} from '../../redux/store'
-import {TComment, TPost, TUser} from '../../types/types'
-import Post from '../Posts/Post/Post'
+import {Posts} from '../Posts/Posts'
 
 type PathParamsType = {
 	id: string
@@ -31,43 +18,41 @@ type PathParamsType = {
 
 type OwnProps = RouteComponentProps<PathParamsType>
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+type Props = OwnProps & RouteComponentProps
 
-const User: FC<Props> = ({
-							 user, match, requestUser, requestUserPosts, posts,
-							 requestRatedPosts, requestCommentedPosts, userComments
-						 }) => {
+const UserComponent: FC<Props> = ({match}) => {
+	const user = useSelector(userSelector)
+
+	const dispatch = useDispatch()
+
 	const urlId = match.params.id,
-		[check, setCheck] = React.useState(true)
+		[check, setCheck] = useState(true)
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = await requestUser(+urlId)
+			const ok: any = await dispatch(requestUser(+urlId))
 			if (!ok)
 				setCheck(false)
-			requestUserPosts(+urlId)
+			dispatch(requestUserPosts(+urlId))
 		}
 		initialize()
-	}, [urlId, requestUser, requestUserPosts])
+	}, [urlId, dispatch])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check)
 		return <Error404/>
 
 	const onClick = ({key}: any) => {
 		if (key === 'created')
-			requestUserPosts(+urlId)
+			dispatch(requestUserPosts(+urlId))
 		else if (key === 'up-voted')
-			requestRatedPosts(+urlId, 'upvoted')
+			dispatch(requestRatedPosts(+urlId, 'upvoted'))
 		else if (key === 'down-voted')
-			requestRatedPosts(+urlId, 'downvoted')
+			dispatch(requestRatedPosts(+urlId, 'downvoted'))
 		else
-			requestCommentedPosts(+urlId)
+			dispatch(requestCommentedPosts(+urlId))
 	}
 
-	const title = user ? user.username : 'User Page',
-		postCards = posts?.map(post => (
-			<Post post={post} key={post.id} comments={userComments && userComments[post.id]}/>
-		))
+	const title = user ? user.username : 'User Page'
 
 	return user && <>
 		<Helmet><title>{title} | forume</title></Helmet>
@@ -78,36 +63,8 @@ const User: FC<Props> = ({
 			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} forAll available/>
 			<MenuItem key='commented' title='Commented Posts' icon={<CommentOutlined/>} forAll available/>
 		</Menu>
-		<section className='posts'>
-			{posts?.length ?
-				postCards :
-				<Card><Empty description='No Posts'/></Card>}
-		</section>
+		<Posts/>
 	</>
 }
 
-type MapStateToProps = {
-	user: TUser | null
-	posts: TPost[] | null
-	userComments: { [key: string]: TComment[] } | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	user: userSelector(state),
-	posts: postsSelector(state),
-	userComments: userCommentsSelector(state)
-})
-
-type MapDispatchToProps = {
-	requestUser: RequestUser
-	requestUserPosts: RequestUserPosts
-	requestRatedPosts: RequestRatedPosts
-	requestCommentedPosts: RequestCommentedPosts
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	requestUser,
-	requestUserPosts,
-	requestRatedPosts,
-	requestCommentedPosts
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(User))
+export const User = withRouter(UserComponent)

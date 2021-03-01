@@ -12,7 +12,7 @@ type OwnProps = {
 
 type Props = OwnProps & RouteComponentProps
 
-const Error403: FC<Props> = ({text, location}) => {
+const Error403Component: FC<Props> = ({text, location}) => {
 	const dispatch = useDispatch()
 
 	const onClick = async () => {
@@ -37,4 +37,4 @@ const Error403: FC<Props> = ({text, location}) => {
 	</>
 }
 
-export default withRouter(Error403)
+export const Error403 = withRouter(Error403Component)

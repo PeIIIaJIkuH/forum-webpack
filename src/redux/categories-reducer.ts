@@ -14,7 +14,7 @@ const initialState: InitialState = {
 
 type Action = ActionTypes<typeof categoriesActions>
 
-const categoriesReducer = (state = initialState, action: Action) => {
+export const categoriesReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
 		case 'categories/SET_CATEGORIES':
 			return {...state, all: action.categories}
@@ -49,5 +49,3 @@ export type SetSelectedCategories = (categories: string[] | null) => void
 export const setSelectedCategories = (categories: string[] | null) => async (dispatch: Dispatch) => {
 	dispatch(categoriesActions.setSelectedCategoriesAC(categories))
 }
-
-export default categoriesReducer

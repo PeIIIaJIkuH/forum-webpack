@@ -1,7 +1,7 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
-import history from '../history'
+import {history} from '../history'
 import {Reaction, TComment, TPost, TUser} from '../types/types'
 import {ThunkDispatch} from 'redux-thunk'
 import {ActionTypes, State} from './store'
@@ -23,7 +23,7 @@ const initialState: InitialState = {
 
 type Action = ActionTypes<typeof postsActions>
 
-const postsReducer = (state = initialState, action: Action) => {
+export const postsReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
 		case 'posts/SET_POSTS':
 			return {...state, posts: action.posts, comments: null}
@@ -303,5 +303,3 @@ export const setCommentRating = (id: number, postID: number, reaction: Reaction)
 	await dispatch(setProgress(100))
 	return res
 }
-
-export default postsReducer

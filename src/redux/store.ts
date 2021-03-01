@@ -1,15 +1,15 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import auth from './auth-reducer'
-import app from './app-reducer'
-import posts from './posts-reducer'
-import categories from './categories-reducer'
+import {appReducer} from './app-reducer'
+import {postsReducer} from './posts-reducer'
+import {authReducer} from './auth-reducer'
+import {categoriesReducer} from './categories-reducer'
 
 const reducers = combineReducers({
-	auth,
-	app,
-	posts,
-	categories
+	auth: authReducer,
+	app: appReducer,
+	posts: postsReducer,
+	categories: categoriesReducer
 })
 
 type Reducers = typeof reducers
@@ -20,9 +20,4 @@ export type ActionTypes<T extends { [key: string]: (...args: any[]) => any }> = 
 
 // @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)))
-
-// @ts-ignore
-window.store = store
-
-export default store
+export const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)))

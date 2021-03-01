@@ -1,14 +1,13 @@
 import React, {FC} from 'react'
 import s from './RightMenu.module.css'
-import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {menuOpenSelector} from '../../redux/selectors'
-import LeftMenu from '../LeftMenu/LeftMenu'
+import {LeftMenu} from '../LeftMenu/LeftMenu'
 import Layout from 'antd/lib/layout'
-import {State} from '../../redux/store'
 
-type Props = MapStateToProps & MapDispatchToProps
+export const RightMenu: FC = () => {
+	const menuOpen = useSelector(menuOpenSelector)
 
-const RightMenu: FC<Props> = ({menuOpen}) => {
 	return <>
 		<div className={`${s.wrapper} ${menuOpen ? s.open : ''}`}>
 			<LeftMenu mobile/>
@@ -20,15 +19,3 @@ const RightMenu: FC<Props> = ({menuOpen}) => {
 		</div>
 	</>
 }
-
-type MapStateToProps = {
-	menuOpen: boolean
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	menuOpen: menuOpenSelector(state)
-})
-
-type MapDispatchToProps = {}
-const mapDispatchToProps: MapDispatchToProps = {}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(RightMenu)

@@ -4,14 +4,14 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
 import {isAuthSelector, urlToSelector} from '../../redux/selectors'
-import AuthForm from './AuthForm'
+import {AuthForm} from './AuthForm'
 import Card from 'antd/lib/card'
-import Form from 'antd/lib/form'
-import history from '../../history'
-import Error403 from '../common/errors/Error403'
+import {history} from '../../history'
+import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {setUrlTo} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
+import {useForm} from 'antd/lib/form/Form'
 
 type Props = {
 	register?: boolean
@@ -20,10 +20,10 @@ type Props = {
 export const Auth: FC<Props> = ({register}) => {
 	const isAuth = useSelector(isAuthSelector),
 		urlTo = useSelector(urlToSelector)
-	
+
 	const dispatch = useDispatch()
-	
-	const [form] = Form.useForm()
+
+	const [form] = useForm()
 	const [isFetching, setIsFetching] = useState(false)
 
 	if (isAuth)

@@ -1,23 +1,23 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from './Header.module.css'
 import Popover from 'antd/lib/popover'
 import Button from 'antd/lib/button'
 import {BellOutlined, DeleteOutlined} from '@ant-design/icons'
 import Badge from 'antd/lib/badge'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {notificationsSelector} from '../../redux/selectors'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
-import {DeleteNotification, deleteNotification} from '../../redux/auth-reducer'
-import {State} from '../../redux/store'
-import {TNotification} from '../../types/types'
+import {deleteNotification} from '../../redux/auth-reducer'
 import message from 'antd/lib/message'
 
-type Props = MapStateToProps & MapDispatchToProps
+export const Notifications: FC = () => {
+	const notifications = useSelector(notificationsSelector)
 
-const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
-	const [loading, setLoading] = React.useState(false),
-		[visible, setVisible] = React.useState(false)
+	const dispatch = useDispatch()
+
+	const [loading, setLoading] = useState(false),
+		[visible, setVisible] = useState(false)
 
 	const handleVisibleChange = (visible: boolean) => {
 		setVisible(visible)
@@ -25,7 +25,7 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 
 	const onClose = async () => {
 		setLoading(true)
-		const ok: any = await deleteNotification()
+		const ok: any = await dispatch(deleteNotification())
 		setLoading(false)
 		setVisible(false)
 		if (!ok)
@@ -85,19 +85,3 @@ const Notifications: FC<Props> = ({notifications, deleteNotification}) => {
 		</Badge>
 	</>
 }
-
-type MapStateToProps = {
-	notifications: TNotification[] | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	notifications: notificationsSelector(state)
-})
-
-type MapDispatchToProps = {
-	deleteNotification: DeleteNotification
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	deleteNotification
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(Notifications)

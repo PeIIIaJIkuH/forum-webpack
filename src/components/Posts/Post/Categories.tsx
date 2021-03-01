@@ -11,7 +11,7 @@ type Props = {
 	setSelectedCategories: SetSelectedCategories
 }
 
-const Categories: FC<Props> = ({categories, requestPostsByCategories, setSelectedCategories}) => {
+export const Categories: FC<Props> = ({categories, requestPostsByCategories, setSelectedCategories}) => {
 	return categories && <>
 		<div className={s.categories}>
 			{categories.map(category => (
@@ -25,4 +25,3 @@ const Categories: FC<Props> = ({categories, requestPostsByCategories, setSelecte
 		</div>
 	</>
 }
-export default Categories

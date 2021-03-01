@@ -17,7 +17,7 @@ type Props = {
 	isFetching: boolean
 }
 
-const AuthForm: FC<Props> = ({onsubmit, register, form, isFetching}) => {
+export const AuthForm: FC<Props> = ({onsubmit, register, form, isFetching}) => {
 	const usernameInfo = <>
 			<Tooltip title={<>
 				<div>4-20 characters long.</div>
@@ -73,5 +73,3 @@ const AuthForm: FC<Props> = ({onsubmit, register, form, isFetching}) => {
 		</Form>
 	</>
 }
-
-export default AuthForm

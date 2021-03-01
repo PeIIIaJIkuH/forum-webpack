@@ -1,42 +1,57 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect} from 'react'
 import s from './App.module.css'
 import {Route, RouteComponentProps, Router, Switch, withRouter} from 'react-router-dom'
-import {connect, Provider} from 'react-redux'
+import {Provider, useDispatch, useSelector} from 'react-redux'
 import {initializedSelector} from './redux/selectors'
-import {InitializeApp, initializeApp, SetMenuOpen, setMenuOpen} from './redux/app-reducer'
-import store, {State} from './redux/store'
-import history from './history'
-import Header from './components/Header/Header'
-import Auth from './components/Auth/Auth'
-import CreatePost from './components/CreatePost/CreatePost'
-import LeftMenu from './components/LeftMenu/LeftMenu'
-import Actions from './components/Actions/Actions'
-import Error404 from './components/common/errors/Error404'
-import AppPreloader from './components/common/preloaders/AppPreloader'
-import Posts from './components/Posts/Posts'
-import PostPage from './components/Posts/PostPage'
-import User from './components/User/User'
+import {initializeApp, setMenuOpen} from './redux/app-reducer'
+import {store} from './redux/store'
+import {history} from './history'
+import {Header} from './components/Header/Header'
+import {Auth} from './components/Auth/Auth'
+import {CreatePost} from './components/CreatePost/CreatePost'
+import {LeftMenu} from './components/LeftMenu/LeftMenu'
+import {Actions} from './components/Actions/Actions'
+import {Error404} from './components/common/errors/Error404'
+import {AppPreloader} from './components/common/preloaders/AppPreloader'
+import {Posts} from './components/Posts/Posts'
+import {PostPage} from './components/Posts/PostPage'
+import {User} from './components/User/User'
 import Layout from 'antd/lib/layout'
 import Sider from 'antd/lib/layout/Sider'
 import {Content} from 'antd/lib/layout/layout'
 import Affix from 'antd/lib/affix'
 import {useMediaQuery} from 'react-responsive'
-import RightMenu from './components/RightMenu/RightMenu'
+import {RightMenu} from './components/RightMenu/RightMenu'
+
+// FEATURES:
+// Load posts, comments, ratings, notifications
+// Create/edit/delete post/comment/notification
+// Rate post, comment
+// Change posts type: all, my, upvoted, downvoted, by-categories, on user page: created, upvoted, downvoted, commented
 
 // TODO:
 // check all the features and functions
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
+// try to remove return from reducers
 
-type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
+type PathParamsType = {
+	id: string,
+}
 
-const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => {
-	React.useEffect(() => {
-		initializeApp()
-	}, [initializeApp])
+type Props = RouteComponentProps<PathParamsType>
 
-	React.useEffect(() => {
-		setMenuOpen(false)
-	}, [setMenuOpen, location.pathname])
+const App: FC<Props> = ({location}) => {
+	const initialized = useSelector(initializedSelector)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(initializeApp())
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(setMenuOpen(false))
+	}, [dispatch, location.pathname])
 
 	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
@@ -84,25 +99,9 @@ const App: FC<Props> = ({initialized, initializeApp, setMenuOpen, location}) => 
 	)
 }
 
-type MapStateToProps = {
-	initialized: boolean
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	initialized: initializedSelector(state)
-})
+const AppContainer = withRouter(App)
 
-type MapDispatchToProps = {
-	initializeApp: InitializeApp
-	setMenuOpen: SetMenuOpen
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	initializeApp,
-	setMenuOpen
-}
-
-const AppContainer = connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(App))
-
-const MainApp = () => {
+export const MainApp = () => {
 	return (
 		<Router history={history}>
 			<Provider store={store}>
@@ -111,5 +110,3 @@ const MainApp = () => {
 		</Router>
 	)
 }
-
-export default MainApp

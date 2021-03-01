@@ -17,7 +17,7 @@ const initialState: InitialState = {
 
 type Action = ActionTypes<typeof appActions>
 
-const appReducer = (state = initialState, action: Action) => {
+export const appReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
 		case 'app/INITIALIZE_APP':
 			return {...state, initialized: true}
@@ -74,5 +74,3 @@ export const setMenuOpen = (menuOpen: boolean) => async (dispatch: Dispatch) => 
 	else document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
 	await dispatch(appActions.setMenuOpenAC(menuOpen))
 }
-
-export default appReducer

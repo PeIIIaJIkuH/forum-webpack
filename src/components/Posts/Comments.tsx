@@ -3,20 +3,22 @@ import s from './Posts.module.css'
 import List from 'antd/lib/list'
 import {getDateDifference} from '../../utils/helpers/helpers'
 import {Link} from 'react-router-dom'
-import {connect} from 'react-redux'
-import {userIDSelector} from '../../redux/selectors'
-import Comment from './Comment'
-import {State} from '../../redux/store'
+import {useDispatch, useSelector} from 'react-redux'
+import {isAuthSelector, userIDSelector} from '../../redux/selectors'
+import {Comment} from './Comment'
 import {TComment, TUser} from '../../types/types'
 
-type OwnProps = {
+type Props = {
 	comments: TComment[] | null
 	userPage?: boolean
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps
-
-const Comments: FC<Props> = ({comments, userID, userPage}) => {
+export const Comments: FC<Props> = ({comments, userPage}) => {
+	const userID = useSelector(userIDSelector),
+		isAuth = useSelector(isAuthSelector)
+	
+	const dispatch = useDispatch()
+	
 	const data = comments ? comments.map(comment => {
 		const created = getDateDifference(comment.createdAt),
 			check = comment.author.id === userID
@@ -53,22 +55,10 @@ const Comments: FC<Props> = ({comments, userID, userPage}) => {
 
 		return <li>
 			<Comment author={author} content={item.content} datetime={item.datetime} comment={item.comment}
-					 check={item.check} userPage={userPage}/>
+					 check={item.check} userPage={userPage} isAuth={isAuth} dispatch={dispatch}/>
 		</li>
 	}
 
 	return <List header={!userPage ? header : null} dataSource={data} renderItem={renderItem}
 				 locale={{emptyText: 'No Comments'}}/>
 }
-
-type MapStateToProps = {
-	userID: number | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	userID: userIDSelector(state)
-})
-
-type MapDispatchToProps = {}
-const mapDispatchToProps: MapDispatchToProps = {}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Comments)

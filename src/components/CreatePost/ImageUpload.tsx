@@ -64,8 +64,7 @@ export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileLis
 	}
 
 	const onRemove = async () => {
-		const data = postAPI.deleteImage(postToEdit?.id)
-		console.log(data)
+		await postAPI.deleteImage(postToEdit?.id)
 		setIsImage(false)
 		setImagePath('')
 	}

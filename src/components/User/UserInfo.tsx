@@ -13,7 +13,7 @@ type Props = {
 	user: TUser | null
 }
 
-const UserInfo: FC<Props> = ({user}) => {
+export const UserInfo: FC<Props> = ({user}) => {
 	let lastActive
 	if (user)
 		lastActive = getDateDifference(user.lastActive, true)
@@ -35,5 +35,3 @@ const UserInfo: FC<Props> = ({user}) => {
 		</section>
 	</>
 }
-
-export default UserInfo

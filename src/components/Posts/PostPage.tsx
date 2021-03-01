@@ -1,49 +1,44 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import s from './Posts.module.css'
-import CommentForm from './CommentForm'
-import Comments from './Comments'
+import {CommentForm} from './CommentForm'
+import {Comments} from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
 import {commentsSelector, isAuthSelector, postsSelector} from '../../redux/selectors'
-import {
-	DeleteComment,
-	deleteComment,
-	RequestComments,
-	requestComments,
-	RequestPost,
-	requestPost
-} from '../../redux/posts-reducer'
-import {connect} from 'react-redux'
+import {requestComments, requestPost} from '../../redux/posts-reducer'
+import {useDispatch, useSelector} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors/Error404'
-import Post from './Post/Post'
-import {TComment, TPost} from '../../types/types'
-import {State} from '../../redux/store'
 import message from 'antd/lib/message'
+import {Posts} from './Posts'
 
 type PathParamsType = {
 	id: string,
 }
 
-type OwnProps = RouteComponentProps<PathParamsType>
+type Props = RouteComponentProps<PathParamsType>
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps & RouteComponentProps
+const PostPageComponent: FC<Props> = ({match}) => {
+	const posts = useSelector(postsSelector),
+		isAuth = useSelector(isAuthSelector),
+		comments = useSelector(commentsSelector)
 
-const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, requestPost}) => {
+	const dispatch = useDispatch()
+
 	const urlId = match.params.id,
-		[check, setCheck] = React.useState(true)
+		[check, setCheck] = useState(true)
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = await requestPost(+urlId)
+			const ok: any = await dispatch(requestPost(+urlId))
 			if (!ok) {
 				setCheck(false)
 			}
-			requestComments(+urlId)
+			dispatch(requestComments(+urlId))
 		}
 		initialize()
-	}, [urlId, requestPost, requestComments])
+	}, [urlId, dispatch])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check)
 		return <Error404/>
@@ -54,18 +49,14 @@ const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, r
 			.addComment(+urlId, content.replace(/((\r\n)|\r|\n)+/gm, '\n').split('\n')
 				.map(line => line.trim()).join('\n'))
 		if (data && data.status)
-			await requestComments(+urlId)
+			await dispatch(requestComments(+urlId))
 		else
 			message.error('Can not add comment!')
 	}
 
-	const postCards = posts?.map(post => <Post post={post} key={post.id} postPage/>)
-
 	return posts && <>
 		<Helmet><title>Comments | forume</title></Helmet>
-		<section className='posts'>
-			{postCards}
-		</section>
+		<Posts postPage/>
 		<section className={s.comments}>
 			<Card className={s.commentsCard}>
 				<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
@@ -75,26 +66,4 @@ const PostPage: FC<Props> = ({isAuth, comments, requestComments, match, posts, r
 	</>
 }
 
-type MapStateToProps = {
-	posts: TPost[] | null
-	isAuth: boolean
-	comments: TComment[] | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	posts: postsSelector(state),
-	isAuth: isAuthSelector(state),
-	comments: commentsSelector(state)
-})
-
-type MapDispatchToProps = {
-	requestComments: RequestComments
-	requestPost: RequestPost
-	deleteComment: DeleteComment
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	requestComments,
-	requestPost,
-	deleteComment
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(PostPage))
+export const PostPage = withRouter(PostPageComponent)

@@ -1,10 +1,10 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import Button from 'antd/lib/button'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
-import history from '../../history'
+import {history} from '../../history'
 import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
@@ -33,7 +33,7 @@ type OwnProps = {
 
 type Props = OwnProps & RouteComponentProps
 
-const CreatePostForm: FC<Props> = ({isFetching, location, setIsFetching}) => {
+const CreatePostFormComponent: FC<Props> = ({isFetching, location, setIsFetching}) => {
 	const categories = useSelector(categoriesSelector),
 		postToEdit = useSelector(postToEditSelector)
 
@@ -46,8 +46,8 @@ const CreatePostForm: FC<Props> = ({isFetching, location, setIsFetching}) => {
 		}
 	}, [dispatch, postToEdit, location.pathname])
 
-	const [isImage, setIsImage] = React.useState(postToEdit?.isImage || false),
-		[imagePath, setImagePath] = React.useState(postToEdit?.imagePath || '')
+	const [isImage, setIsImage] = useState(postToEdit?.isImage || false),
+		[imagePath, setImagePath] = useState(postToEdit?.imagePath || '')
 
 	type obj = { title: string, content: string, categories: string[] }
 	const onSubmit = async ({title, content, categories}: obj) => {
@@ -118,4 +118,4 @@ const CreatePostForm: FC<Props> = ({isFetching, location, setIsFetching}) => {
 	</>
 }
 
-export default withRouter(CreatePostForm)
+export const CreatePostForm = withRouter(CreatePostFormComponent)

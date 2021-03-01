@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, useRef, useState} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
 import {DownOutlined, UpOutlined} from '@ant-design/icons'
@@ -12,29 +12,29 @@ type Props = {
 	post: TPost
 }
 
-const Rate: FC<Props> = ({isAuth, setRating, post}) => {
+export const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 	const isRatedUp = post.userRating === 1,
 		isRatedDown = post.userRating === -1,
-		[upLoading, setUpLoading] = React.useState(false),
-		[downLoading, setDownLoading] = React.useState(false),
-		upRef = React.useRef(null),
-		downRef = React.useRef(null)
+		[upLoading, setUpLoading] = useState(false),
+		[downLoading, setDownLoading] = useState(false),
+		upRef = useRef<HTMLDivElement>(null),
+		downRef = useRef<HTMLDivElement>(null)
 
-	const onUpClick = async () => {
+	const onUpClick = () => {
 		setUpLoading(true)
-		const ok: any = await setRating(post.id, 1)
-		// @ts-ignore
-		upRef.current.blur()
+		const ok: any = setRating(post.id, 1)
+		if (upRef.current)
+			upRef.current.blur()
 		setUpLoading(false)
 		if (!ok)
 			message.error('Can not rate post!')
 	}
 
-	const onDownClick = async () => {
+	const onDownClick = () => {
 		setDownLoading(true)
-		const ok: any = await setRating(post.id, -1)
-		// @ts-ignore
-		downRef.current.blur()
+		const ok: any = setRating(post.id, -1)
+		if (downRef.current)
+			downRef.current.blur()
 		setDownLoading(false)
 		if (!ok)
 			message.error('Can not rate post!')
@@ -52,5 +52,3 @@ const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 		</div>
 	</>
 }
-
-export default Rate

@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import s from './Actions.module.css'
-import CategoriesSearchForm from './CategoriesSearchForm'
+import {CategoriesSearchForm} from './CategoriesSearchForm'
 import Card from 'antd/lib/card'
 import {requestPostsByCategories} from '../../redux/posts-reducer'
 import {setMenuOpen} from '../../redux/app-reducer'

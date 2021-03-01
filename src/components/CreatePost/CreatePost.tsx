@@ -1,20 +1,21 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from './CreatePost.module.css'
-import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {isAuthSelector, postToEditSelector} from '../../redux/selectors'
-import CreatePostForm from './CreatePostForm'
+import {CreatePostForm} from './CreatePostForm'
 import Card from 'antd/lib/card'
-import Error403 from '../common/errors/Error403'
+import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
-import {TPost} from '../../types/types'
-import {State} from '../../redux/store'
 
-type Props = MapStateToProps & MapDispatchToProps & RouteComponentProps
+type Props = RouteComponentProps
 
-const CreatePost: FC<Props> = ({isAuth, postToEdit, location}) => {
-	const [isFetching, setIsFetching] = React.useState(false)
+const CreatePostComponent: FC<Props> = ({location}) => {
+	const isAuth = useSelector(isAuthSelector),
+		postToEdit = useSelector(postToEditSelector)
+
+	const [isFetching, setIsFetching] = useState(false)
 
 	if (!isAuth)
 		return <Error403/>
@@ -32,16 +33,4 @@ const CreatePost: FC<Props> = ({isAuth, postToEdit, location}) => {
 	</>
 }
 
-type MapStateToProps = {
-	isAuth: boolean
-	postToEdit: TPost | null
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	isAuth: isAuthSelector(state),
-	postToEdit: postToEditSelector(state)
-})
-
-type MapDispatchToProps = {}
-const mapDispatchToProps: MapDispatchToProps = {}
-
-export default connect<MapStateToProps, MapDispatchToProps, unknown, State>(mapStateToProps, mapDispatchToProps)(withRouter(CreatePost))
+export const CreatePost = withRouter(CreatePostComponent)

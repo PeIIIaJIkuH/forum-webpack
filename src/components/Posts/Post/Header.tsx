@@ -1,7 +1,7 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import history from '../../../history'
+import {history} from '../../../history'
 import {DeleteOutlined, EditOutlined, MoreOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import Popover from 'antd/lib/popover'
@@ -17,9 +17,9 @@ type Props = {
 	postPage?: boolean
 }
 
-const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) => {
-	const [loading, setLoading] = React.useState(false),
-		[visible, setVisible] = React.useState(false)
+export const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) => {
+	const [loading, setLoading] = useState(false),
+		[visible, setVisible] = useState(false)
 
 	const onDelete = async () => {
 		setVisible(false)
@@ -67,5 +67,3 @@ const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) 
 		</div>
 	</>
 }
-
-export default Header

@@ -5,7 +5,7 @@ type Props = {
 	content: string
 }
 
-const Content: FC<Props> = ({content}) => {
+export const Content: FC<Props> = ({content}) => {
 	return <>
 		<div className={s.content}>
 			{content.split('\n').map((paragraph, i) => (
@@ -14,5 +14,3 @@ const Content: FC<Props> = ({content}) => {
 		</div>
 	</>
 }
-
-export default Content

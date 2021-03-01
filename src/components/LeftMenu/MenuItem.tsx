@@ -12,16 +12,14 @@ type Props = {
 	props?: any
 }
 
-const MenuItem: FC<Props> = ({
-								 key, icon,
-								 forAll, isAuth, title,
-								 available, ...props
-							 }) => {
+export const MenuItem: FC<Props> = ({
+										key, icon,
+										forAll, isAuth, title,
+										available, ...props
+									}) => {
 	return <>
 		<Menu.Item className={s.menuItem} key={key} icon={icon} disabled={!(isAuth || forAll) || !available} {...props}>
 			{title}
 		</Menu.Item>
 	</>
 }
-
-export default MenuItem

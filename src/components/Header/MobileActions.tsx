@@ -1,28 +1,29 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import s from './Header.module.css'
 import Popover from 'antd/lib/popover'
 import Button from 'antd/lib/button'
 import {CloseOutlined, MenuOutlined} from '@ant-design/icons'
-import {SetMenuOpen, setMenuOpen} from '../../redux/app-reducer'
-import {connect} from 'react-redux'
-import {menuOpenSelector} from '../../redux/selectors'
-import Notifications from './Notifications'
-import history from '../../history'
-import {State} from '../../redux/store'
+import {setMenuOpen} from '../../redux/app-reducer'
+import {useDispatch, useSelector} from 'react-redux'
+import {menuOpenSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
+import {Notifications} from './Notifications'
+import {history} from '../../history'
 
-type OwnProps = {
-	userID: number | null
-	username: string | null
+type Props = {
 	onSignout: () => void
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps
+export const MobileActions: FC<Props> = ({onSignout}) => {
+	const userID = useSelector(userIDSelector),
+		username = useSelector(usernameSelector),
+		menuOpen = useSelector(menuOpenSelector)
 
-const MobileActions: FC<Props> = ({userID, username, onSignout, menuOpen, setMenuOpen}) => {
-	const [visible, setVisible] = React.useState(false)
+	const dispatch = useDispatch()
+
+	const [visible, setVisible] = useState(false)
 
 	const toggleMenu = () => {
-		setMenuOpen(!menuOpen)
+		dispatch(setMenuOpen(!menuOpen))
 	}
 
 	const handleVisibleChange = (visible: boolean) => {
@@ -31,7 +32,7 @@ const MobileActions: FC<Props> = ({userID, username, onSignout, menuOpen, setMen
 
 	const onClick = () => {
 		setVisible(false)
-		setMenuOpen(false)
+		dispatch(setMenuOpen(false))
 		history.push(`/user/${userID}`)
 	}
 
@@ -59,19 +60,3 @@ const MobileActions: FC<Props> = ({userID, username, onSignout, menuOpen, setMen
 		</div>
 	</>
 }
-
-type MapStateToProps = {
-	menuOpen: boolean
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	menuOpen: menuOpenSelector(state)
-})
-
-type MapDispatchToProps = {
-	setMenuOpen: SetMenuOpen
-}
-const mapDispatchToProps: MapDispatchToProps = {
-	setMenuOpen
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(MobileActions)

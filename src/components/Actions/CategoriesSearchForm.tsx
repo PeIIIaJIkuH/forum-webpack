@@ -26,7 +26,7 @@ type Props = {
 	form: FormInstance
 }
 
-const CategoriesSearchForm: FC<Props> = ({onSubmit, form, isFetching}) => {
+export const CategoriesSearchForm: FC<Props> = ({onSubmit, form, isFetching}) => {
 	const categories = useSelector(categoriesSelector)
 
 	const dispatch = useDispatch()
@@ -56,5 +56,3 @@ const CategoriesSearchForm: FC<Props> = ({onSubmit, form, isFetching}) => {
 		</Form>
 	</>
 }
-
-export default CategoriesSearchForm

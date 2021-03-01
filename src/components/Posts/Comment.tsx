@@ -1,61 +1,52 @@
-import React, {ChangeEvent, FC, ReactNode} from 'react'
+import React, {ChangeEvent, Dispatch, FC, ReactNode, useRef, useState} from 'react'
 import AntComment from 'antd/lib/comment'
 import Button from 'antd/lib/button'
 import {DeleteOutlined, DownOutlined, EditOutlined, MoreOutlined, SaveOutlined, UpOutlined} from '@ant-design/icons'
 import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
-import {
-	DeleteComment,
-	deleteComment,
-	EditComment,
-	editComment,
-	setCommentRating,
-	SetCommentRating
-} from '../../redux/posts-reducer'
-import {connect} from 'react-redux'
+import {deleteComment, editComment, setCommentRating} from '../../redux/posts-reducer'
 import Popover from 'antd/lib/popover'
-import {State} from '../../redux/store'
 import {TComment} from '../../types/types'
 import message from 'antd/lib/message'
-import {isAuthSelector} from '../../redux/selectors'
 
-type OwnProps = {
+type Props = {
 	author: ReactNode
 	content: string
 	datetime: ReactNode
 	comment: TComment
 	check: boolean
 	userPage?: boolean
+	isAuth: boolean
+	dispatch: Dispatch<any>
 }
 
-type Props = MapStateToProps & MapDispatchToProps & OwnProps
+export const Comment: FC<Props> = ({
+									   author, content,
+									   datetime, comment,
+									   check, userPage, isAuth, dispatch
+								   }) => {
+	const [isEdit, setIsEdit] = useState(false),
+		[text, setText] = useState(content),
+		[deleteLoading, setDeleteLoading] = useState(false),
+		[editLoading, setEditLoading] = useState(false),
+		[visible, setVisible] = useState(false)
 
-const Comment: FC<Props> = ({
-								author, content,
-								datetime, comment,
-								check, deleteComment, editComment, userPage, isAuth,
-								setCommentRating
-							}) => {
-	const [isEdit, setIsEdit] = React.useState(false),
-		[text, setText] = React.useState(content),
-		[deleteLoading, setDeleteLoading] = React.useState(false),
-		[editLoading, setEditLoading] = React.useState(false),
-		[visible, setVisible] = React.useState(false)
-
-	const paragraphs = content.split('\n').map((paragraph, i) => (<p key={i}>{paragraph}</p>))
+	const paragraphs = content.split('\n').map((paragraph: string, i: number) => (<p key={i}>{paragraph}</p>))
 
 	const onDelete = async () => {
 		let ok: any
 		await setDeleteLoading(true)
 		if (!userPage)
-			ok = await deleteComment(comment.id)
+			ok = await dispatch(deleteComment(comment.id))
 		else
-			ok = await deleteComment(comment.id, comment.post_id)
-		if (!ok) {
+			ok = await dispatch(deleteComment(comment.id, comment.post_id))
+		try {
 			await setDeleteLoading(false)
 			await setVisible(false)
-			message.error('Can not delete comment!')
+		} catch (e) {
 		}
+		if (!ok)
+			message.error('Can not delete comment!')
 	}
 
 	const onEdit = async () => {
@@ -95,16 +86,16 @@ const Comment: FC<Props> = ({
 
 	const isRatedUp = comment.userRating === 1,
 		isRatedDown = comment.userRating === -1,
-		[upLoading, setUpLoading] = React.useState(false),
-		[downLoading, setDownLoading] = React.useState(false),
-		upRef = React.useRef(null),
-		downRef = React.useRef(null)
+		[upLoading, setUpLoading] = useState(false),
+		[downLoading, setDownLoading] = useState(false),
+		upRef = useRef<HTMLDivElement>(null),
+		downRef = useRef<HTMLDivElement>(null)
 
 	const onUpClick = async () => {
 		setUpLoading(true)
-		const ok: any = await setCommentRating(comment.id, comment.post_id, 1)
-		// @ts-ignore
-		upRef.current.blur()
+		const ok: any = await dispatch(setCommentRating(comment.id, comment.post_id, 1))
+		if (upRef.current)
+			upRef.current.blur()
 		setUpLoading(false)
 		if (!ok)
 			message.error('Can not rate comment!')
@@ -112,9 +103,9 @@ const Comment: FC<Props> = ({
 
 	const onDownClick = async () => {
 		setDownLoading(true)
-		const ok: any = await setCommentRating(comment.id, comment.post_id, -1)
-		// @ts-ignore
-		downRef.current.blur()
+		const ok: any = await dispatch(setCommentRating(comment.id, comment.post_id, -1))
+		if (downRef.current)
+			downRef.current.blur()
 		setDownLoading(false)
 		if (!ok)
 			message.error('Can not rate comment!')
@@ -150,23 +141,3 @@ const Comment: FC<Props> = ({
 	return <AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}
 					   key={comment.id}/>
 }
-
-type MapStateToProps = {
-	isAuth: boolean
-}
-const mapStateToProps = (state: State): MapStateToProps => ({
-	isAuth: isAuthSelector(state)
-})
-
-type MapDispatchToProps = {
-	deleteComment: DeleteComment
-	editComment: EditComment
-	setCommentRating: SetCommentRating
-}
-const mapDispatchToProps = {
-	deleteComment,
-	editComment,
-	setCommentRating
-}
-
-export default connect<MapStateToProps, MapDispatchToProps, OwnProps, State>(mapStateToProps, mapDispatchToProps)(Comment)

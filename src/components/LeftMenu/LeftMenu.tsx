@@ -1,11 +1,11 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import Menu from 'antd/lib/menu'
 import {isAuthSelector} from '../../redux/selectors'
 import {useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, TagsOutlined, UserOutlined} from '@ant-design/icons'
-import history from '../../history'
-import MenuItem from './MenuItem'
+import {history} from '../../history'
+import {MenuItem} from './MenuItem'
 import {CategoriesModal} from './CategoriesModal'
 
 type OwnProps = {
@@ -14,11 +14,11 @@ type OwnProps = {
 
 type Props = OwnProps & RouteComponentProps
 
-const LeftMenu: FC<Props> = ({location, mobile}) => {
+const LeftMenuComponent: FC<Props> = ({location, mobile}) => {
 	const isAuth = useSelector(isAuthSelector)
 
 	const options = [location.pathname.split('/')[1] || 'home'],
-		[modalVisible, setModalVisible] = React.useState(false),
+		[modalVisible, setModalVisible] = useState(false),
 		defaultKeys = ['home']
 
 	const onClick = ({key}: any) => {
@@ -43,4 +43,4 @@ const LeftMenu: FC<Props> = ({location, mobile}) => {
 	)
 }
 
-export default withRouter(LeftMenu)
+export const LeftMenu = withRouter(LeftMenuComponent)

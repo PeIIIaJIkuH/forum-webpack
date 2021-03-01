@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import history from '../../../history'
+import {history} from '../../../history'
 import {CommentOutlined} from '@ant-design/icons'
 import {getDateDifference} from '../../../utils/helpers/helpers'
 import {TPost} from '../../../types/types'
@@ -10,7 +10,7 @@ type Props = {
 	post: TPost
 }
 
-const Footer: FC<Props> = ({post}) => {
+export const Footer: FC<Props> = ({post}) => {
 	const created = getDateDifference(post.createdAt)
 
 	const onClick = () => {
@@ -34,5 +34,3 @@ const Footer: FC<Props> = ({post}) => {
 		</div>
 	)
 }
-
-export default Footer

@@ -25,7 +25,7 @@ const initialState: InitialState = {
 
 type Action = ActionTypes<typeof authActions>
 
-const authReducer = (state = initialState, action: Action) => {
+export const authReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
 		case 'auth/SET_USER_DATA':
 			return {
@@ -60,8 +60,6 @@ export const requestAuthUserData = () => async (dispatch: Dispatch) => {
 		const {id, username, email, createdAt, lastActive} = data.data
 		dispatch(authActions.setUserDataAC(id, username, email, createdAt, lastActive, true))
 		requestNotifications()
-	} else {
-		console.log(data)
 	}
 	await dispatch(setProgress(100))
 }
@@ -125,5 +123,3 @@ export const deleteNotification = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(100))
 	return res
 }
-
-export default authReducer
