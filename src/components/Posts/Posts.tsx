@@ -65,7 +65,7 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 			dispatch(requestAllPosts())
 		}
 	}, [type, urlId, userID, selected, dispatch])
-
+	
 	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selectedFromStorage))
 		return <Error404/>
 	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))

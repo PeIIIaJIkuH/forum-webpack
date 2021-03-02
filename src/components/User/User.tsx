@@ -31,7 +31,7 @@ const UserComponent: FC<Props> = ({match}) => {
 
 	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = dispatch(requestUser(+urlId))
+			const ok: any = await dispatch(requestUser(+urlId))
 			if (!ok)
 				setCheck(false)
 			dispatch(requestUserPosts(+urlId))

@@ -31,7 +31,7 @@ const PostPageComponent: FC<Props> = ({match}) => {
 
 	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = dispatch(requestPost(+urlId))
+			const ok: any = await dispatch(requestPost(+urlId))
 			if (!ok) {
 				setCheck(false)
 			}

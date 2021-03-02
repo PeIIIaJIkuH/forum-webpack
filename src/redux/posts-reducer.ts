@@ -170,7 +170,7 @@ export const requestPost = (id: number) => async (dispatch: Dispatch) => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await postAPI.get(id)
-	if (data.data) {
+	if (data && data.status) {
 		await dispatch(postsActions.setPostsAC([data.data]))
 		res = true
 	}

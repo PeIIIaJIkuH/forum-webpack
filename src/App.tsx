@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react'
 import s from './App.module.css'
-import {Route, RouteComponentProps, Router, Switch, withRouter} from 'react-router-dom'
+import {Route, Router, Switch, useLocation} from 'react-router-dom'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import {initializedSelector} from './redux/selectors'
 import {initializeApp, setMenuOpen} from './redux/app-reducer'
@@ -33,15 +33,13 @@ import {RightMenu} from './components/RightMenu/RightMenu'
 // check all the features and functions
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
 // try to remove return from reducers
+// change localstorage to query params
+// change all withRouter to useMatch
+// change history to useHistory
 
-type PathParamsType = {
-	id: string,
-}
-
-type Props = RouteComponentProps<PathParamsType>
-
-const App: FC<Props> = ({location}) => {
-	const initialized = useSelector(initializedSelector)
+const App: FC = () => {
+	const initialized = useSelector(initializedSelector),
+		location = useLocation()
 
 	const dispatch = useDispatch()
 
@@ -99,13 +97,11 @@ const App: FC<Props> = ({location}) => {
 	)
 }
 
-const AppContainer = withRouter(App)
-
 export const MainApp = () => {
 	return (
 		<Router history={history}>
 			<Provider store={store}>
-				<AppContainer/>
+				<App/>
 			</Provider>
 		</Router>
 	)

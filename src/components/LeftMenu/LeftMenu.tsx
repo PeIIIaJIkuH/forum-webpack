@@ -2,20 +2,19 @@ import React, {FC, useState} from 'react'
 import Menu from 'antd/lib/menu'
 import {isAuthSelector} from '../../redux/selectors'
 import {useSelector} from 'react-redux'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import {DislikeOutlined, FormOutlined, HomeOutlined, LikeOutlined, TagsOutlined, UserOutlined} from '@ant-design/icons'
 import {history} from '../../history/history'
 import {MenuItem} from './MenuItem'
 import {CategoriesModal} from './CategoriesModal'
 
-type OwnProps = {
+type Props = {
 	mobile?: boolean
 }
 
-type Props = OwnProps & RouteComponentProps
-
-const LeftMenuComponent: FC<Props> = ({location, mobile}) => {
-	const isAuth = useSelector(isAuthSelector)
+export const LeftMenu: FC<Props> = ({mobile}) => {
+	const isAuth = useSelector(isAuthSelector),
+		location = useLocation()
 
 	const options = [location.pathname.split('/')[1] || 'home'],
 		[modalVisible, setModalVisible] = useState(false),
@@ -42,5 +41,3 @@ const LeftMenuComponent: FC<Props> = ({location, mobile}) => {
 		</Menu>
 	)
 }
-
-export const LeftMenu = withRouter(LeftMenuComponent)

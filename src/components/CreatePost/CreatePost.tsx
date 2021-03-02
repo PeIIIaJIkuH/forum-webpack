@@ -6,14 +6,13 @@ import {CreatePostForm} from './CreatePostForm'
 import Card from 'antd/lib/card'
 import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 
-type Props = RouteComponentProps
-
-const CreatePostComponent: FC<Props> = ({location}) => {
+export const CreatePost: FC = () => {
 	const isAuth = useSelector(isAuthSelector),
-		postToEdit = useSelector(postToEditSelector)
+		postToEdit = useSelector(postToEditSelector),
+		location = useLocation()
 
 	const [isFetching, setIsFetching] = useState(false)
 
@@ -32,5 +31,3 @@ const CreatePostComponent: FC<Props> = ({location}) => {
 		</div>
 	</>
 }
-
-export const CreatePost = withRouter(CreatePostComponent)

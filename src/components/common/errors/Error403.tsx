@@ -1,18 +1,18 @@
 import React, {FC} from 'react'
 import Button from 'antd/lib/button'
 import Result from 'antd/lib/result'
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {Helmet} from 'react-helmet'
 import {useDispatch} from 'react-redux'
 import {setUrlTo} from '../../../redux/app-reducer'
 
-type OwnProps = {
+type Props = {
 	text?: string
 }
 
-type Props = OwnProps & RouteComponentProps
+export const Error403: FC<Props> = ({text}) => {
+	const location = useLocation()
 
-const Error403Component: FC<Props> = ({text, location}) => {
 	const dispatch = useDispatch()
 
 	const onClick = async () => {
@@ -36,5 +36,3 @@ const Error403Component: FC<Props> = ({text, location}) => {
 		/>
 	</>
 }
-
-export const Error403 = withRouter(Error403Component)

@@ -6,7 +6,7 @@ import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
 import {history} from '../../history/history'
 import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
 import {defaultValidator} from '../../utils/helpers/helpers'
 import {requestCategories} from '../../redux/categories-reducer'
@@ -26,16 +26,15 @@ const tailLayout = {
 	wrapperCol: {span: 24}
 }
 
-type OwnProps = {
+type Props = {
 	isFetching: boolean
 	setIsFetching: (fetching: boolean) => void
 }
 
-type Props = OwnProps & RouteComponentProps
-
-const CreatePostFormComponent: FC<Props> = ({isFetching, location, setIsFetching}) => {
+export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 	const categories = useSelector(categoriesSelector),
-		postToEdit = useSelector(postToEditSelector)
+		postToEdit = useSelector(postToEditSelector),
+		location = useLocation()
 
 	const dispatch = useDispatch()
 
@@ -117,5 +116,3 @@ const CreatePostFormComponent: FC<Props> = ({isFetching, location, setIsFetching
 		</Form>
 	</>
 }
-
-export const CreatePostForm = withRouter(CreatePostFormComponent)

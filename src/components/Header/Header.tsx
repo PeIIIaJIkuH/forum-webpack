@@ -3,7 +3,7 @@ import s from './Header.module.css'
 import {isAuthSelector, progressSelector} from '../../redux/selectors'
 import {requestNotifications, signout} from '../../redux/auth-reducer'
 import {useDispatch, useSelector} from 'react-redux'
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
 import Button from 'antd/lib/button'
 import Image from 'antd/lib/image'
@@ -16,11 +16,10 @@ import {useMediaQuery} from 'react-responsive'
 import {MobileActions} from './MobileActions'
 import message from 'antd/lib/message'
 
-type Props = RouteComponentProps
-
-const HeaderComponent: FC<Props> = ({location}) => {
+export const Header: FC = () => {
 	const isAuth = useSelector(isAuthSelector),
-		progress = useSelector(progressSelector)
+		progress = useSelector(progressSelector),
+		location = useLocation()
 
 	const dispatch = useDispatch()
 
@@ -68,5 +67,3 @@ const HeaderComponent: FC<Props> = ({location}) => {
 		</Affix>
 	)
 }
-
-export const Header = withRouter(HeaderComponent)

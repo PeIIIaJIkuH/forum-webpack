@@ -93,7 +93,7 @@ export const Comment: FC<Props> = ({
 
 	const onUpClick = async () => {
 		setUpLoading(true)
-		const ok: any = dispatch(setCommentRating(comment.id, comment.post_id, 1))
+		const ok: any = await dispatch(setCommentRating(comment.id, comment.post_id, 1))
 		if (upRef.current)
 			upRef.current.blur()
 		setUpLoading(false)
@@ -103,7 +103,7 @@ export const Comment: FC<Props> = ({
 
 	const onDownClick = async () => {
 		setDownLoading(true)
-		const ok: any = dispatch(setCommentRating(comment.id, comment.post_id, -1))
+		const ok: any = await dispatch(setCommentRating(comment.id, comment.post_id, -1))
 		if (downRef.current)
 			downRef.current.blur()
 		setDownLoading(false)
