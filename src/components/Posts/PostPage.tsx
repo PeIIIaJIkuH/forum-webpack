@@ -6,12 +6,13 @@ import {Comments} from './Comments'
 import Card from 'antd/lib/card'
 import {postAPI} from '../../api/requests'
 import {commentsSelector, isAuthSelector, postsSelector} from '../../redux/selectors'
-import {requestComments, requestPost} from '../../redux/posts-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors/Error404'
 import message from 'antd/lib/message'
 import {Posts} from './Posts'
+import {requestPost} from '../../redux/posts-reducer'
+import {requestComments} from '../../redux/comments-reducer'
 
 type PathParamsType = {
 	id: string,
@@ -57,7 +58,7 @@ const PostPageComponent: FC<Props> = ({match}) => {
 	return posts && <>
 		<Helmet><title>Comments | forume</title></Helmet>
 		<Posts postPage/>
-		<section className={s.comments}>
+		<section className={s.all}>
 			<Card className={s.commentsCard}>
 				<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
 				<Comments comments={comments}/>

@@ -32,9 +32,7 @@ import {RightMenu} from './components/RightMenu/RightMenu'
 // check all the features and functions
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
 // try to remove return from reducers
-// change localstorage to query params
 // change all withRouter to useMatch
-// change history to useHistory
 
 const App: FC = () => {
 	const initialized = useSelector(initializedSelector),

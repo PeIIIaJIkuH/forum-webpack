@@ -1,110 +1,50 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
-import {Reaction, TComment, TPost, TUser} from '../types/types'
+import {Reaction, TPost} from '../types/types'
 import {ActionTypes, ThunkType} from './store'
+import {commentsActions} from './comments-reducer'
 
 type InitialState = {
-	posts: TPost[] | null
-	user: TUser | null
-	comments: TComment[] | null
-	postToEdit: TPost | null
-	userComments: { [key: string]: TComment[] } | null
+	all: TPost[] | null
+	toEdit: TPost | null
 }
 const initialState: InitialState = {
-	posts: null,
-	user: null,
-	comments: null,
-	postToEdit: null,
-	userComments: null
+	all: null,
+	toEdit: null
 }
 
-type Action = ActionTypes<typeof postsActions>
+type Action = ActionTypes<typeof postsActions | typeof commentsActions>
 
 export const postsReducer = (state = initialState, action: Action) => {
 	switch (action.type) {
 		case 'posts/SET_POSTS':
-			return {...state, posts: action.posts, comments: null}
+			return {...state, all: action.all}
 		case 'posts/SET_RATING':
-			const post = getObjectInArray(state.posts, action.id, 'id')
+			const post = getObjectInArray(state.all, action.id, 'id')
 			const [userRating, postRating] = getRating(post.userRating, post.postRating, action.reaction)
 			return {
 				...state,
-				posts: updateObjectInArray(state.posts, action.id, 'id',
+				all: updateObjectInArray(state.all, action.id, 'id',
 					{postRating, userRating})
 			}
-		case 'posts/SET_USER':
-			return {...state, user: action.user}
-		case 'posts/SET_COMMENTS':
-			return {...state, comments: action.comments}
 		case 'posts/DELETE_POST':
-			return {...state, posts: state.posts && state.posts.filter(post => post.id !== action.id)}
+			return {...state, all: state.all && state.all.filter(post => post.id !== action.id)}
 		case 'posts/SET_POST_TO_EDIT':
-			return {...state, postToEdit: action.post}
-		case 'posts/DELETE_COMMENT':
-			return {
-				...state,
-				comments: state.comments && state.comments.filter((comment: TComment) => comment.id !== action.id)
-			}
-		case 'posts/SET_USER_COMMENTS':
-			return {...state, userComments: action.comments}
-		case 'posts/DELETE_USER_COMMENT':
-			const id = action.id,
-				postID = action.postID,
-				comments = {...state.userComments}
-			const postComments = comments[postID].filter((comment: TComment) => comment.id !== id)
-			comments[postID] = postComments
-			return {...state, userComments: comments}
-		case 'posts/EDIT_COMMENT':
-			if (state.comments) {
-				const cComments = [...state.comments]
-				const index = cComments && cComments.findIndex((comment: TComment) => comment.id === action.id)
-				if (cComments) {
-					cComments[index].content = action.content
-				}
-				return {...state, comments: cComments}
-			}
-			return state
-		case 'posts/EDIT_USER_COMMENT':
-			const ucComments = {...state.userComments}
-			const pComments = [...ucComments[action.postID]]
-			const uIndex = pComments.findIndex(comment => comment.id === action.id)
-			pComments[uIndex].content = action.content
-			ucComments[action.postID] = pComments
-			return {...state, userComments: ucComments}
-		case 'posts/SET_COMMENT_RATING':
-			const comment = getObjectInArray(state.comments, action.id, 'id')
-			const [commentUserRating, commentRating] = getRating(comment.userRating, comment.commentRating, action.reaction)
-			return {
-				...state,
-				comments: updateObjectInArray(state.comments, action.id, 'id',
-					{commentRating, userRating: commentUserRating})
-			}
+			return {...state, toEdit: action.post}
 		default:
 			return state
 	}
 }
 
-const postsActions = {
-	setPostsAC: (posts: TPost[] | null) => ({
+export const postsActions = {
+	setPostsAC: (all: TPost[] | null) => ({
 		type: 'posts/SET_POSTS',
-		posts
+		all
 	} as const),
 	setRatingAC: (id: number, reaction: Reaction) => ({
 		type: 'posts/SET_RATING',
 		id, reaction
-	} as const),
-	setUserAC: (user: TUser | null) => ({
-		type: 'posts/SET_USER',
-		user
-	} as const),
-	setCommentsAC: (comments: TComment[] | null) => ({
-		type: 'posts/SET_COMMENTS',
-		comments
-	} as const),
-	setUserCommentsAC: (comments: { [key: string]: TComment[] } | null) => ({
-		type: 'posts/SET_USER_COMMENTS',
-		comments
 	} as const),
 	deletePostAC: (id: number) => ({
 		type: 'posts/DELETE_POST',
@@ -113,26 +53,6 @@ const postsActions = {
 	setPostToEditAC: (post: TPost | null) => ({
 		type: 'posts/SET_POST_TO_EDIT',
 		post
-	} as const),
-	deleteCommentAC: (id: number) => ({
-		type: 'posts/DELETE_COMMENT',
-		id
-	} as const),
-	deleteUserCommentAC: (id: number, postID: number) => ({
-		type: 'posts/DELETE_USER_COMMENT',
-		id, postID
-	} as const),
-	editCommentAC: (id: number, content: string) => ({
-		type: 'posts/EDIT_COMMENT',
-		id, content
-	} as const),
-	editUserCommentAC: (id: number, postID: number, content: string) => ({
-		type: 'posts/EDIT_USER_COMMENT',
-		id, postID, content
-	} as const),
-	setCommentRatingAC: (id: number, reaction: Reaction) => ({
-		type: 'posts/SET_COMMENT_RATING',
-		id, reaction
 	} as const)
 }
 
@@ -150,8 +70,7 @@ export const requestUserPosts = (id: number): Thunk => async dispatch => {
 	await dispatch(setProgress(0))
 	const data = await userAPI.getCreatedPosts(id)
 	await dispatch(postsActions.setPostsAC(data.data))
-	await dispatch(postsActions.setUserCommentsAC(null))
-	await dispatch(postsActions.setUserCommentsAC(null))
+	await dispatch(commentsActions.setUserCommentsAC(null))
 	await dispatch(setProgress(100))
 }
 
@@ -160,7 +79,7 @@ export const requestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvot
 	await dispatch(setProgress(0))
 	const data = await userAPI.getRatedPosts(userID, reaction)
 	await dispatch(postsActions.setPostsAC(data.data))
-	await dispatch(postsActions.setUserCommentsAC(null))
+	await dispatch(commentsActions.setUserCommentsAC(null))
 	await dispatch(setProgress(100))
 }
 
@@ -198,24 +117,6 @@ export const setRating = (id: number, reaction: Reaction): ThunkBool => async di
 	return res
 }
 
-export type RequestUser = (id: number) => void
-export const requestUser = (id: number): ThunkBool => async dispatch => {
-	let res = false
-	await dispatch(setProgress(0))
-	const data = await userAPI.get(id)
-	if (data.data) {
-		await dispatch(postsActions.setUserAC(data.data))
-		res = true
-	}
-	await dispatch(setProgress(100))
-	return res
-}
-
-export const requestComments = (id: number): Thunk => async dispatch => {
-	const data = await postAPI.getComments(id)
-	await dispatch(postsActions.setCommentsAC(data.data))
-}
-
 export type DeletePost = (id: number) => void
 export const deletePost = (id: number): ThunkBool => async dispatch => {
 	let res = false
@@ -224,7 +125,7 @@ export const deletePost = (id: number): ThunkBool => async dispatch => {
 	if (data && data.status) {
 		res = true
 		await dispatch(postsActions.deletePostAC(id))
-		await dispatch(postsActions.setCommentsAC(null))
+		await dispatch(commentsActions.setCommentsAC(null))
 	}
 	await dispatch(setProgress(100))
 	return res
@@ -247,50 +148,6 @@ export const requestCommentedPosts = (id: number): Thunk => async dispatch => {
 		}
 	}
 	await dispatch(postsActions.setPostsAC(posts))
-	await dispatch(postsActions.setUserCommentsAC(commentsByPostId))
+	await dispatch(commentsActions.setUserCommentsAC(commentsByPostId))
 	await dispatch(setProgress(100))
-}
-
-export const deleteComment = (id: number, postID?: number): ThunkBool => async dispatch => {
-	let res = false
-	await dispatch(setProgress(0))
-	const data = await postAPI.deleteComment(id)
-	if (data && data.status) {
-		res = true
-		if (!postID) {
-			await dispatch(postsActions.deleteCommentAC(id))
-		} else {
-			await dispatch(postsActions.deleteUserCommentAC(id, postID))
-		}
-	}
-	await dispatch(setProgress(100))
-	return res
-}
-
-export const editComment = (id: number, authorID: number, postID: number, content: string, isUserPage: boolean): ThunkBool => async dispatch => {
-	let res = false
-	await dispatch(setProgress(0))
-	const data = await postAPI.editComment(id, authorID, postID, content)
-	if (data && data.status) {
-		res = true
-		if (!isUserPage) {
-			await dispatch(postsActions.editCommentAC(id, content))
-		} else {
-			await dispatch(postsActions.editUserCommentAC(id, postID, content))
-		}
-	}
-	await dispatch(setProgress(100))
-	return res
-}
-
-export const setCommentRating = (id: number, postID: number, reaction: Reaction): ThunkBool => async dispatch => {
-	await dispatch(setProgress(0))
-	let res = false
-	const data = await postAPI.rateComment(id, postID, reaction)
-	if (data && data.status) {
-		res = true
-		await dispatch(postsActions.setCommentRatingAC(id, reaction))
-	}
-	await dispatch(setProgress(100))
-	return res
 }

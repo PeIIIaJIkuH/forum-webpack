@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react'
 import s from './User.module.css'
 import {userCommentsSelector, userSelector} from '../../redux/selectors'
-import {requestCommentedPosts, requestRatedPosts, requestUser, requestUserPosts} from '../../redux/posts-reducer'
+import {requestCommentedPosts, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {UserInfo} from './UserInfo'
@@ -11,6 +11,7 @@ import Menu from 'antd/lib/menu'
 import {MenuItem} from '../LeftMenu/MenuItem'
 import {CommentOutlined, DislikeOutlined, LikeOutlined, UserOutlined} from '@ant-design/icons'
 import {Posts} from '../Posts/Posts'
+import {requestUser} from '../../redux/user-reducer'
 
 type PathParamsType = {
 	id: string

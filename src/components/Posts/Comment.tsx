@@ -4,10 +4,10 @@ import Button from 'antd/lib/button'
 import {DeleteOutlined, DownOutlined, EditOutlined, MoreOutlined, SaveOutlined, UpOutlined} from '@ant-design/icons'
 import s from './Posts.module.css'
 import TextArea from 'antd/lib/input/TextArea'
-import {deleteComment, editComment, setCommentRating} from '../../redux/posts-reducer'
 import Popover from 'antd/lib/popover'
 import {TComment} from '../../types/types'
 import message from 'antd/lib/message'
+import {deleteComment, editComment, setCommentRating} from '../../redux/comments-reducer'
 
 type Props = {
 	author: ReactNode

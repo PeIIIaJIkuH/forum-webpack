@@ -4,11 +4,15 @@ import {appReducer} from './app-reducer'
 import {postsReducer} from './posts-reducer'
 import {authReducer} from './auth-reducer'
 import {categoriesReducer} from './categories-reducer'
+import {commentsReducer} from './comments-reducer'
+import {userReducer} from './user-reducer'
 
 const reducers = combineReducers({
 	auth: authReducer,
 	app: appReducer,
+	user: userReducer,
 	posts: postsReducer,
+	comments: commentsReducer,
 	categories: categoriesReducer
 })
 

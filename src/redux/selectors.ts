@@ -12,12 +12,16 @@ export const userIDSelector = (state: State) => authSelector(state).id
 export const usernameSelector = (state: State) => authSelector(state).username
 export const notificationsSelector = (state: State) => authSelector(state).notifications
 
+export const userReducerSelector = (state: State) => state.user
+export const userSelector = (state: State) => userReducerSelector(state).user
+
 export const postsReducerSelector = (state: State) => state.posts
-export const userSelector = (state: State) => postsReducerSelector(state).user
-export const postsSelector = (state: State) => postsReducerSelector(state).posts
-export const commentsSelector = (state: State) => postsReducerSelector(state).comments
-export const postToEditSelector = (state: State) => postsReducerSelector(state).postToEdit
-export const userCommentsSelector = (state: State) => postsReducerSelector(state).userComments
+export const postsSelector = (state: State) => postsReducerSelector(state).all
+export const postToEditSelector = (state: State) => postsReducerSelector(state).toEdit
+
+export const commentsReducerSelector = (state: State) => state.comments
+export const commentsSelector = (state: State) => commentsReducerSelector(state).all
+export const userCommentsSelector = (state: State) => commentsReducerSelector(state).userComments
 
 export const categoriesReducerSelector = (state: State) => state.categories
 export const categoriesSelector = (state: State) => categoriesReducerSelector(state).all
