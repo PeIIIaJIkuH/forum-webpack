@@ -58,7 +58,7 @@ const PostPageComponent: FC<Props> = ({match}) => {
 	return posts && <>
 		<Helmet><title>Comments | forume</title></Helmet>
 		<Posts postPage/>
-		<section className={s.all}>
+		<section className={s.comments}>
 			<Card className={s.commentsCard}>
 				<CommentForm isAuth={isAuth} onSubmit={onSubmit}/>
 				<Comments comments={comments}/>
