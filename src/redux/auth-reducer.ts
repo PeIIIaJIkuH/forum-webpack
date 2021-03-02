@@ -1,7 +1,6 @@
 import {authAPI} from '../api/requests'
 import {setProgress} from './app-reducer'
-import {ThunkDispatch} from 'redux-thunk'
-import {ActionTypes, State} from './store'
+import {ActionTypes, ThunkType} from './store'
 import {TNotification} from '../types/types'
 
 type InitialState = {
@@ -51,9 +50,10 @@ export const authActions = {
 	} as const)
 }
 
-type Dispatch = ThunkDispatch<State, unknown, Action>
+type Thunk = ThunkType<void, Action>
+type ThunkBool = ThunkType<boolean, Action>
 
-export const requestAuthUserData = () => async (dispatch: Dispatch) => {
+export const requestAuthUserData = (): Thunk => async dispatch => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.me()
 	if (data && data.status) {
@@ -64,7 +64,7 @@ export const requestAuthUserData = () => async (dispatch: Dispatch) => {
 	await dispatch(setProgress(100))
 }
 
-export const signup = (username: string, email: string, password: string) => async (dispatch: Dispatch) => {
+export const signup = (username: string, email: string, password: string): ThunkBool => async dispatch => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.signup(username, email, password)
@@ -75,7 +75,7 @@ export const signup = (username: string, email: string, password: string) => asy
 	return res
 }
 
-export const signin = (username: string, password: string) => async (dispatch: Dispatch) => {
+export const signin = (username: string, password: string): ThunkBool => async dispatch => {
 	let res = false
 	const data = await authAPI.signin(username, password)
 	if (data && data.status) {
@@ -86,7 +86,7 @@ export const signin = (username: string, password: string) => async (dispatch: D
 }
 
 export type Signout = () => void
-export const signout = () => async (dispatch: Dispatch) => {
+export const signout = (): ThunkBool => async dispatch => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.signout()
@@ -99,7 +99,7 @@ export const signout = () => async (dispatch: Dispatch) => {
 	return res
 }
 
-export const requestNotifications = () => async (dispatch: Dispatch) => {
+export const requestNotifications = (): Thunk => async dispatch => {
 	await dispatch(setProgress(0))
 	const data = await authAPI.getNotifications()
 	if (data && data.status) {
@@ -109,7 +109,7 @@ export const requestNotifications = () => async (dispatch: Dispatch) => {
 }
 
 export type DeleteNotification = () => void
-export const deleteNotification = () => async (dispatch: Dispatch) => {
+export const deleteNotification = (): ThunkBool => async dispatch => {
 	let res = false
 	await dispatch(setProgress(0))
 	const data = await authAPI.deleteNotification()
