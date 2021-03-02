@@ -4,7 +4,7 @@ import Button from 'antd/lib/button'
 import Form, {FormInstance} from 'antd/lib/form'
 import Select from 'antd/lib/select'
 import {FilterOutlined} from '@ant-design/icons'
-import {requestCategories, setSelectedCategories} from '../../redux/categories-reducer'
+import {requestCategories} from '../../redux/categories-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {categoriesSelector} from '../../redux/selectors'
 
@@ -35,14 +35,10 @@ export const CategoriesSearchForm: FC<Props> = ({onSubmit, form, isFetching}) =>
 		dispatch(requestCategories())
 	}, [dispatch])
 
-	const onChange = (values: string[]) => {
-		dispatch(setSelectedCategories(values))
-	}
-
 	return <>
 		<Form {...layout} name='selectPosts' onFinish={onSubmit} layout='horizontal' form={form}>
 			<Form.Item name='categories'>
-				<Select mode='multiple' placeholder='Select categories' allowClear onChange={onChange}>
+				<Select mode='multiple' placeholder='Select categories' allowClear>
 					{categories?.map(e => (
 						<Select.Option key={e.name} value={e.name}>{e.name}</Select.Option>
 					))}

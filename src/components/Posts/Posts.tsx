@@ -6,13 +6,14 @@ import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUse
 import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
-import {RouteComponentProps, useHistory, withRouter} from 'react-router-dom'
+import {RouteComponentProps, useHistory, useLocation, withRouter} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
 import {Error403} from '../common/errors/Error403'
 import Tag from 'antd/lib/tag'
 import Typography from 'antd/lib/typography'
 import {TComment, TPost} from '../../types/types'
+import * as queryString from 'query-string'
 import {setSelectedCategories} from '../../redux/categories-reducer'
 
 type PathParamsType = {
@@ -32,13 +33,13 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 		userID = useSelector(userIDSelector),
 		isAuth = useSelector(isAuthSelector),
 		selected = useSelector(selectedCategoriesSelector),
-		history = useHistory()
+		history = useHistory(),
+		location = useLocation()
 
 	const dispatch = useDispatch()
 
 	const urlId = match.params.id,
-		[title, setTitle] = useState('Home'),
-		[selectedFromStorage, setSelectedFromStorage] = useState<string[] | null>(null)
+		[title, setTitle] = useState('Home')
 
 	useEffect(() => {
 		if (type === 'my') {
@@ -52,23 +53,24 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 			userID && dispatch(requestRatedPosts(userID, type))
 		} else if (type === 'categories') {
 			setTitle('Search by Categories')
-			const item = localStorage.getItem('selected-categories')
-			if (selected) {
-				setSelectedFromStorage(selected)
-				localStorage.setItem('selected-categories', JSON.stringify(selected))
-			} else if (item !== null) {
-				setSelectedFromStorage(JSON.parse(item))
-				setSelectedCategories(JSON.parse(item))
-				dispatch(requestPostsByCategories(JSON.parse(item)))
-				history.push('/by-categories')
+			const parsed = queryString.parse(location.search, {arrayFormat: 'comma'})
+			const categories = parsed.categories
+			if (categories) {
+				if (categories instanceof Array) {
+					dispatch(setSelectedCategories(categories))
+					dispatch(requestPostsByCategories(categories))
+				} else {
+					dispatch(setSelectedCategories([categories]))
+					dispatch(requestPostsByCategories([categories]))
+				}
 			}
 		} else {
 			setTitle('Home')
 			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, userID, selected, history, dispatch])
+	}, [type, urlId, userID, history, location.pathname, dispatch])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selectedFromStorage))
+	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
 		return <Error404/>
 	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))
 		return <Error403/>
@@ -78,7 +80,7 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 		{type === 'categories' && <>
 			<section className={s.searchByCategories}>
 				<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
-					{selectedFromStorage?.map(tag => <Tag key={tag}>{tag}</Tag>)}
+					{selected?.map(tag => <Tag key={tag}>{tag}</Tag>)}
 				</Card>
 			</section>
 		</>}
