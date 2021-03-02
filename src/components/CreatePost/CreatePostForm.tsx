@@ -4,9 +4,8 @@ import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Select from 'antd/lib/select'
 import s from './CreatePost.module.css'
-import {history} from '../../history/history'
 import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
-import {useLocation} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
 import {defaultValidator} from '../../utils/helpers/helpers'
 import {requestCategories} from '../../redux/categories-reducer'
@@ -34,7 +33,8 @@ type Props = {
 export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 	const categories = useSelector(categoriesSelector),
 		postToEdit = useSelector(postToEditSelector),
-		location = useLocation()
+		location = useLocation(),
+		history = useHistory()
 
 	const dispatch = useDispatch()
 

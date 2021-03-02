@@ -1,16 +1,18 @@
 import React, {FC} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import {history} from '../../../history/history'
 import {CommentOutlined} from '@ant-design/icons'
 import {getDateDifference} from '../../../utils/helpers/helpers'
 import {TPost} from '../../../types/types'
+import {useHistory} from 'react-router-dom'
 
 type Props = {
 	post: TPost
 }
 
 export const Footer: FC<Props> = ({post}) => {
+	const history = useHistory()
+	
 	const created = getDateDifference(post.createdAt)
 
 	const onClick = () => {

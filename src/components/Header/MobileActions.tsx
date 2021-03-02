@@ -7,7 +7,7 @@ import {setMenuOpen} from '../../redux/app-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {menuOpenSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
 import {Notifications} from './Notifications'
-import {history} from '../../history/history'
+import {useHistory} from 'react-router-dom'
 
 type Props = {
 	onSignout: () => void
@@ -16,7 +16,8 @@ type Props = {
 export const MobileActions: FC<Props> = ({onSignout}) => {
 	const userID = useSelector(userIDSelector),
 		username = useSelector(usernameSelector),
-		menuOpen = useSelector(menuOpenSelector)
+		menuOpen = useSelector(menuOpenSelector),
+		history = useHistory()
 
 	const dispatch = useDispatch()
 

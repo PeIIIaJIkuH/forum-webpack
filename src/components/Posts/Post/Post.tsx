@@ -11,6 +11,8 @@ import {Footer} from './Footer'
 import {Reaction, TComment, TPost} from '../../../types/types'
 import {Comments} from '../Comments'
 import Image from 'antd/lib/image'
+import {setSelectedCategories} from '../../../redux/categories-reducer'
+import {useHistory} from 'react-router-dom'
 
 type Props = {
 	post: TPost | null
@@ -25,17 +27,20 @@ export const Post: FC<Props> = ({
 									isAuth, userID, post,
 									comments, postPage, dispatch
 								}) => {
+	const history = useHistory()
+
 	const setPostToEditWrapper = (post: TPost | null) => {
 			dispatch(setPostToEdit(post))
 		},
 		deletePostWrapper = (id: number) => {
 			dispatch(deletePost(id))
 		},
-		setSelectedCategoriesWrapper = () => {
-			dispatch(setSelectedCategoriesWrapper())
+		setSelectedCategoriesWrapper = (categories: string[] | null) => {
+			dispatch(setSelectedCategories(categories))
 		},
 		requestPostsByCategoriesWrapper = (categories: string[]) => {
 			dispatch(requestPostsByCategories(categories))
+			history.push('/by-categories')
 		},
 		setRatingWrapper = (id: number, reaction: Reaction) => {
 			return dispatch(setRating(id, reaction))

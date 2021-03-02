@@ -1,11 +1,10 @@
 import React, {FC, useEffect} from 'react'
 import s from './App.module.css'
-import {Route, Router, Switch, useLocation} from 'react-router-dom'
+import {BrowserRouter, Route, Switch, useLocation} from 'react-router-dom'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import {initializedSelector} from './redux/selectors'
 import {initializeApp, setMenuOpen} from './redux/app-reducer'
 import {store} from './redux/store'
-import {history} from './history/history'
 import {Header} from './components/Header/Header'
 import {Auth} from './components/Auth/Auth'
 import {CreatePost} from './components/CreatePost/CreatePost'
@@ -99,10 +98,10 @@ const App: FC = () => {
 
 export const MainApp = () => {
 	return (
-		<Router history={history}>
+		<BrowserRouter>
 			<Provider store={store}>
 				<App/>
 			</Provider>
-		</Router>
+		</BrowserRouter>
 	)
 }

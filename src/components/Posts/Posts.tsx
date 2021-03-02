@@ -6,7 +6,7 @@ import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUse
 import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {RouteComponentProps, useHistory, withRouter} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
 import {Error403} from '../common/errors/Error403'
@@ -31,7 +31,8 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 	const posts = useSelector(postsSelector),
 		userID = useSelector(userIDSelector),
 		isAuth = useSelector(isAuthSelector),
-		selected = useSelector(selectedCategoriesSelector)
+		selected = useSelector(selectedCategoriesSelector),
+		history = useHistory()
 
 	const dispatch = useDispatch()
 
@@ -59,13 +60,14 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 				setSelectedFromStorage(JSON.parse(item))
 				setSelectedCategories(JSON.parse(item))
 				dispatch(requestPostsByCategories(JSON.parse(item)))
+				history.push('/by-categories')
 			}
 		} else {
 			setTitle('Home')
 			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, userID, selected, dispatch])
-	
+	}, [type, urlId, userID, selected, history, dispatch])
+
 	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selectedFromStorage))
 		return <Error404/>
 	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))

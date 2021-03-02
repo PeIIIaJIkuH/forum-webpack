@@ -1,9 +1,8 @@
 import React, {FC, useState} from 'react'
 import s from '../Posts.module.css'
 import Button from 'antd/lib/button'
-import {history} from '../../../history/history'
 import {DeleteOutlined, EditOutlined, MoreOutlined} from '@ant-design/icons'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import Popover from 'antd/lib/popover'
 import {TPost} from '../../../types/types'
 import {DeletePost, SetPostToEdit} from '../../../redux/posts-reducer'
@@ -18,6 +17,8 @@ type Props = {
 }
 
 export const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) => {
+	const history = useHistory()
+	
 	const [loading, setLoading] = useState(false),
 		[visible, setVisible] = useState(false)
 

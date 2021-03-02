@@ -1,12 +1,11 @@
 import React, {FC, useState} from 'react'
 import s from './Auth.module.css'
 import {useDispatch, useSelector} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import {signin, signup} from '../../redux/auth-reducer'
 import {isAuthSelector, urlToSelector} from '../../redux/selectors'
 import {AuthForm} from './AuthForm'
 import Card from 'antd/lib/card'
-import {history} from '../../history/history'
 import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
 import {setUrlTo} from '../../redux/app-reducer'
@@ -19,7 +18,8 @@ type Props = {
 
 export const Auth: FC<Props> = ({register}) => {
 	const isAuth = useSelector(isAuthSelector),
-		urlTo = useSelector(urlToSelector)
+		urlTo = useSelector(urlToSelector),
+		history = useHistory()
 
 	const dispatch = useDispatch()
 

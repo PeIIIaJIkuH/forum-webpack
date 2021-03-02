@@ -1,7 +1,6 @@
 import {postAPI, userAPI} from '../api/requests'
 import {getObjectInArray, getRating, groupBy, updateObjectInArray} from '../utils/helpers/helpers'
 import {setProgress} from './app-reducer'
-import {history} from '../history/history'
 import {Reaction, TComment, TPost, TUser} from '../types/types'
 import {ThunkDispatch} from 'redux-thunk'
 import {ActionTypes, State} from './store'
@@ -183,7 +182,6 @@ export const requestPostsByCategories = (categories: string[]) => async (dispatc
 	await dispatch(setProgress(0))
 	const data = await postAPI.getByCategories(categories)
 	await dispatch(postsActions.setPostsAC(data.data))
-	history.push('/by-categories')
 	await dispatch(setProgress(100))
 }
 
