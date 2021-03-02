@@ -1,6 +1,5 @@
 import {requestAuthUserData} from './auth-reducer'
-import {ActionTypes, State} from './store'
-import {ThunkDispatch} from 'redux-thunk'
+import {ActionTypes, ThunkType} from './store'
 
 type InitialState = {
 	initialized: boolean
@@ -50,23 +49,23 @@ export const appActions = {
 	} as const)
 }
 
-type Dispatch = ThunkDispatch<State, unknown, Action>
+type Thunk = ThunkType<void, Action>
 
-export const initializeApp = () => async (dispatch: Dispatch) => {
+export const initializeApp = (): Thunk => async dispatch => {
 	await dispatch(requestAuthUserData())
 	await dispatch(appActions.initializeAppAC())
 }
 
 export type SetProgress = (progress: number) => void
-export const setProgress = (progress: number) => async (dispatch: Dispatch) => {
+export const setProgress = (progress: number): Thunk => async dispatch => {
 	await dispatch(appActions.setProgressAC(progress))
 }
 
-export const setUrlTo = (url: string | null) => async (dispatch: Dispatch) => {
+export const setUrlTo = (url: string | null): Thunk => async dispatch => {
 	await dispatch(appActions.setUrlToAC(url))
 }
 
-export const setMenuOpen = (menuOpen: boolean) => async (dispatch: Dispatch) => {
+export const setMenuOpen = (menuOpen: boolean): Thunk => async dispatch => {
 	if (!menuOpen) document.getElementsByTagName('html')[0].style.overflowY = 'scroll'
 	else document.getElementsByTagName('html')[0].style.overflowY = 'hidden'
 	await dispatch(appActions.setMenuOpenAC(menuOpen))
