@@ -5,20 +5,19 @@ import {DeleteOutlined, EditOutlined, MoreOutlined} from '@ant-design/icons'
 import {Link, useHistory} from 'react-router-dom'
 import Popover from 'antd/lib/popover'
 import {TPost} from '../../../types/types'
-import {DeletePost, SetPostToEdit} from '../../../redux/posts-reducer'
+import {DeletePost} from '../../../redux/posts-reducer'
 import message from 'antd/lib/message'
 
 type Props = {
 	post: TPost
 	userID: number | null
 	deletePost: DeletePost
-	setPostToEdit: SetPostToEdit
 	postPage?: boolean
 }
 
-export const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, postPage}) => {
+export const Header: FC<Props> = ({post, userID, deletePost, postPage}) => {
 	const history = useHistory()
-	
+
 	const [loading, setLoading] = useState(false),
 		[visible, setVisible] = useState(false)
 
@@ -36,9 +35,8 @@ export const Header: FC<Props> = ({post, userID, deletePost, setPostToEdit, post
 	}
 
 	const onEdit = async () => {
-		await setPostToEdit(post)
 		setVisible(false)
-		history.push('/edit')
+		history.push(`/edit?id=${post.id}`)
 	}
 
 	const handleVisibleChange = (visible: boolean) => {

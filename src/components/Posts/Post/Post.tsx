@@ -2,7 +2,7 @@ import React, {Dispatch, FC} from 'react'
 import s from '../Posts.module.css'
 import Card from 'antd/lib/card'
 import Divider from 'antd/lib/divider'
-import {deletePost, requestPostsByCategories, setPostToEdit, setRating} from '../../../redux/posts-reducer'
+import {deletePost, requestPostsByCategories, setRating} from '../../../redux/posts-reducer'
 import {Rate} from './Rate'
 import {Header} from './Header'
 import {Content} from './Content'
@@ -29,10 +29,7 @@ export const Post: FC<Props> = ({
 								}) => {
 	const history = useHistory()
 
-	const setPostToEditWrapper = (post: TPost | null) => {
-			dispatch(setPostToEdit(post))
-		},
-		deletePostWrapper = (id: number) => {
+	const deletePostWrapper = (id: number) => {
 			dispatch(deletePost(id))
 		},
 		setSelectedCategoriesWrapper = (categories: string[] | null) => {
@@ -50,8 +47,7 @@ export const Post: FC<Props> = ({
 		<Card className={s.post}>
 			<Rate isAuth={isAuth} setRating={setRatingWrapper} post={post}/>
 			<div className={s.main}>
-				<Header post={post} userID={userID} deletePost={deletePostWrapper} postPage={postPage}
-						setPostToEdit={setPostToEditWrapper}/>
+				<Header post={post} userID={userID} deletePost={deletePostWrapper} postPage={postPage}/>
 				<Content content={post.content}/>
 				{post.isImage && <Image src={`https://${post.imagePath}`} alt='post image'/>}
 				<Divider className={s.divider}/>

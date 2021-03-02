@@ -66,7 +66,7 @@ export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 		} else {
 			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories, isImage, imagePath)
 			await setIsFetching(false)
-			history.goBack()
+			history.push('/')
 		}
 	}
 
