@@ -15,27 +15,27 @@ type Props = {
 export const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 	const isRatedUp = post.userRating === 1,
 		isRatedDown = post.userRating === -1,
-		[upLoading, setUpLoading] = useState(false),
-		[downLoading, setDownLoading] = useState(false),
+		[upIsFetching, setUpIsFetching] = useState(false),
+		[downIsFetching, setDownIsFetching] = useState(false),
 		upRef = useRef<HTMLDivElement>(null),
 		downRef = useRef<HTMLDivElement>(null)
 
 	const onUpClick = () => {
-		setUpLoading(true)
+		setUpIsFetching(true)
 		const ok: any = setRating(post.id, 1)
 		if (upRef.current)
 			upRef.current.blur()
-		setUpLoading(false)
+		setUpIsFetching(false)
 		if (!ok)
 			message.error('Can not rate post!').then()
 	}
 
 	const onDownClick = () => {
-		setDownLoading(true)
+		setDownIsFetching(true)
 		const ok: any = setRating(post.id, -1)
 		if (downRef.current)
 			downRef.current.blur()
-		setDownLoading(false)
+		setDownIsFetching(false)
 		if (!ok)
 			message.error('Can not rate post!').then()
 	}
@@ -43,12 +43,12 @@ export const Rate: FC<Props> = ({isAuth, setRating, post}) => {
 	return <>
 		<div className={s.rating}>
 			<Button className={`${s.up} ${isRatedUp && s.ratedUp}`} icon={<UpOutlined/>} ref={upRef}
-					disabled={!isAuth} onClick={onUpClick} loading={upLoading}/>
+					disabled={!isAuth} onClick={onUpClick} loading={upIsFetching}/>
 			<div className={s.ratingNumber}>
 				{post.postRating}
 			</div>
 			<Button className={`${s.down} ${isRatedDown && s.ratedDown}`} icon={<DownOutlined/>} ref={downRef}
-					disabled={!isAuth} onClick={onDownClick} loading={downLoading}/>
+					disabled={!isAuth} onClick={onDownClick} loading={downIsFetching}/>
 		</div>
 	</>
 }
