@@ -74,10 +74,10 @@ export const requestUserPosts = (id: number): Thunk => async dispatch => {
 	await dispatch(setProgress(100))
 }
 
-export type RequestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvoted') => void
-export const requestRatedPosts = (userID: number, reaction: 'upvoted' | 'downvoted'): Thunk => async dispatch => {
+export type RequestRatedPosts = (userID: number, reaction: 'up-voted' | 'down-voted') => void
+export const requestRatedPosts = (userID: number, reaction: 'up-voted' | 'down-voted'): Thunk => async dispatch => {
 	await dispatch(setProgress(0))
-	const data = await userAPI.getRatedPosts(userID, reaction)
+	const data = await userAPI.getRatedPosts(userID, reaction.split('-').join(''))
 	await dispatch(postsActions.setPostsAC(data.data))
 	await dispatch(commentsActions.setUserCommentsAC(null))
 	await dispatch(setProgress(100))
@@ -89,6 +89,7 @@ export const requestPost = (id: number): ThunkBool => async dispatch => {
 	await dispatch(setProgress(0))
 	const data = await postAPI.get(id)
 	if (data && data.status) {
+		await dispatch(postsActions.setPostsAC(null))
 		await dispatch(postsActions.setPostsAC([data.data]))
 		res = true
 	}

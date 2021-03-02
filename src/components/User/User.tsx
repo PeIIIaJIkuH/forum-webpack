@@ -47,9 +47,9 @@ const UserComponent: FC<Props> = ({match}) => {
 		if (key === 'created')
 			dispatch(requestUserPosts(+urlId))
 		else if (key === 'up-voted')
-			dispatch(requestRatedPosts(+urlId, 'upvoted'))
+			dispatch(requestRatedPosts(+urlId, 'up-voted'))
 		else if (key === 'down-voted')
-			dispatch(requestRatedPosts(+urlId, 'downvoted'))
+			dispatch(requestRatedPosts(+urlId, 'down-voted'))
 		else
 			dispatch(requestCommentedPosts(+urlId))
 	}

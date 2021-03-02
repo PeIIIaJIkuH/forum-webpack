@@ -21,14 +21,19 @@ type PathParamsType = {
 }
 
 type OwnProps = & {
-	type?: string
+	type?: 'my' | 'user' | 'up-voted' | 'down-voted' | 'post-page' | 'categories'
 	postPage?: boolean
 	userComments?: { [key: string]: TComment[] } | null
+	postID?: number
 }
 
 type Props = OwnProps & RouteComponentProps<PathParamsType>
 
-const PostsComponent: FC<Props> = ({type, match, userComments}) => {
+const PostsComponent: FC<Props> = ({
+									   type,
+									   match, userComments,
+									   postID
+								   }) => {
 	const posts = useSelector(postsSelector),
 		userID = useSelector(userIDSelector),
 		isAuth = useSelector(isAuthSelector),
@@ -48,8 +53,8 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 		} else if (type === 'user') {
 			setTitle('user')
 			dispatch(requestUserPosts(+urlId))
-		} else if (type === 'upvoted' || type === 'downvoted') {
-			setTitle(type === 'upvoted' ? 'Upvoted Posts' : 'Downvoted Posts')
+		} else if (type === 'up-voted' || type === 'down-voted') {
+			setTitle(type === 'up-voted' ? 'Upvoted Posts' : 'Downvoted Posts')
 			userID && dispatch(requestRatedPosts(userID, type))
 		} else if (type === 'categories') {
 			setTitle('Search by Categories')
@@ -64,16 +69,17 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 					dispatch(requestPostsByCategories([categories]))
 				}
 			}
+		} else if (type === 'post-page') {
 		} else {
 			setTitle('Home')
 			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, userID, history, location.pathname, location.search, dispatch])
+	}, [type, urlId, userID, postID, history, location.pathname, location.search, dispatch])
 
 
 	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
 		return <Error404/>
-	if (!isAuth && (type === 'my' || type === 'upvoted' || type === 'downvoted'))
+	if (!isAuth && (type === 'my' || type === 'up-voted' || type === 'down-voted'))
 		return <Error403/>
 
 	return <>
