@@ -2,28 +2,18 @@ import React, {FC} from 'react'
 import s from '../Posts.module.css'
 import Tag from 'antd/lib/tag'
 import {Category} from '../../../types/types'
-import {RequestPostsByCategories} from '../../../redux/posts-reducer'
-import {SetSelectedCategories} from '../../../redux/categories-reducer'
 import {useHistory} from 'react-router-dom'
-import * as queryString from 'query-string'
+import {categoriesQuery} from '../../../utils/helpers/helpers'
 
 type Props = {
 	categories: Category[]
-	requestPostsByCategories: RequestPostsByCategories
-	setSelectedCategories: SetSelectedCategories
 }
 
-export const Categories: FC<Props> = ({categories, requestPostsByCategories, setSelectedCategories}) => {
+export const Categories: FC<Props> = ({categories}) => {
 	const history = useHistory()
 
 	const onClick = (categories: string) => {
-		const query = queryString.stringify({categories}, {
-			arrayFormat: 'comma',
-			skipEmptyString: true,
-			skipNull: true
-		})
-		setSelectedCategories([categories])
-		requestPostsByCategories([categories])
+		const query = categoriesQuery(categories)
 		history.push(`/by-categories?${query}`)
 	}
 

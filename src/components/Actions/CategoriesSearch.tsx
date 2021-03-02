@@ -7,9 +7,7 @@ import {setMenuOpen} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
 import {useForm} from 'antd/lib/form/Form'
 import {useHistory} from 'react-router-dom'
-import * as queryString from 'query-string'
-import {setSelectedCategories} from '../../redux/categories-reducer'
-import {requestPostsByCategories} from '../../redux/posts-reducer'
+import {categoriesQuery} from '../../utils/helpers/helpers'
 
 type Props = {
 	closeModal?: () => void
@@ -33,13 +31,7 @@ export const CategoriesSearch: FC<Props> = ({closeModal, mobile}) => {
 		else {
 			form.resetFields()
 			setIsFetching(true)
-			const query = queryString.stringify({categories}, {
-				arrayFormat: 'comma',
-				skipEmptyString: true,
-				skipNull: true
-			})
-			dispatch(setSelectedCategories(categories))
-			dispatch(requestPostsByCategories(categories))
+			const query = categoriesQuery(categories)
 			history.push(`/by-categories?${query}`)
 			setIsFetching(false)
 		}

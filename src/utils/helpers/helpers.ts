@@ -1,5 +1,6 @@
 import moment from 'moment'
 import {Reaction} from '../../types/types'
+import * as queryString from 'query-string'
 
 export const updateObjectInArray = (items: any, itemProp: any, prop: string, newObjProp: {}) => items.map((e: any) =>
 	e[prop] === itemProp ? {...e, ...newObjProp} : e
@@ -76,4 +77,10 @@ export const defaultValidator = (field: string, isSignup?: boolean) => ({
 		}
 		resolve()
 	})
+})
+
+export const categoriesQuery = (array: string | string[]) => queryString.stringify({categories: array}, {
+	arrayFormat: 'comma',
+	skipEmptyString: true,
+	skipNull: true
 })

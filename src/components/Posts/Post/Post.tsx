@@ -2,7 +2,7 @@ import React, {Dispatch, FC} from 'react'
 import s from '../Posts.module.css'
 import Card from 'antd/lib/card'
 import Divider from 'antd/lib/divider'
-import {deletePost, requestPostsByCategories, setRating} from '../../../redux/posts-reducer'
+import {deletePost, setRating} from '../../../redux/posts-reducer'
 import {Rate} from './Rate'
 import {Header} from './Header'
 import {Content} from './Content'
@@ -11,8 +11,6 @@ import {Footer} from './Footer'
 import {Reaction, TComment, TPost} from '../../../types/types'
 import {Comments} from '../Comments'
 import Image from 'antd/lib/image'
-import {setSelectedCategories} from '../../../redux/categories-reducer'
-import {useHistory} from 'react-router-dom'
 
 type Props = {
 	post: TPost | null
@@ -27,17 +25,8 @@ export const Post: FC<Props> = ({
 									isAuth, userID, post,
 									comments, postPage, dispatch
 								}) => {
-	const history = useHistory()
-
 	const deletePostWrapper = (id: number) => {
 			dispatch(deletePost(id))
-		},
-		setSelectedCategoriesWrapper = (categories: string[] | null) => {
-			dispatch(setSelectedCategories(categories))
-		},
-		requestPostsByCategoriesWrapper = (categories: string[]) => {
-			dispatch(requestPostsByCategories(categories))
-			history.push('/by-categories')
 		},
 		setRatingWrapper = (id: number, reaction: Reaction) => {
 			return dispatch(setRating(id, reaction))
@@ -51,8 +40,7 @@ export const Post: FC<Props> = ({
 				<Content content={post.content}/>
 				{post.isImage && <Image src={`https://${post.imagePath}`} alt='post image'/>}
 				<Divider className={s.divider}/>
-				<Categories categories={post.categories} requestPostsByCategories={requestPostsByCategoriesWrapper}
-							setSelectedCategories={setSelectedCategoriesWrapper}/>
+				<Categories categories={post.categories}/>
 				<Footer post={post}/>
 				{comments && <>
 					<Divider/>

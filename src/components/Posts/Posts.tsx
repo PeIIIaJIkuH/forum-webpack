@@ -68,7 +68,8 @@ const PostsComponent: FC<Props> = ({type, match, userComments}) => {
 			setTitle('Home')
 			dispatch(requestAllPosts())
 		}
-	}, [type, urlId, userID, history, location.pathname, dispatch])
+	}, [type, urlId, userID, history, location.pathname, location.search, dispatch])
+
 
 	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
 		return <Error404/>
