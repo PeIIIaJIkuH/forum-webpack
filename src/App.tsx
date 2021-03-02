@@ -73,8 +73,8 @@ const App: FC = () => {
 							<Route exact path='/post/:id'><PostPage/></Route>
 							<Route exact path='/user/:id'><User/></Route>
 							<Route exact path='/my'><Posts type='my'/></Route>
-							<Route exact path='/up-voted'><Posts type='upvoted'/></Route>
-							<Route exact path='/down-voted'><Posts type='downvoted'/></Route>
+							<Route exact path='/up-voted'><Posts type='up-voted'/></Route>
+							<Route exact path='/down-voted'><Posts type='down-voted'/></Route>
 							<Route exact path='/by-categories'><Posts type='categories'/></Route>
 							<Route exact path='/'><Posts/></Route>
 							<Route><Error404/></Route>
