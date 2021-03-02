@@ -1,6 +1,5 @@
 import {categoriesAPI} from '../api/requests'
-import {ThunkDispatch} from 'redux-thunk'
-import {ActionTypes, State} from './store'
+import {ActionTypes, ThunkType} from './store'
 import {Category} from '../types/types'
 
 type InitialState = {
@@ -36,16 +35,15 @@ const categoriesActions = {
 	} as const)
 }
 
-type Dispatch = ThunkDispatch<State, unknown, Action>
+type Thunk = ThunkType<void, Action>
 
 export type RequestCategories = () => void
-export const requestCategories = () => async (dispatch: Dispatch) => {
+export const requestCategories = (): Thunk => async dispatch => {
 	const data = await categoriesAPI.all()
 	const arr = data && data.data ? data.data : null
 	await dispatch(categoriesActions.setCategoriesAC(arr))
 }
 
-export type SetSelectedCategories = (categories: string[] | null) => void
-export const setSelectedCategories = (categories: string[] | null) => async (dispatch: Dispatch) => {
+export const setSelectedCategories = (categories: string[] | null): Thunk => async dispatch => {
 	dispatch(categoriesActions.setSelectedCategoriesAC(categories))
 }
