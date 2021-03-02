@@ -29,8 +29,8 @@ export const Header: FC = () => {
 
 	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
-	const onSignout = () => {
-		const ok: any = dispatch(signout())
+	const onSignout = async () => {
+		const ok: any = await dispatch(signout())
 		dispatch(setMenuOpen(false))
 		if (!ok)
 			message.error('Can not logout!').then()
