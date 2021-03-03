@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {useRouteMatch} from 'react-router-dom'
 import s from './Posts.module.css'
 import {CommentForm} from './CommentForm'
 import {Comments} from './Comments'
@@ -14,16 +14,11 @@ import {Posts} from './Posts'
 import {requestPost} from '../../redux/posts-reducer'
 import {requestComments} from '../../redux/comments-reducer'
 
-type PathParamsType = {
-	id: string,
-}
-
-type Props = RouteComponentProps<PathParamsType>
-
-const PostPageComponent: FC<Props> = ({match}) => {
+export const PostPage: FC = () => {
 	const posts = useSelector(postsSelector),
 		isAuth = useSelector(isAuthSelector),
-		comments = useSelector(commentsSelector)
+		comments = useSelector(commentsSelector),
+		match = useRouteMatch<{ id: string }>()
 
 	const dispatch = useDispatch()
 
@@ -66,5 +61,3 @@ const PostPageComponent: FC<Props> = ({match}) => {
 		</section>
 	</>
 }
-
-export const PostPage = withRouter(PostPageComponent)

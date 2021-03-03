@@ -6,7 +6,7 @@ import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUse
 import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
-import {RouteComponentProps, useHistory, useLocation, withRouter} from 'react-router-dom'
+import {useHistory, useLocation, useRouteMatch} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 import {Helmet} from 'react-helmet'
 import {Error403} from '../common/errors/Error403'
@@ -16,30 +16,21 @@ import {TComment, TPost} from '../../types/types'
 import * as queryString from 'query-string'
 import {setSelectedCategories} from '../../redux/categories-reducer'
 
-type PathParamsType = {
-	id: string,
-}
-
-type OwnProps = & {
+type Props = & {
 	type?: 'my' | 'user' | 'up-voted' | 'down-voted' | 'post-page' | 'categories'
 	postPage?: boolean
 	userComments?: { [key: string]: TComment[] } | null
 	postID?: number
 }
 
-type Props = OwnProps & RouteComponentProps<PathParamsType>
-
-const PostsComponent: FC<Props> = ({
-									   type,
-									   match, userComments,
-									   postID
-								   }) => {
+export const Posts: FC<Props> = ({type, userComments, postID}) => {
 	const posts = useSelector(postsSelector),
 		userID = useSelector(userIDSelector),
 		isAuth = useSelector(isAuthSelector),
 		selected = useSelector(selectedCategoriesSelector),
 		history = useHistory(),
-		location = useLocation()
+		location = useLocation(),
+		match = useRouteMatch<{ id: string }>()
 
 	const dispatch = useDispatch()
 
@@ -104,5 +95,3 @@ const PostsComponent: FC<Props> = ({
 		</section>
 	</>
 }
-
-export const Posts = withRouter(PostsComponent)

@@ -3,7 +3,7 @@ import s from './User.module.css'
 import {userCommentsSelector, userSelector} from '../../redux/selectors'
 import {requestCommentedPosts, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import {useDispatch, useSelector} from 'react-redux'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {useRouteMatch} from 'react-router-dom'
 import {UserInfo} from './UserInfo'
 import {Helmet} from 'react-helmet'
 import {Error404} from '../common/errors/Error404'
@@ -13,17 +13,10 @@ import {CommentOutlined, DislikeOutlined, LikeOutlined, UserOutlined} from '@ant
 import {Posts} from '../Posts/Posts'
 import {requestUser} from '../../redux/user-reducer'
 
-type PathParamsType = {
-	id: string
-}
-
-type OwnProps = RouteComponentProps<PathParamsType>
-
-type Props = OwnProps & RouteComponentProps
-
-const UserComponent: FC<Props> = ({match}) => {
+export const User: FC = () => {
 	const user = useSelector(userSelector),
-		userComments = useSelector(userCommentsSelector)
+		userComments = useSelector(userCommentsSelector),
+		match = useRouteMatch<{ id: string }>()
 
 	const dispatch = useDispatch()
 
@@ -68,5 +61,3 @@ const UserComponent: FC<Props> = ({match}) => {
 		<Posts userComments={userComments}/>
 	</>
 }
-
-export const User = withRouter(UserComponent)
