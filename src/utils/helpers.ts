@@ -1,16 +1,16 @@
 import moment from 'moment'
-import {Reaction} from '../../types/types'
+import {IReaction} from '../types'
 import * as queryString from 'query-string'
 
 export const updateObjectInArray = (items: any, itemProp: any, prop: string, newObjProp: {}) => items.map((e: any) =>
-	e[prop] === itemProp ? {...e, ...newObjProp} : e
+	e[prop] === itemProp ? {...e, ...newObjProp} : e,
 )
 
 export const getObjectInArray = (items: any, itemProp: any, prop: string) => {
 	return items.find((e: any) => e[prop] === itemProp)
 }
 
-export const getRating = (userRating: number, rating: number, reaction: Reaction) => {
+export const getRating = (userRating: number, rating: number, reaction: IReaction): [u: IReaction, p: number] => {
 	if (userRating !== 0) {
 		if (userRating === reaction) {
 			userRating = 0
@@ -23,7 +23,7 @@ export const getRating = (userRating: number, rating: number, reaction: Reaction
 		userRating = reaction
 		rating += reaction
 	}
-	return [userRating, rating]
+	return [userRating as IReaction, rating]
 }
 
 export const getDateDifference = (createdAt: number, long?: boolean) => {
@@ -32,7 +32,7 @@ export const getDateDifference = (createdAt: number, long?: boolean) => {
 	const arr = ['months', 'days', 'hours', 'minutes', 'seconds'].map(e => ({
 		// @ts-ignore
 		num: now.diff(date, e),
-		type: e
+		type: e,
 	}))
 	if (!long) {
 		arr[0].type = 'M'
@@ -76,11 +76,11 @@ export const defaultValidator = (field: string, isSignup?: boolean) => ({
 			}
 		}
 		resolve()
-	})
+	}),
 })
 
 export const categoriesQuery = (array: string | string[]) => queryString.stringify({categories: array}, {
 	arrayFormat: 'comma',
 	skipEmptyString: true,
-	skipNull: true
+	skipNull: true,
 })

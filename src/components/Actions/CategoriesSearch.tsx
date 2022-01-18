@@ -1,34 +1,33 @@
 import React, {FC, useState} from 'react'
-import {useDispatch} from 'react-redux'
 import s from './Actions.module.css'
 import {CategoriesSearchForm} from './CategoriesSearchForm'
 import Card from 'antd/lib/card'
-import {setMenuOpen} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
 import {useForm} from 'antd/lib/form/Form'
 import {useHistory} from 'react-router-dom'
-import {categoriesQuery} from '../../utils/helpers/helpers'
+import {categoriesQuery} from '../../utils/helpers'
+import {observer} from 'mobx-react-lite'
+import appState from '../../store/appState'
 
 type Props = {
 	closeModal?: () => void
 	mobile?: boolean
 }
 
-export const CategoriesSearch: FC<Props> = ({closeModal, mobile}) => {
-	const dispatch = useDispatch(),
-		history = useHistory()
-
-	const [isFetching, setIsFetching] = useState(false),
+export const CategoriesSearch: FC<Props> = observer(({closeModal, mobile}) => {
+	const history = useHistory(),
+		[isFetching, setIsFetching] = useState(false),
 		[form] = useForm()
 
 	type obj = { categories: string[] }
 	const onSubmit = async ({categories}: obj) => {
-		if (mobile && closeModal)
+		if (mobile && closeModal) {
 			closeModal()
-		dispatch(setMenuOpen(false))
-		if (!categories || !categories.length)
+		}
+		appState.setIsMenuOpen(false)
+		if (!categories || !categories.length) {
 			message.warning('Choose at least one category!')
-		else {
+		} else {
 			form.resetFields()
 			setIsFetching(true)
 			const query = categoriesQuery(categories)
@@ -37,9 +36,9 @@ export const CategoriesSearch: FC<Props> = ({closeModal, mobile}) => {
 		}
 	}
 
-	return <>
+	return (
 		<Card className={s.card}>
 			<CategoriesSearchForm onSubmit={onSubmit} form={form} isFetching={isFetching}/>
 		</Card>
-	</>
-}
+	)
+})

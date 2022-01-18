@@ -1,8 +1,5 @@
 import React, {FC, useEffect} from 'react'
 import s from './Header.module.css'
-import {isAuthSelector, progressSelector} from '../../redux/selectors'
-import {requestNotifications, signout} from '../../redux/auth-reducer'
-import {useDispatch, useSelector} from 'react-redux'
 import {Link, useLocation} from 'react-router-dom'
 import logo from '../../assets/img/logo.svg'
 import Button from 'antd/lib/button'
@@ -10,53 +7,55 @@ import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
 import LoadingBar from 'react-top-loading-bar'
-import {setMenuOpen, setProgress, setUrlTo} from '../../redux/app-reducer'
 import {Actions} from './Actions'
 import {useMediaQuery} from 'react-responsive'
 import {MobileActions} from './MobileActions'
 import message from 'antd/lib/message'
+import {observer} from 'mobx-react-lite'
+import userState from '../../store/userState'
+import authState from '../../store/authState'
+import appState from '../../store/appState'
 
-export const Header: FC = () => {
-	const isAuth = useSelector(isAuthSelector),
-		progress = useSelector(progressSelector),
-		location = useLocation()
-
-	const dispatch = useDispatch()
+export const Header: FC = observer(() => {
+	const location = useLocation(),
+		isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
 	useEffect(() => {
-		dispatch(requestNotifications())
-	}, [dispatch, location.pathname])
+		if (authState.user) {
+			userState.fetchNotifications().then()
+		}
+	}, [location.pathname])
 
-	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
-
-	const onSignout = async () => {
-		const ok: any = await dispatch(signout())
-		dispatch(setMenuOpen(false))
-		if (!ok)
+	const onSignOut = async () => {
+		const status = await authState.signOut()
+		appState.setIsMenuOpen(false)
+		if (!status) {
 			message.error('Can not logout!').then()
+		}
 	}
 
 	const onFinished = () => {
-		dispatch(setProgress(0))
+		appState.setProgress(0)
 	}
 
-	const onAuth = async () => {
-		await dispatch(setUrlTo(location.pathname))
+	const onAuth = () => {
+		appState.setUrl(location.pathname)
 	}
 
 	return (
 		<Affix offsetTop={1} className={s.headerWrapper}>
 			<Layout.Header className={s.header}>
 				<div className={s.inner}>
-					<LoadingBar color='#40a9ff' progress={progress} onLoaderFinished={onFinished}/>
+					<LoadingBar color='#40a9ff' progress={appState.progress} onLoaderFinished={onFinished}/>
 					<Link to='/' className={s.logo}>
 						<Image width={50} src={logo} preview={false} alt='logo'/>
 						foru<span>me</span>
 					</Link>
-					{isAuth ? !isTabletOrMobile ?
-						<Actions onSignout={onSignout}/>
-						:
-						<MobileActions onSignout={onSignout}/>
+					{authState.user ?
+						!isTabletOrMobile ?
+							<Actions onSignOut={onSignOut}/>
+							:
+							<MobileActions onSignOut={onSignOut}/>
 						:
 						<Link to='/auth/signin'>
 							<Button className={s.auth} type='link' onClick={onAuth}>Sign In</Button>
@@ -66,4 +65,4 @@ export const Header: FC = () => {
 			</Layout.Header>
 		</Affix>
 	)
-}
+})

@@ -1,10 +1,6 @@
 import React, {FC, useEffect} from 'react'
 import s from './App.module.css'
-import {BrowserRouter, Route, Switch, useLocation} from 'react-router-dom'
-import {Provider, useDispatch, useSelector} from 'react-redux'
-import {initializedSelector} from './redux/selectors'
-import {initializeApp, setMenuOpen} from './redux/app-reducer'
-import {store} from './redux/store'
+import {Route, Switch, useLocation} from 'react-router-dom'
 import {Header} from './components/Header/Header'
 import {Auth} from './components/Auth/Auth'
 import {CreatePost} from './components/CreatePost/CreatePost'
@@ -21,6 +17,9 @@ import {Content} from 'antd/lib/layout/layout'
 import Affix from 'antd/lib/affix'
 import {useMediaQuery} from 'react-responsive'
 import {RightMenu} from './components/RightMenu/RightMenu'
+import {AdminDashboard} from './components/AdminDashboard/AdminDashboard'
+import {observer} from 'mobx-react-lite'
+import appState from './store/appState'
 
 // FEATURES:
 // Load posts, comments, ratings, notifications
@@ -32,39 +31,35 @@ import {RightMenu} from './components/RightMenu/RightMenu'
 // check all the features and functions
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
 // try to remove return from reducers
-// change all withRouter to useMatch
 
-const App: FC = () => {
-	const initialized = useSelector(initializedSelector),
-		location = useLocation()
-
-	const dispatch = useDispatch()
+export const App: FC = observer(() => {
+	const location = useLocation(),
+		isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
 	useEffect(() => {
-		dispatch(initializeApp())
-	}, [dispatch])
+		appState.initialize().then()
+	}, [])
 
 	useEffect(() => {
-		dispatch(setMenuOpen(false))
-	}, [dispatch, location.pathname])
+		appState.setIsMenuOpen(false)
+	}, [location.pathname])
 
-	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
-
-	if (!initialized)
+	if (!appState.initialized) {
 		return <AppPreloader/>
+	}
 
 	return (
 		<div className={s.App}>
 			<Layout className={s.layout}>
 				<Header/>
 				<Layout className={s.innerLayout}>
-					{!isTabletOrMobile && <>
+					{!isTabletOrMobile && (
 						<Affix offsetTop={105} className={`${s.affix} ${s.menu}`}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<LeftMenu/>
 							</Sider>
 						</Affix>
-					</>}
+					)}
 					<Content className={s.content}>
 						<Switch>
 							<Route exact path='/auth/signup'><Auth register/></Route>
@@ -77,29 +72,20 @@ const App: FC = () => {
 							<Route exact path='/down-voted'><Posts type='down-voted'/></Route>
 							<Route exact path='/by-categories'><Posts type='categories'/></Route>
 							<Route exact path='/'><Posts/></Route>
+							<Route exact path='/admin'><AdminDashboard/></Route>
 							<Route><Error404/></Route>
 						</Switch>
 					</Content>
-					{!isTabletOrMobile && <>
+					{!isTabletOrMobile && (
 						<Affix offsetTop={105} className={`${s.affix} ${s.actions}`}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<Actions/>
 							</Sider>
 						</Affix>
-					</>}
+					)}
 					{isTabletOrMobile && <RightMenu/>}
 				</Layout>
 			</Layout>
 		</div>
 	)
-}
-
-export const MainApp = () => {
-	return (
-		<BrowserRouter>
-			<Provider store={store}>
-				<App/>
-			</Provider>
-		</BrowserRouter>
-	)
-}
+})

@@ -1,7 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
 import s from './CreatePost.module.css'
-import {useDispatch, useSelector} from 'react-redux'
-import {isAuthSelector, postToEditSelector} from '../../redux/selectors'
 import {CreatePostForm} from './CreatePostForm'
 import Card from 'antd/lib/card'
 import {Error403} from '../common/errors/Error403'
@@ -9,46 +7,38 @@ import {Helmet} from 'react-helmet'
 import {useLocation} from 'react-router-dom'
 import {Error404} from '../common/errors/Error404'
 import * as queryString from 'query-string'
-import {postAPI} from '../../api/requests'
-import {TPost} from '../../types/types'
-import {setPostToEdit} from '../../redux/posts-reducer'
+import {observer} from 'mobx-react-lite'
+import authState from '../../store/authState'
+import postsState from '../../store/postsState'
 
-export const CreatePost: FC = () => {
-	const isAuth = useSelector(isAuthSelector),
-		postToEdit = useSelector(postToEditSelector),
-		location = useLocation()
-
-	const dispatch = useDispatch()
+export const CreatePost: FC = observer(() => {
+	const location = useLocation(),
+		[isFetching, setIsFetching] = useState(false)
 
 	useEffect(() => {
 		const initialize = async () => {
 			const parsed = queryString.parse(location.search)
 			const id = parseInt(parsed.id as string)
-			if (!isNaN(id)) {
-				const data = await postAPI.get(id)
-				if (data && data.status) {
-					const post = data.data as TPost
-					await dispatch(setPostToEdit(post))
-				}
-			}
+			postsState.fetchEditing(id).then()
 		}
 		initialize().then()
-	}, [location.search, dispatch])
+	}, [location.search])
 
-	const [isFetching, setIsFetching] = useState(false)
-
-	if (!isAuth)
+	if (!authState.user) {
 		return <Error403/>
-	if (location.pathname.indexOf('/edit') === 0 && !postToEdit)
+	}
+	if (location.pathname.indexOf('/edit') === 0 && !postsState.editing) {
 		return <Error404/>
+	}
 
 	return <>
 		<Helmet><title>Create Post | forume</title></Helmet>
 		<div className={s.wrapper}>
-			<Card className={s.card} title={(postToEdit ? 'Edit' : 'Create') + ' post'}
-				  headStyle={{fontSize: '20px', fontWeight: 600}}>
+			<Card className={s.card} title={(postsState.editing ? 'Edit' : 'Create') + ' post'}
+			      headStyle={{fontSize: '20px', fontWeight: 600}}
+			>
 				<CreatePostForm setIsFetching={setIsFetching} isFetching={isFetching}/>
 			</Card>
 		</div>
 	</>
-}
+})

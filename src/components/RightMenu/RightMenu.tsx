@@ -1,15 +1,13 @@
 import React, {FC} from 'react'
 import s from './RightMenu.module.css'
-import {useSelector} from 'react-redux'
-import {menuOpenSelector} from '../../redux/selectors'
 import {LeftMenu} from '../LeftMenu/LeftMenu'
 import Layout from 'antd/lib/layout'
+import {observer} from 'mobx-react-lite'
+import appState from '../../store/appState'
 
-export const RightMenu: FC = () => {
-	const menuOpen = useSelector(menuOpenSelector)
-
-	return <>
-		<div className={`${s.wrapper} ${menuOpen ? s.open : ''}`}>
+export const RightMenu: FC = observer(() => {
+	return (
+		<div className={`${s.wrapper} ${appState.isMenuOpen ? s.open : ''}`}>
 			<LeftMenu mobile/>
 			<Layout.Footer className={s.footer}>
 				<div>by PeIIIaJIkuH and indecember</div>
@@ -17,5 +15,5 @@ export const RightMenu: FC = () => {
 				<div>February, 2021</div>
 			</Layout.Footer>
 		</div>
-	</>
-}
+	)
+})

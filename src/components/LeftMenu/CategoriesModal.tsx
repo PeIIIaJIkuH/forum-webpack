@@ -12,9 +12,9 @@ export const CategoriesModal: FC<Props> = ({modalVisible, setModalVisible}) => {
 		setModalVisible(false)
 	}
 
-	return <>
+	return (
 		<Modal title='Search by Categories' visible={modalVisible} footer={null} onCancel={closeModel}>
 			<CategoriesSearch closeModal={closeModel} mobile/>
 		</Modal>
-	</>
+	)
 }

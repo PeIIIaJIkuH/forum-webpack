@@ -1,59 +1,58 @@
 import React, {FC, useState} from 'react'
 import s from './Auth.module.css'
-import {useDispatch, useSelector} from 'react-redux'
 import {Link, useHistory} from 'react-router-dom'
-import {signin, signup} from '../../redux/auth-reducer'
-import {isAuthSelector, urlToSelector} from '../../redux/selectors'
 import {AuthForm} from './AuthForm'
 import Card from 'antd/lib/card'
 import {Error403} from '../common/errors/Error403'
 import {Helmet} from 'react-helmet'
-import {setUrlTo} from '../../redux/app-reducer'
 import message from 'antd/lib/message'
 import {useForm} from 'antd/lib/form/Form'
+import {observer} from 'mobx-react-lite'
+import authState from '../../store/authState'
+import appState from '../../store/appState'
 
 type Props = {
 	register?: boolean
 }
 
-export const Auth: FC<Props> = ({register}) => {
-	const isAuth = useSelector(isAuthSelector),
-		urlTo = useSelector(urlToSelector),
-		history = useHistory()
+export const Auth: FC<Props> = observer(({register}) => {
+	const history = useHistory(),
+		[form] = useForm(),
+		[isFetching, setIsFetching] = useState(false)
 
-	const dispatch = useDispatch()
-
-	const [form] = useForm()
-	const [isFetching, setIsFetching] = useState(false)
-
-	if (isAuth)
+	if (authState.user) {
 		return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
+	}
 
 	type obj = {
 		username: string
 		email: string
 		password: string
+		adminToken: string
 	}
-	const onSubmit = async ({username, email, password}: obj) => {
+	const onSubmit = async ({username, email, password, adminToken}: obj) => {
 		setIsFetching(true)
 		if (register) {
-			const ok: any = await dispatch(signup(username, email, password))
+			const status = await authState.signUp(username, email, password, adminToken)
 			setIsFetching(false)
-			if (ok) {
+			if (status) {
 				message.success('Created new user!')
 				form.resetFields()
 				history.push('/auth/signin')
-			} else
+			} else {
 				message.error('Can not register!')
+			}
 		} else {
-			const ok: any = await dispatch(signin(username, password))
+			const status = await authState.signIn(username, password)
 			setIsFetching(false)
-			if (ok) {
-				if (urlTo) {
-					await dispatch(setUrlTo(null))
-					history.push(urlTo)
-				} else
+			if (status) {
+				if (appState.url) {
+					const url = appState.url
+					appState.setUrl('')
+					history.push(url)
+				} else {
 					history.push('/')
+				}
 			} else message.error('Can not login!')
 		}
 	}
@@ -64,11 +63,11 @@ export const Auth: FC<Props> = ({register}) => {
 
 	const title = register ? 'Sign Up' : 'Sign In',
 		path = register ? '/auth/signin' : '/auth/signup',
-		extra = <>
+		extra = (
 			<Link to={path} onClick={onClick}>
 				{!register ? 'Sign Up' : 'Sign In'}
 			</Link>
-		</>
+		)
 
 	return <>
 		<Helmet><title>{title} | forume</title></Helmet>
@@ -78,4 +77,4 @@ export const Auth: FC<Props> = ({register}) => {
 			</Card>
 		</div>
 	</>
-}
+})

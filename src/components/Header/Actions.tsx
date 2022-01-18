@@ -3,24 +3,23 @@ import s from './Header.module.css'
 import Button from 'antd/lib/button'
 import {Link} from 'react-router-dom'
 import {Notifications} from './Notifications'
-import {useSelector} from 'react-redux'
-import {userIDSelector, usernameSelector} from '../../redux/selectors'
+import {EUserRole} from '../../types'
+import {observer} from 'mobx-react-lite'
+import authState from '../../store/authState'
 
 type Props = {
-	onSignout: () => void
+	onSignOut: () => void
 }
 
-export const Actions: FC<Props> = ({onSignout}) => {
-	const userID = useSelector(userIDSelector),
-		username = useSelector(usernameSelector)
-
-	return (
-		<div className={s.actions}>
-			<Notifications/>
-			<Link className={s.username} to={`/user/${userID}`}>{username}</Link>
-			<Button className={s.auth} type='link' danger onClick={onSignout}>
-				Sign Out
-			</Button>
-		</div>
-	)
-}
+export const Actions: FC<Props> = observer(({onSignOut}) => (
+	<div className={s.actions}>
+		<Notifications/>
+		{authState.role === EUserRole.admin && (
+			<Link className={s.dashboard} to='/admin'>Dashboard</Link>
+		)}
+		<Link className={s.username} to={`/user/${authState.user?.id}`}>{authState.user?.username}</Link>
+		<Button className={s.auth} type='link' danger onClick={onSignOut}>
+			Sign Out
+		</Button>
+	</div>
+))

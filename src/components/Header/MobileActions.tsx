@@ -3,61 +3,63 @@ import s from './Header.module.css'
 import Popover from 'antd/lib/popover'
 import Button from 'antd/lib/button'
 import {CloseOutlined, MenuOutlined} from '@ant-design/icons'
-import {setMenuOpen} from '../../redux/app-reducer'
-import {useDispatch, useSelector} from 'react-redux'
-import {menuOpenSelector, userIDSelector, usernameSelector} from '../../redux/selectors'
 import {Notifications} from './Notifications'
 import {useHistory} from 'react-router-dom'
+import {EUserRole} from '../../types'
+import {observer} from 'mobx-react-lite'
+import appState from '../../store/appState'
+import authState from '../../store/authState'
 
 type Props = {
-	onSignout: () => void
+	onSignOut: () => void
 }
 
-export const MobileActions: FC<Props> = ({onSignout}) => {
-	const userID = useSelector(userIDSelector),
-		username = useSelector(usernameSelector),
-		menuOpen = useSelector(menuOpenSelector),
-		history = useHistory()
-
-	const dispatch = useDispatch()
-
-	const [visible, setVisible] = useState(false)
+export const MobileActions: FC<Props> = observer(({onSignOut}) => {
+	const history = useHistory(),
+		[visible, setVisible] = useState(false)
 
 	const toggleMenu = () => {
-		dispatch(setMenuOpen(!menuOpen))
+		appState.setIsMenuOpen(!appState.isMenuOpen)
 	}
 
 	const handleVisibleChange = (visible: boolean) => {
 		setVisible(visible)
 	}
 
-	const onClick = () => {
+	const onClick = (url: string) => {
 		setVisible(false)
-		dispatch(setMenuOpen(false))
-		history.push(`/user/${userID}`)
+		appState.setIsMenuOpen(false)
+		history.push(url)
 	}
 
-	const content = <>
+	const content = (
 		<div className={s.content}>
-			<Button type='link' onClick={onClick}>
+			<Button type='link' onClick={() => onClick(`/user/${authState.user?.id}`)}>
 				Profile
 			</Button>
-			<Button type='link' danger onClick={onSignout}>
+			{authState.role === EUserRole.admin && (
+				<Button type='link' onClick={() => onClick('/admin')}>
+					Dashboard
+				</Button>
+			)}
+			<Button type='link' danger onClick={onSignOut}>
 				Sign Out
 			</Button>
 		</div>
-	</>
+	)
 
-	return <>
+	return (
 		<div className='mobileActions'>
 			<Notifications/>
 			<Popover placement='bottom' content={content} trigger='click'
-					 visible={visible}
-					 onVisibleChange={handleVisibleChange}>
-				<Button type='text'>{username}</Button>
+			         visible={visible}
+			         onVisibleChange={handleVisibleChange}
+			>
+				<Button type='text'>{authState.user?.username}</Button>
 			</Popover>
-			<Button type='text' icon={!menuOpen ? <MenuOutlined/> : <CloseOutlined/>}
-					onClick={toggleMenu}/>
+			<Button type='text' icon={!appState.isMenuOpen ? <MenuOutlined/> : <CloseOutlined/>}
+			        onClick={toggleMenu}
+			/>
 		</div>
-	</>
-}
+	)
+})

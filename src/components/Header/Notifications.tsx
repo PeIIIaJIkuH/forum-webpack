@@ -4,18 +4,13 @@ import Popover from 'antd/lib/popover'
 import Button from 'antd/lib/button'
 import {BellOutlined, DeleteOutlined} from '@ant-design/icons'
 import Badge from 'antd/lib/badge'
-import {useDispatch, useSelector} from 'react-redux'
-import {notificationsSelector} from '../../redux/selectors'
-import {getDateDifference} from '../../utils/helpers/helpers'
+import {getDateDifference} from '../../utils/helpers'
 import {Link} from 'react-router-dom'
-import {deleteNotification} from '../../redux/auth-reducer'
 import message from 'antd/lib/message'
+import {observer} from 'mobx-react-lite'
+import userState from '../../store/userState'
 
-export const Notifications: FC = () => {
-	const notifications = useSelector(notificationsSelector)
-
-	const dispatch = useDispatch()
-
+export const Notifications: FC = observer(() => {
 	const [loading, setLoading] = useState(false),
 		[visible, setVisible] = useState(false)
 
@@ -25,22 +20,24 @@ export const Notifications: FC = () => {
 
 	const onClose = async () => {
 		setLoading(true)
-		const ok: any = await dispatch(deleteNotification())
+		const status = await userState.clearNotifications()
 		setLoading(false)
 		setVisible(false)
-		if (!ok)
+		if (!status) {
 			message.error('Can not delete notifications!')
+		}
 	}
 
-	const title = <>
+	const title = (
 		<div className={s.title}>
 			<div>Notifications</div>
-			<Button type='text' size='small' onClick={onClose} loading={loading} disabled={!notifications}
-					icon={<DeleteOutlined className={s.closeIcon}/>}/>
+			<Button type='text' size='small' onClick={onClose} loading={loading} disabled={!userState.notifications}
+			        icon={<DeleteOutlined className={s.closeIcon}/>}
+			/>
 		</div>
-	</>
+	)
 
-	const content = notifications ? notifications.map(notification => {
+	const content = userState.notifications.length !== 0 ? userState.notifications.map(notification => {
 		let username, userID, text, link
 		if (notification.postRating) {
 			username = notification.postRating.author.username
@@ -75,13 +72,15 @@ export const Notifications: FC = () => {
 		)
 	}) : <div style={{color: '#959595'}}>No Data</div>
 
-	return <>
+	return (
 		<Badge className={s.notifications} offset={[-5, 5]} size='small' overflowCount={10}
-			   count={notifications && notifications.length}>
+		       count={userState.notifications.length}
+		>
 			<Popover placement='bottom' title={title} content={content} trigger='click' visible={visible}
-					 onVisibleChange={handleVisibleChange} overlayClassName={s.popoverNotifications}>
+			         onVisibleChange={handleVisibleChange} overlayClassName={s.popoverNotifications}
+			>
 				<Button type='text' icon={<BellOutlined/>}/>
 			</Popover>
 		</Badge>
-	</>
-}
+	)
+})

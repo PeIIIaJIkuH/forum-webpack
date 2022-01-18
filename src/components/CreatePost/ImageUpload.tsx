@@ -2,9 +2,9 @@ import React, {FC, useState} from 'react'
 import {InboxOutlined} from '@ant-design/icons'
 import Upload, {RcFile} from 'antd/lib/upload'
 import message from 'antd/lib/message'
-import {postAPI} from '../../api/requests'
-import {useSelector} from 'react-redux'
-import {postToEditSelector} from '../../redux/selectors'
+import {observer} from 'mobx-react-lite'
+import postsState from '../../store/postsState'
+import {postsAPI} from '../../api/posts'
 
 type Props = {
 	setIsImage: (isImage: boolean) => void
@@ -12,9 +12,7 @@ type Props = {
 	defaultFileList: any
 }
 
-export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileList}) => {
-	const postToEdit = useSelector(postToEditSelector)
-
+export const ImageUpload: FC<Props> = observer(({setIsImage, setImagePath, defaultFileList}) => {
 	const [fileList] = useState([])[0],
 		setProgress = useState(0)[1]
 
@@ -33,10 +31,10 @@ export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileLis
 	const progressData = {
 		strokeColor: {
 			'0%': '#108ee9',
-			'100%': '#87d068'
+			'100%': '#87d068',
 		},
 		strokeWidth: 3,
-		format: (percent: any) => `${parseFloat(percent.toFixed(2))}%`
+		format: (percent: any) => `${parseFloat(percent.toFixed(2))}%`,
 	}
 
 	const customRequest = async ({file, onProgress, onSuccess, onError}: any) => {
@@ -50,33 +48,38 @@ export const ImageUpload: FC<Props> = ({setIsImage, setImagePath, defaultFileLis
 					setTimeout(() => setProgress(0), 1000)
 				}
 				onProgress({percent: (event.loaded / event.total) * 100})
-			}
+			},
 		}
 		formData.append('image', file)
 		try {
-			const data = await postAPI.uploadImage(formData, config)
-			setIsImage(true)
-			setImagePath(data.data)
-			onSuccess()
+			const {data, status} = await postsAPI.uploadImage(formData, config)
+			if (status) {
+				setIsImage(true)
+				setImagePath(data.data)
+				onSuccess()
+			}
 		} catch (err) {
 			onError(err)
 		}
 	}
 
 	const onRemove = async () => {
-		await postAPI.deleteImage(postToEdit?.id)
-		setIsImage(false)
-		setImagePath('')
+		const {status} = await postsAPI.deleteImage(postsState.editing?.id!)
+		if (status) {
+			setIsImage(false)
+			setImagePath('')
+		}
 	}
 
 	return (
 		<Upload.Dragger name='image' fileList={fileList} beforeUpload={beforeUpload} progress={progressData}
-						customRequest={customRequest} listType='picture' maxCount={1} onRemove={onRemove}
-						defaultFileList={defaultFileList}>
+		                customRequest={customRequest} listType='picture' maxCount={1} onRemove={onRemove}
+		                defaultFileList={defaultFileList}
+		>
 			<p className='ant-upload-drag-icon'>
 				<InboxOutlined/>
 			</p>
 			<p className='ant-upload-text'>Click or drag file to this area to upload</p>
 		</Upload.Dragger>
 	)
-}
+})

@@ -7,22 +7,20 @@ import s from './CreatePost.module.css'
 import {CloudUploadOutlined, SaveOutlined, StopOutlined} from '@ant-design/icons'
 import {useHistory, useLocation} from 'react-router-dom'
 import TextArea from 'antd/lib/input/TextArea'
-import {defaultValidator} from '../../utils/helpers/helpers'
-import {requestCategories} from '../../redux/categories-reducer'
-import {requestAllPosts, setPostToEdit} from '../../redux/posts-reducer'
-import {categoriesSelector, postToEditSelector} from '../../redux/selectors'
-import {useDispatch, useSelector} from 'react-redux'
-import {postAPI} from '../../api/requests'
+import {defaultValidator} from '../../utils/helpers'
 import {ImageUpload} from './ImageUpload'
 import message from 'antd/lib/message'
+import {observer} from 'mobx-react-lite'
+import postsState from '../../store/postsState'
+import {postsAPI} from '../../api/posts'
 
 const layout = {
 	labelCol: {span: 4},
-	wrapperCol: {span: 20}
+	wrapperCol: {span: 20},
 }
 
 const tailLayout = {
-	wrapperCol: {span: 24}
+	wrapperCol: {span: 24},
 }
 
 type Props = {
@@ -30,23 +28,18 @@ type Props = {
 	setIsFetching: (fetching: boolean) => void
 }
 
-export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
-	const categories = useSelector(categoriesSelector),
-		postToEdit = useSelector(postToEditSelector),
-		location = useLocation(),
-		history = useHistory()
-
-	const dispatch = useDispatch()
+export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) => {
+	const location = useLocation(),
+		history = useHistory(),
+		[isImage, setIsImage] = useState(postsState.editing?.isImage || false),
+		[imagePath, setImagePath] = useState(postsState.editing?.imagePath || '')
 
 	useEffect(() => {
-		dispatch(requestCategories())
+		postsState.fetchAllCategories().then()
 		return () => {
-			dispatch(setPostToEdit(null))
+			postsState.setEditing(null)
 		}
-	}, [dispatch, postToEdit, location.pathname])
-
-	const [isImage, setIsImage] = useState(postToEdit?.isImage || false),
-		[imagePath, setImagePath] = useState(postToEdit?.imagePath || '')
+	}, [location.pathname])
 
 	type obj = { title: string, content: string, categories: string[] }
 	const onSubmit = async ({title, content, categories}: obj) => {
@@ -54,17 +47,15 @@ export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 		title = title.trim()
 		content = content?.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
 		categories = categories.map(tag => tag.trim())
-		if (!postToEdit) {
-			const data = await postAPI.create(title, content, categories, isImage, imagePath)
-			if (data && data.status) {
-				await requestAllPosts()
-				await requestCategories()
+		if (!postsState.editing) {
+			const {status} = await postsAPI.createPost(title, content, categories, isImage, imagePath)
+			if (status) {
 				await setIsFetching(false)
 				history.push('/')
 			} else
-				message.error(`Can not ${!postToEdit ? 'create' : 'edit'} post!`)
+				message.error(`Can not ${!postsState.editing ? 'create' : 'edit'} post!`)
 		} else {
-			await postAPI.edit(postToEdit.id, postToEdit.author.id, title, content, categories, isImage, imagePath)
+			await postsAPI.editPost(postsState.editing.id, postsState.editing.author.id, title, content, categories, isImage, imagePath)
 			await setIsFetching(false)
 			history.push('/')
 		}
@@ -76,28 +67,31 @@ export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 
 	const defaultFileList = [{
 		uid: '1',
-		name: postToEdit?.imagePath.split('images/')[1],
+		name: postsState.editing?.imagePath.split('images/')[1],
 		status: 'done',
-		url: `https://${postToEdit?.imagePath}`
+		url: `https://${postsState.editing?.imagePath}`,
 	}]
 
-	return <>
+	return (
 		<Form className={s.form} {...layout} name='createPost' onFinish={onSubmit}>
-			<Form.Item label='Title' name='title' rules={[defaultValidator('Title')]} initialValue={postToEdit?.title}>
+			<Form.Item label='Title' name='title' rules={[defaultValidator('Title')]} initialValue={postsState.editing?.title}>
 				<Input autoFocus/>
 			</Form.Item>
-			<Form.Item label='Content' name='content' initialValue={postToEdit?.content}
-					   rules={!isImage ? [defaultValidator('Content')] : undefined}>
+			<Form.Item label='Content' name='content' initialValue={postsState.editing?.content}
+			           rules={!isImage ? [defaultValidator('Content')] : undefined}
+			>
 				<TextArea allowClear autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
 			<Form.Item label='Image' name='image'>
 				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage}
-							 defaultFileList={postToEdit?.isImage && defaultFileList}/>
+				             defaultFileList={postsState.editing?.isImage && defaultFileList}
+				/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}
-					   initialValue={postToEdit?.categories.map(category => category.name)}>
+			           initialValue={postsState.editing?.categories.map(category => category.name)}
+			>
 				<Select mode='tags' allowClear>
-					{categories?.map(category => (
+					{postsState.allCategories?.map(category => (
 						<Select.Option key={category.name} value={category.name}>
 							{category.name}
 						</Select.Option>
@@ -109,10 +103,11 @@ export const CreatePostForm: FC<Props> = ({isFetching, setIsFetching}) => {
 					Cancel
 				</Button>
 				<Button className={s.create} type='primary' htmlType='submit'
-						icon={postToEdit ? <SaveOutlined/> : <CloudUploadOutlined/>} loading={isFetching}>
-					{postToEdit ? 'Save' : 'Create'}
+				        icon={postsState.editing ? <SaveOutlined/> : <CloudUploadOutlined/>} loading={isFetching}
+				>
+					{postsState.editing ? 'Save' : 'Create'}
 				</Button>
 			</Form.Item>
 		</Form>
-	</>
-}
+	)
+})

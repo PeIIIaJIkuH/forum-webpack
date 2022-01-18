@@ -12,6 +12,10 @@
     .post + .post {
         margin-top: 40px;
     }
+
+    .post {
+        margin-bottom: 40px;
+    }
 }
 
 .title {

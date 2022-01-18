@@ -1,8 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
 import s from './User.module.css'
-import {userCommentsSelector, userSelector} from '../../redux/selectors'
-import {requestCommentedPosts, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
-import {useDispatch, useSelector} from 'react-redux'
 import {useRouteMatch} from 'react-router-dom'
 import {UserInfo} from './UserInfo'
 import {Helmet} from 'react-helmet'
@@ -11,53 +8,53 @@ import Menu from 'antd/lib/menu'
 import {MenuItem} from '../LeftMenu/MenuItem'
 import {CommentOutlined, DislikeOutlined, LikeOutlined, UserOutlined} from '@ant-design/icons'
 import {Posts} from '../Posts/Posts'
-import {requestUser} from '../../redux/user-reducer'
+import userState from '../../store/userState'
+import postsState from '../../store/postsState'
+import commentsState from '../../store/commentsState'
+import {observer} from 'mobx-react-lite'
 
-export const User: FC = () => {
-	const user = useSelector(userSelector),
-		userComments = useSelector(userCommentsSelector),
-		match = useRouteMatch<{ id: string }>()
-
-	const dispatch = useDispatch()
-
-	const urlId = match.params.id,
-		[check, setCheck] = useState(true)
+export const User: FC = observer(() => {
+	const match = useRouteMatch<{ id: string }>(),
+		urlId = match.params.id,
+		[check, setCheck] = useState(true),
+		title = userState.user?.username || 'User Page'
 
 	useEffect(() => {
 		const initialize = async () => {
-			const ok: any = await dispatch(requestUser(+urlId))
-			if (!ok)
+			const status = await userState.fetchUser(+urlId)
+			if (!status) {
 				setCheck(false)
-			dispatch(requestUserPosts(+urlId))
+			}
+			await postsState.fetchUserPosts(+urlId)
 		}
 		initialize().then()
-	}, [urlId, dispatch])
+	}, [urlId])
 
-	if ((urlId !== undefined && isNaN(+urlId)) || !check)
+	if ((urlId !== undefined && isNaN(+urlId)) || !check) {
 		return <Error404/>
-
-	const onClick = ({key}: any) => {
-		if (key === 'created')
-			dispatch(requestUserPosts(+urlId))
-		else if (key === 'up-voted')
-			dispatch(requestRatedPosts(+urlId, 'up-voted'))
-		else if (key === 'down-voted')
-			dispatch(requestRatedPosts(+urlId, 'down-voted'))
-		else
-			dispatch(requestCommentedPosts(+urlId))
 	}
 
-	const title = user ? user.username : 'User Page'
+	const onClick = ({key}: any) => {
+		if (key === 'created') {
+			postsState.fetchUserPosts(+urlId).then()
+		} else if (key === 'up-voted') {
+			postsState.fetchRatedPosts(+urlId, true).then()
+		} else if (key === 'down-voted') {
+			postsState.fetchRatedPosts(+urlId, false).then()
+		} else {
+			postsState.fetchCommentedPosts(+urlId).then()
+		}
+	}
 
-	return user && <>
+	return userState.user && <>
 		<Helmet><title>{title} | forume</title></Helmet>
-		<UserInfo user={user}/>
+		<UserInfo user={userState.user}/>
 		<Menu className={s.menu} mode='horizontal' defaultSelectedKeys={['created']} onClick={onClick}>
 			<MenuItem key='created' title='Created Posts' icon={<UserOutlined/>} forAll available/>
 			<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} forAll available/>
 			<MenuItem key='down-voted' title='Downvoted Posts' icon={<DislikeOutlined/>} forAll available/>
 			<MenuItem key='commented' title='Commented Posts' icon={<CommentOutlined/>} forAll available/>
 		</Menu>
-		<Posts userComments={userComments}/>
+		<Posts userComments={commentsState.userComments}/>
 	</>
-}
+})

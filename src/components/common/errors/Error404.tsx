@@ -9,11 +9,11 @@ type Props = {
 }
 
 export const Error404: FC<Props> = ({text}) => {
-	const extra = <>
+	const extra = (
 			<Link to='/'>
 				<Button type='primary'>Back Home</Button>
 			</Link>
-		</>,
+		),
 		subTitle = text || 'Sorry, the page you visited does not exist.'
 
 	return <>

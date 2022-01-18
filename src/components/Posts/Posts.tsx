@@ -1,8 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
 import s from './Posts.module.css'
-import {useDispatch, useSelector} from 'react-redux'
-import {isAuthSelector, postsSelector, selectedCategoriesSelector, userIDSelector} from '../../redux/selectors'
-import {requestAllPosts, requestPostsByCategories, requestRatedPosts, requestUserPosts} from '../../redux/posts-reducer'
 import {Post} from './Post/Post'
 import Card from 'antd/lib/card'
 import Empty from 'antd/lib/empty'
@@ -12,81 +9,79 @@ import {Helmet} from 'react-helmet'
 import {Error403} from '../common/errors/Error403'
 import Tag from 'antd/lib/tag'
 import Typography from 'antd/lib/typography'
-import {TComment, TPost} from '../../types/types'
+import {IComment, IPost} from '../../types'
 import * as queryString from 'query-string'
-import {setSelectedCategories} from '../../redux/categories-reducer'
+import {observer} from 'mobx-react-lite'
+import postsState from '../../store/postsState'
+import authState from '../../store/authState'
 
 type Props = & {
 	type?: 'my' | 'user' | 'up-voted' | 'down-voted' | 'post-page' | 'categories'
 	postPage?: boolean
-	userComments?: { [key: string]: TComment[] } | null
-	postID?: number
+	userComments?: { [key: string]: IComment[] } | null
+	postId?: number
 }
 
-export const Posts: FC<Props> = ({type, userComments, postID}) => {
-	const posts = useSelector(postsSelector),
-		userID = useSelector(userIDSelector),
-		isAuth = useSelector(isAuthSelector),
-		selected = useSelector(selectedCategoriesSelector),
-		history = useHistory(),
+export const Posts: FC<Props> = observer(({type, userComments, postId}) => {
+	const history = useHistory(),
 		location = useLocation(),
-		match = useRouteMatch<{ id: string }>()
-
-	const dispatch = useDispatch()
-
-	const urlId = match.params.id,
+		match = useRouteMatch<{ id: string }>(),
+		urlId = match.params.id,
 		[title, setTitle] = useState('Home')
 
 	useEffect(() => {
 		if (type === 'my') {
 			setTitle('My Posts')
-			userID && dispatch(requestUserPosts(userID))
+			authState.user?.id && postsState.fetchUserPosts(authState.user?.id).then()
 		} else if (type === 'user') {
 			setTitle('user')
-			dispatch(requestUserPosts(+urlId))
+			postsState.fetchUserPosts(+urlId).then()
 		} else if (type === 'up-voted' || type === 'down-voted') {
 			setTitle(type === 'up-voted' ? 'Upvoted Posts' : 'Downvoted Posts')
-			userID && dispatch(requestRatedPosts(userID, type))
+			authState.user?.id && postsState.fetchRatedPosts(authState.user?.id, type === 'up-voted').then()
 		} else if (type === 'categories') {
 			setTitle('Search by Categories')
 			const parsed = queryString.parse(location.search, {arrayFormat: 'comma'})
 			const categories = parsed.categories
 			if (categories) {
-				if (categories instanceof Array) {
-					dispatch(setSelectedCategories(categories))
-					dispatch(requestPostsByCategories(categories))
+				if (Array.isArray(categories)) {
+					postsState.setSelectedCategories(categories)
+					postsState.fetchPostsByCategories(categories).then()
 				} else {
-					dispatch(setSelectedCategories([categories]))
-					dispatch(requestPostsByCategories([categories]))
+					postsState.setSelectedCategories([categories])
+					postsState.fetchPostsByCategories([categories]).then()
 				}
 			}
 		} else if (type === 'post-page') {
+
 		} else {
 			setTitle('Home')
-			dispatch(requestAllPosts())
+			postsState.fetchAllPosts().then()
 		}
-	}, [type, urlId, userID, postID, history, location.pathname, location.search, dispatch])
+	}, [type, urlId, postId, history, location.pathname, location.search])
 
 
-	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !selected))
+	if ((urlId !== undefined && isNaN(+urlId)) || (type === 'categories' && !postsState.selectedCategories)) {
 		return <Error404/>
-	if (!isAuth && (type === 'my' || type === 'up-voted' || type === 'down-voted'))
+	}
+	if (!authState.user && (type === 'my' || type === 'up-voted' || type === 'down-voted')) {
 		return <Error403/>
+	}
 
 	return <>
 		<Helmet><title>{title} | forume</title></Helmet>
 		{type === 'categories' && <>
 			<section className={s.searchByCategories}>
 				<Card title={<Typography.Title level={4}>Search by Categories</Typography.Title>}>
-					{selected?.map(tag => <Tag key={tag}>{tag}</Tag>)}
+					{postsState.selectedCategories?.map(name => <Tag key={name}>{name}</Tag>)}
 				</Card>
 			</section>
 		</>}
 		<section className='posts'>
-			{posts?.length ?
-				posts && posts.map((post: TPost) => (
-					<Post post={post} key={post.id} isAuth={isAuth} userID={userID} dispatch={dispatch}
-						  comments={userComments ? userComments[post.id] : undefined}/>
+			{postsState.posts?.length ?
+				postsState.posts.map((post: IPost) => (
+					<Post post={post} key={post.id} comments={userComments ? userComments[post.id] : undefined}
+					/>
 				)) :
 				<Card>
 					<Empty className={s.empty} description='No Posts'/>
@@ -94,4 +89,4 @@ export const Posts: FC<Props> = ({type, userComments, postID}) => {
 			}
 		</section>
 	</>
-}
+})
