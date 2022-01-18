@@ -27,10 +27,10 @@ export const Header: FC<Props> = observer(({post, postPage}) => {
 		if (status) {
 			if (postPage) {
 				history.push('/')
-			} else {
-				setLoading(false)
-				message.error('Can not delete post!')
 			}
+		} else {
+			setLoading(false)
+			message.error('Can not delete post!')
 		}
 	}
 
