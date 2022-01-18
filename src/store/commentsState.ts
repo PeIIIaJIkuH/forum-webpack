@@ -40,7 +40,7 @@ class CommentsState {
 
 	async deleteComment(commentId: number, postId?: number) {
 		appState.setProgress(0)
-		const {status} = await commentsAPI.fetchComments(commentId)
+		const {status} = await commentsAPI.deleteComment(commentId)
 		appState.setProgress(100)
 		if (status) {
 			if (!postId) {

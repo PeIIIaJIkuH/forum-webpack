@@ -41,11 +41,9 @@ export const Comment: FC<Props> = observer(({
 		} else {
 			status = await commentsState.deleteComment(comment.id, comment.post_id)
 		}
-		try {
-			await setDeleteLoading(false)
-			await setVisible(false)
-		} catch (e) {
-		}
+		await setDeleteLoading(false)
+		await setVisible(false)
+
 		if (!status) {
 			message.error('Can not delete comment!')
 		}
