@@ -23,7 +23,7 @@ export const Header: FC<Props> = observer(({post, postPage}) => {
 	const onDelete = async () => {
 		setVisible(false)
 		setLoading(true)
-		const status = postsState.deletePost(post.id)
+		const status = await postsState.deletePost(post.id)
 		if (status) {
 			if (postPage) {
 				history.push('/')
