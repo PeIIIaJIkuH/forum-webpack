@@ -10,6 +10,7 @@ import message from 'antd/lib/message'
 import {observer} from 'mobx-react-lite'
 import commentsState from '../../store/commentsState'
 import authState from '../../store/authState'
+import useOnClickOutside from '../../utils/useOnClickOutside'
 
 type Props = {
 	author: ReactNode
@@ -29,20 +30,21 @@ export const Comment: FC<Props> = observer(({
 		[text, setText] = useState(content),
 		[deleteLoading, setDeleteLoading] = useState(false),
 		[editLoading, setEditLoading] = useState(false),
-		[visible, setVisible] = useState(false)
+		[visible, setVisible] = useState(false),
+		ref = useRef<HTMLDivElement>(null)
 
 	const paragraphs = content.split('\n').map((paragraph: string, i: number) => (<p key={i}>{paragraph}</p>))
 
 	const onDelete = async () => {
 		let status: boolean
-		await setDeleteLoading(true)
+		setDeleteLoading(true)
 		if (!userPage) {
 			status = await commentsState.deleteComment(comment.id)
 		} else {
 			status = await commentsState.deleteComment(comment.id, comment.post_id)
 		}
-		await setDeleteLoading(false)
-		await setVisible(false)
+		setDeleteLoading(false)
+		setVisible(false)
 
 		if (!status) {
 			message.error('Can not delete comment!')
@@ -52,12 +54,12 @@ export const Comment: FC<Props> = observer(({
 	const onEdit = async () => {
 		let status = true
 		if (!isEdit) {
-			await setIsEdit(true)
+			setIsEdit(true)
 		} else {
-			await setEditLoading(true)
+			setEditLoading(true)
 			status = await commentsState.editComment(comment, text)
-			await setEditLoading(false)
-			await setIsEdit(false)
+			setEditLoading(false)
+			setIsEdit(false)
 		}
 		if (!status) {
 			message.error('Can not edit comment!')
@@ -129,6 +131,14 @@ export const Comment: FC<Props> = observer(({
 		</div>
 	)
 
+	const clickOutsideEdit = () => {
+		if (isEdit) {
+			onEdit().then()
+		}
+	}
+
+	useOnClickOutside(ref, clickOutsideEdit)
+
 	const updatedAuthor = <>
 		{author}
 		{check && (
@@ -146,8 +156,10 @@ export const Comment: FC<Props> = observer(({
 	</>
 
 	return (
-		<AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}
-		            key={comment.id}
-		/>
+		<div ref={ref}>
+			<AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}
+			            key={comment.id}
+			/>
+		</div>
 	)
 })

@@ -29,6 +29,10 @@ class CommentsState {
 		comment.commentRating = commentRating
 	}
 
+	setContent(comment: IComment, content: string) {
+		comment.content = content
+	}
+
 	async fetchComments(postId: number) {
 		appState.setProgress(0)
 		const {data, status} = await commentsAPI.fetchComments(postId)
@@ -58,7 +62,7 @@ class CommentsState {
 		const {status} = await commentsAPI.editComment(comment.id, comment.author.id, comment.post_id, content)
 		appState.setProgress(100)
 		if (status) {
-			comment.content = content
+			this.setContent(comment, content)
 		}
 		return status
 	}

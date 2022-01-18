@@ -50,7 +50,7 @@ export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) 
 		if (!postsState.editing) {
 			const {status} = await postsAPI.createPost(title, content, categories, isImage, imagePath)
 			if (status) {
-				await setIsFetching(false)
+				setIsFetching(false)
 				history.push('/')
 			} else {
 				message.error(`Can not ${!postsState.editing ? 'create' : 'edit'} post!`)
