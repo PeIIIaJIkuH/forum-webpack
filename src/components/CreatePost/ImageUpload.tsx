@@ -55,7 +55,7 @@ export const ImageUpload: FC<Props> = observer(({setIsImage, setImagePath, defau
 			const {data, status} = await postsAPI.uploadImage(formData, config)
 			if (status) {
 				setIsImage(true)
-				setImagePath(data.data)
+				setImagePath(data)
 				onSuccess()
 			}
 		} catch (err) {
