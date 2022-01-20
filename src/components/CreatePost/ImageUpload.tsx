@@ -36,7 +36,7 @@ export const ImageUpload: FC<Props> = observer(({defaultFileList, setFormData, s
 
 	return (
 		<Upload.Dragger name='image' fileList={fileList} beforeUpload={beforeUpload} maxCount={1} listType='picture'
-		                customRequest={customRequest} defaultFileList={defaultFileList} accept='.png,.jpg,.jpeg,.gif'
+		                customRequest={customRequest} defaultFileList={defaultFileList} accept='.png,.jpg,.jpeg,.gif,.svg'
 		                onRemove={onRemove}
 		>
 			<p className='ant-upload-drag-icon'>
