@@ -31,8 +31,8 @@ type Props = {
 export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) => {
 	const location = useLocation(),
 		history = useHistory(),
-		[isImage, setIsImage] = useState(postsState.editing?.isImage || false),
-		[imagePath, setImagePath] = useState(postsState.editing?.imagePath || '')
+		[formData, setFormData] = useState<FormData | null>(null),
+		[imageState, setImageState] = useState<-1 | 0 | 1>(0)
 
 	useEffect(() => {
 		postsState.fetchAllCategories().then()
@@ -43,12 +43,27 @@ export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) 
 
 	type obj = { title: string, content: string, categories: string[] }
 	const onSubmit = async ({title, content, categories}: obj) => {
+		let imagePath = postsState.editing?.imagePath, isImage = postsState.editing?.isImage
+		if (postsState.editing && imageState && isImage) {
+			await postsAPI.deleteImage(postsState.editing.id)
+			imagePath = ''
+			isImage = false
+		}
+		if (formData) {
+			const {data, status} = await postsAPI.uploadImage(formData, {
+				headers: {'content-type': 'multipart/form-data'},
+			})
+			if (status) {
+				imagePath = data
+				isImage = true
+			}
+		}
 		setIsFetching(true)
 		title = title.trim()
 		content = content?.replace(/\n+/, '\n').split('\n').map(line => line.trim()).join('\n')
 		categories = categories.map(tag => tag.trim())
 		if (!postsState.editing) {
-			const {status} = await postsAPI.createPost(title, content, categories, isImage, imagePath)
+			const {status} = await postsAPI.createPost(title, content, categories, isImage || false, imagePath || '')
 			if (status) {
 				setIsFetching(false)
 				history.push('/')
@@ -79,13 +94,13 @@ export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) 
 				<Input autoFocus/>
 			</Form.Item>
 			<Form.Item label='Content' name='content' initialValue={postsState.editing?.content}
-			           rules={!isImage ? [defaultValidator('Content')] : undefined}
+			           rules={!formData ? [defaultValidator('Content')] : undefined}
 			>
 				<TextArea allowClear autoSize={{minRows: 3, maxRows: 10}} showCount/>
 			</Form.Item>
 			<Form.Item label='Image' name='image'>
-				<ImageUpload setImagePath={setImagePath} setIsImage={setIsImage}
-				             defaultFileList={postsState.editing?.isImage && defaultFileList}
+				<ImageUpload defaultFileList={postsState.editing?.isImage && defaultFileList} setFormData={setFormData}
+				             setImageState={setImageState}
 				/>
 			</Form.Item>
 			<Form.Item label='Categories' name='categories' rules={[defaultValidator('Categories')]}
