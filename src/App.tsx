@@ -20,6 +20,8 @@ import {RightMenu} from './components/RightMenu/RightMenu'
 import {AdminDashboard} from './components/AdminDashboard/AdminDashboard'
 import {observer} from 'mobx-react-lite'
 import appState from './store/appState'
+import {useCookies} from 'react-cookie'
+import authState from './store/authState'
 
 // FEATURES:
 // Load posts, comments, ratings, notifications
@@ -34,10 +36,17 @@ import appState from './store/appState'
 
 export const App: FC = observer(() => {
 	const location = useLocation(),
-		isTabletOrMobile = useMediaQuery({maxWidth: 1200})
+		isTabletOrMobile = useMediaQuery({maxWidth: 1200}),
+		removeCookies = useCookies(['forumSecretKey'])[2]
 
 	useEffect(() => {
-		appState.initialize().then()
+		const f = async () => {
+			await appState.initialize()
+			if (!authState.user) {
+				removeCookies('forumSecretKey')
+			}
+		}
+		f().then()
 	}, [])
 
 	useEffect(() => {
