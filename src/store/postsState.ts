@@ -41,6 +41,7 @@ class PostsState {
 	}
 
 	async fetchAllPosts() {
+		this.setAllPosts(null)
 		appState.setProgress(0)
 		const {data, status} = await postsAPI.fetchAllPosts()
 		appState.setProgress(100)
