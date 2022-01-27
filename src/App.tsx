@@ -47,7 +47,7 @@ export const App: FC = observer(() => {
 			}
 		}
 		f().then()
-	}, [])
+	}, [removeCookies])
 
 	useEffect(() => {
 		appState.setIsMenuOpen(false)
