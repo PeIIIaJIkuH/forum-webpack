@@ -25,7 +25,7 @@ class AppState {
 
 	setIsMenuOpen(isOpen: boolean) {
 		const htmlElement = document.getElementsByTagName('html')[0]
-		if (!this.isMenuOpen) {
+		if (!isOpen) {
 			htmlElement.style.overflowY = 'scroll'
 		} else {
 			htmlElement.style.overflowY = 'hidden'

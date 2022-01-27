@@ -11,6 +11,7 @@ import {observer} from 'mobx-react-lite'
 import commentsState from '../../store/commentsState'
 import authState from '../../store/authState'
 import useOnClickOutside from '../../utils/useOnClickOutside'
+import cx from 'classnames'
 
 type Props = {
 	author: ReactNode
@@ -117,10 +118,10 @@ export const Comment: FC<Props> = observer(({
 		}
 	}
 
-	const upBtn = <Button className={`${s.commentUp} ${isRatedUp && s.commentRatedUp}`} icon={<UpOutlined/>} ref={upRef}
+	const upBtn = <Button className={cx(s.commentUp, isRatedUp && s.commentRatedUp)} icon={<UpOutlined/>} ref={upRef}
 	                      disabled={!authState.user?.id} onClick={onUpClick} loading={upLoading} type='text' size='small'
 		/>,
-		downBtn = <Button className={`${s.downComment} ${isRatedDown && s.commentRatedDown}`} icon={<DownOutlined/>}
+		downBtn = <Button className={cx(s.downComment, isRatedDown && s.commentRatedDown)} icon={<DownOutlined/>}
 		                  disabled={!authState.user?.id} onClick={onDownClick} loading={downLoading} type='text' size='small'
 		                  ref={downRef}
 		/>

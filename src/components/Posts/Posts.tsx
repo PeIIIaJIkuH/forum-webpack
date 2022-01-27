@@ -14,6 +14,7 @@ import * as queryString from 'query-string'
 import {observer} from 'mobx-react-lite'
 import postsState from '../../store/postsState'
 import authState from '../../store/authState'
+import appState from '../../store/appState'
 
 type Props = & {
 	type?: 'my' | 'user' | 'up-voted' | 'down-voted' | 'post-page' | 'categories'
@@ -30,6 +31,7 @@ export const Posts: FC<Props> = observer(({type, userComments, postId}) => {
 		[title, setTitle] = useState('Home')
 
 	useEffect(() => {
+		appState.setProgress(0)
 		if (type === 'my') {
 			setTitle('My Posts')
 			authState.user?.id && postsState.fetchUserPosts(authState.user?.id).then()
@@ -58,6 +60,7 @@ export const Posts: FC<Props> = observer(({type, userComments, postId}) => {
 			setTitle('Home')
 			postsState.fetchAllPosts().then()
 		}
+		appState.setProgress(100)
 	}, [type, urlId, postId, history, location.pathname, location.search])
 
 

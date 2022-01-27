@@ -137,5 +137,5 @@ textarea::-webkit-scrollbar-track {
 }
 
 .ant-message {
-    z-index: 1040;
+    z-index: 15;
 }

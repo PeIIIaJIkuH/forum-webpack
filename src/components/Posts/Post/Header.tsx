@@ -57,7 +57,7 @@ export const Header: FC<Props> = observer(({post, postPage}) => {
 			</Link>
 			{authState.user?.id === post.author.id && (
 				<div className={s.more}>
-					<Popover trigger='click' placement='bottom' visible={visible} onVisibleChange={handleVisibleChange}
+					<Popover trigger='click' placement='left' visible={visible} onVisibleChange={handleVisibleChange}
 					         content={content}
 					>
 						<Button type='text' icon={<MoreOutlined/>}/>

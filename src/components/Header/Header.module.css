@@ -1,5 +1,5 @@
 .headerWrapper {
-    z-index: 1035;
+    z-index: 10;
 }
 
 .header {
@@ -100,7 +100,7 @@
 }
 
 .popoverNotifications {
-    z-index: 1040;
+    z-index: 15;
     position: fixed;
 }
 

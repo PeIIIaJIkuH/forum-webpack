@@ -22,6 +22,7 @@ import {observer} from 'mobx-react-lite'
 import appState from './store/appState'
 import {useCookies} from 'react-cookie'
 import authState from './store/authState'
+import cx from 'classnames'
 
 // FEATURES:
 // Load posts, comments, ratings, notifications
@@ -63,7 +64,7 @@ export const App: FC = observer(() => {
 				<Header/>
 				<Layout className={s.innerLayout}>
 					{!isTabletOrMobile && (
-						<Affix offsetTop={105} className={`${s.affix} ${s.menu}`}>
+						<Affix offsetTop={105} className={cx(s.affix, s.menu)}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<LeftMenu/>
 							</Sider>
@@ -86,7 +87,7 @@ export const App: FC = observer(() => {
 						</Switch>
 					</Content>
 					{!isTabletOrMobile && (
-						<Affix offsetTop={105} className={`${s.affix} ${s.actions}`}>
+						<Affix offsetTop={105} className={cx(s.affix, s.actions)}>
 							<Sider theme='light' trigger={null} className={s.sider}>
 								<Actions/>
 							</Sider>

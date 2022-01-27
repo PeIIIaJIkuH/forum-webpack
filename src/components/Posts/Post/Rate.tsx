@@ -7,6 +7,7 @@ import message from 'antd/lib/message'
 import {observer} from 'mobx-react-lite'
 import postsState from '../../../store/postsState'
 import authState from '../../../store/authState'
+import cx from 'classnames'
 
 type Props = {
 	post: IPost
@@ -46,13 +47,13 @@ export const Rate: FC<Props> = observer(({post}) => {
 
 	return (
 		<div className={s.rating}>
-			<Button className={`${s.up} ${isRatedUp && s.ratedUp}`} icon={<UpOutlined/>} ref={upRef}
+			<Button className={cx(s.up, isRatedUp && s.ratedUp)} icon={<UpOutlined/>} ref={upRef}
 			        disabled={!authState.user?.id} onClick={onUpClick} loading={upIsFetching}
 			/>
 			<div className={s.ratingNumber}>
 				{post.postRating}
 			</div>
-			<Button className={`${s.down} ${isRatedDown && s.ratedDown}`} icon={<DownOutlined/>} ref={downRef}
+			<Button className={cx(s.down, isRatedDown && s.ratedDown)} icon={<DownOutlined/>} ref={downRef}
 			        disabled={!authState.user?.id} onClick={onDownClick} loading={downIsFetching}
 			/>
 		</div>
