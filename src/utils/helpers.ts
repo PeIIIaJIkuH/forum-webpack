@@ -57,7 +57,7 @@ export const groupBy = (key: string) => (array: any[]) =>
 export const defaultValidator = (field: string, isSignup?: boolean) => ({
 	validator: async (_: any, value: any) => new Promise<void>((resolve, reject) => {
 		if (!value) {
-			reject(`${field.toLowerCase()} is required`)
+			reject('required')
 		}
 		if (field === 'Categories') {
 			value.forEach((tag: string) => {

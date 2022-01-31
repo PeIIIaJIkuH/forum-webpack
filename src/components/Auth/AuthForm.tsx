@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import Button from 'antd/lib/button'
 import Form, {FormInstance} from 'antd/lib/form'
 import Input from 'antd/lib/input'
@@ -6,6 +6,7 @@ import {InfoCircleOutlined, LockOutlined, UserOutlined} from '@ant-design/icons'
 import {defaultValidator} from '../../utils/helpers'
 import Tooltip from 'antd/lib/tooltip'
 import {observer} from 'mobx-react-lite'
+import Checkbox, {CheckboxChangeEvent} from 'antd/lib/checkbox/Checkbox'
 
 const tailLayout = {
 	wrapperCol: {offset: 8, span: 16},
@@ -19,42 +20,48 @@ type Props = {
 }
 
 export const AuthForm: FC<Props> = observer(({onsubmit, register, form, isFetching}) => {
+	const [isAdmin, setIsAdmin] = useState(false)
+
 	const usernameInfo = (
-			<Tooltip title={<>
-				<div>4-20 characters long.</div>
-				<div>Allowed: a-z, A-Z, 0-9, _, .</div>
-				<div>No _, . at the beginning or end.</div>
-				<div>No __, _., ._, .. inside.</div>
-			</>}
-			>
-				<InfoCircleOutlined className='inputInfo'/>
-			</Tooltip>
-		),
-		emailInfo = (
-			<Tooltip title={<>
-				<div>Just valid E-mail.</div>
-			</>}
-			>
-				<InfoCircleOutlined className='inputInfo'/>
-			</Tooltip>
-		),
-		passwordInfo = (
-			<Tooltip title={<>
-				<div>6-20 characters long.</div>
-				<div>Allowed: a-z, A-Z, 0-9, _, .</div>
-				<div>At least one lowercase.</div>
-				<div>At least one uppercase.</div>
-				<div>At least one digit.</div>
-			</>}
-			>
-				<InfoCircleOutlined className='inputInfo'/>
-			</Tooltip>
-		),
-		adminTokenInfo = (
-			<Tooltip title={<div>Enter admin token to register as admin</div>}>
-				<InfoCircleOutlined className='inputInfo'/>
-			</Tooltip>
-		)
+		<Tooltip title={<>
+			<div>4-20 characters long.</div>
+			<div>Allowed: a-z, A-Z, 0-9, _, .</div>
+			<div>No _, . at the beginning or end.</div>
+			<div>No __, _., ._, .. inside.</div>
+		</>}
+		>
+			<InfoCircleOutlined className='inputInfo'/>
+		</Tooltip>
+	)
+	const emailInfo = (
+		<Tooltip title={<>
+			<div>Just valid E-mail.</div>
+		</>}
+		>
+			<InfoCircleOutlined className='inputInfo'/>
+		</Tooltip>
+	)
+	const passwordInfo = (
+		<Tooltip title={<>
+			<div>6-20 characters long.</div>
+			<div>Allowed: a-z, A-Z, 0-9, _, .</div>
+			<div>At least one lowercase.</div>
+			<div>At least one uppercase.</div>
+			<div>At least one digit.</div>
+		</>}
+		>
+			<InfoCircleOutlined className='inputInfo'/>
+		</Tooltip>
+	)
+	const adminTokenInfo = (
+		<Tooltip title={<div>Enter admin token to register as admin</div>}>
+			<InfoCircleOutlined className='inputInfo'/>
+		</Tooltip>
+	)
+
+	const onChange = (e: CheckboxChangeEvent) => {
+		setIsAdmin(e.target.checked)
+	}
 
 	return (
 		<Form name='auth' onFinish={onsubmit} form={form}>
@@ -78,6 +85,11 @@ export const AuthForm: FC<Props> = observer(({onsubmit, register, form, isFetchi
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			{register && (
+				<Form.Item name='isAdmin' colon={false}>
+					<Checkbox onChange={onChange}>Register as admin</Checkbox>
+				</Form.Item>
+			)}
+			{register && isAdmin && (
 				<Form.Item name='adminToken' colon={false} label={register && adminTokenInfo}>
 					<Input placeholder='Admin token'/>
 				</Form.Item>

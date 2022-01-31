@@ -39,7 +39,7 @@ export const MobileActions: FC<Props> = observer(({onSignOut}) => {
 			</Button>
 			{authState.role === EUserRole.admin && (
 				<Button type='link' onClick={() => onClick('/admin')}>
-					Dashboard
+					dashboard
 				</Button>
 			)}
 			<Button type='link' danger onClick={onSignOut}>

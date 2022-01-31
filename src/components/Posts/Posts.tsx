@@ -80,12 +80,12 @@ export const Posts: FC<Props> = observer(({type, userComments, postId}) => {
 		<section className='posts'>
 			{postsState.posts?.length ?
 				postsState.posts.map((post: IPost) => (
-					<Post post={post} key={post.id} comments={userComments ? userComments[post.id] : undefined}
-					/>
-				)) :
-				<Card>
-					<Empty className={s.empty} description='No Posts'/>
-				</Card>
+					<Post post={post} key={post.id} comments={userComments ? userComments[post.id] : undefined}/>
+				)) : (
+					<Card>
+						<Empty className={s.empty} description='No Posts'/>
+					</Card>
+				)
 			}
 		</section>
 	</>

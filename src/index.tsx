@@ -11,4 +11,5 @@ ReactDOM.render(
 			<App/>
 		</BrowserRouter>
 	</CookiesProvider>,
-	document.getElementById('root'))
+	document.getElementById('root'),
+)

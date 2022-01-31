@@ -20,14 +20,14 @@ export const User: FC = observer(() => {
 		title = userState.user?.username || 'User Page'
 
 	useEffect(() => {
-		const initialize = async () => {
+		const f = async () => {
 			const status = await userState.fetchUser(+urlId)
 			if (!status) {
 				setCheck(false)
 			}
 			await postsState.fetchUserPosts(+urlId)
 		}
-		initialize().then()
+		f().then()
 	}, [urlId])
 
 	if ((urlId !== undefined && isNaN(+urlId)) || !check) {
@@ -48,7 +48,7 @@ export const User: FC = observer(() => {
 
 	return userState.user && <>
 		<Helmet><title>{title} | forume</title></Helmet>
-		<UserInfo user={userState.user}/>
+		<UserInfo/>
 		<Menu className={s.menu} mode='horizontal' defaultSelectedKeys={['created']} onClick={onClick}>
 			<MenuItem key='created' title='Created Posts' icon={<UserOutlined/>} forAll available/>
 			<MenuItem key='up-voted' title='Upvoted Posts' icon={<LikeOutlined/>} forAll available/>

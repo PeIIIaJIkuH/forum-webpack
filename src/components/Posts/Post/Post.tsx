@@ -15,19 +15,16 @@ import {observer} from 'mobx-react-lite'
 type Props = {
 	post: IPost | null
 	comments?: IComment[] | null
-	postPage?: boolean
 }
 
-export const Post: FC<Props> = observer(({
-	                                         post, comments, postPage,
-                                         }) => {
+export const Post: FC<Props> = observer(({post, comments,}) => {
 	return post && (
 		<Card className={s.post}>
 			<Rate post={post}/>
 			<div className={s.main}>
-				<Header post={post} postPage={postPage}/>
+				<Header post={post}/>
 				<Content content={post.content}/>
-				{post.isImage && <Image src={`https://${post.imagePath}`} alt='post image'/>}
+				{post.isImage && <Image src={`https://${post.imagePath}`} alt='post image' preview={false}/>}
 				<Divider className={s.divider}/>
 				<Categories categories={post.categories}/>
 				<Footer post={post}/>
