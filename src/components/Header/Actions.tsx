@@ -15,7 +15,7 @@ export const Actions: FC<Props> = observer(({onSignOut}) => (
 	<div className={s.actions}>
 		<Notifications/>
 		{authState.role === EUserRole.admin && (
-			<Link className={s.dashboard} to='/admin'>Dashboard</Link>
+			<Link className={s.dashboard} to='/admin'>dashboard</Link>
 		)}
 		<Link className={s.username} to={`/user/${authState.user?.id}`}>{authState.user?.username}</Link>
 		<Button className={s.auth} type='link' danger onClick={onSignOut}>
