@@ -6,7 +6,6 @@ import Button from 'antd/lib/button'
 import Image from 'antd/lib/image'
 import Layout from 'antd/lib/layout'
 import Affix from 'antd/lib/affix'
-import LoadingBar from 'react-top-loading-bar'
 import {Actions} from './Actions'
 import {useMediaQuery} from 'react-responsive'
 import {MobileActions} from './MobileActions'
@@ -15,6 +14,7 @@ import {observer} from 'mobx-react-lite'
 import userState from '../../store/userState'
 import authState from '../../store/authState'
 import appState from '../../store/appState'
+import {ProgressBar} from '../ProgressBar/ProgressBar'
 
 export const Header: FC = observer(() => {
 	const location = useLocation(),
@@ -34,10 +34,6 @@ export const Header: FC = observer(() => {
 		}
 	}
 
-	const onFinished = () => {
-		appState.setProgress(0)
-	}
-
 	const onAuth = () => {
 		appState.setUrl(location.pathname)
 	}
@@ -45,8 +41,8 @@ export const Header: FC = observer(() => {
 	return (
 		<Affix offsetTop={1} className={s.headerWrapper}>
 			<Layout.Header className={s.header}>
+				<ProgressBar/>
 				<div className={s.inner}>
-					<LoadingBar color='#40a9ff' progress={appState.progress} onLoaderFinished={onFinished}/>
 					<Link to='/' className={s.logo}>
 						<Image width={50} src={logo} preview={false} alt='logo'/>
 						foru<span>me</span>
