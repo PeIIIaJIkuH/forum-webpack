@@ -2,25 +2,29 @@ import {makeAutoObservable} from 'mobx'
 import authState from './authState'
 
 class AppState {
-	initialized = false
-	progress = 0
-	url = ''
-	isMenuOpen = false
+	initialized: boolean
+	isLoading: boolean
+	url: string
+	isMenuOpen: boolean
 
 	constructor() {
 		makeAutoObservable(this)
+		this.initialized = false
+		this.isLoading = false
+		this.url = ''
+		this.isMenuOpen = false
 	}
 
 	setInitialized(initialized: boolean) {
 		this.initialized = initialized
 	}
 
-	setProgress(n: number) {
-		this.progress = n
-	}
-
 	setUrl(url: string) {
 		this.url = url
+	}
+
+	setIsLoading(loading: boolean) {
+		this.isLoading = loading
 	}
 
 	setIsMenuOpen(isOpen: boolean) {

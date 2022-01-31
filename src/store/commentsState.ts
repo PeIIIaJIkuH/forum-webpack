@@ -34,18 +34,18 @@ class CommentsState {
 	}
 
 	async fetchComments(postId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await commentsAPI.fetchComments(postId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllComments(data)
 		}
 	}
 
 	async deleteComment(commentId: number, postId?: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await commentsAPI.deleteComment(commentId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			if (!postId) {
 				const filteredComments = this.allComments.filter(({id}) => id !== commentId)
@@ -58,9 +58,9 @@ class CommentsState {
 	}
 
 	async editComment(comment: IComment, content: string) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await commentsAPI.editComment(comment.id, comment.author.id, comment.post_id, content)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setContent(comment, content)
 		}
@@ -68,9 +68,9 @@ class CommentsState {
 	}
 
 	async setCommentRating(comment: IComment, reaction: IReaction) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await commentsAPI.rateComment(comment.id, comment.post_id, reaction)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			const [userRating, commentRating] = getRating(comment.userRating, comment.commentRating, reaction)
 			this.setRating(comment, userRating, commentRating)

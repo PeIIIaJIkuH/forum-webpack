@@ -42,18 +42,18 @@ class PostsState {
 
 	async fetchAllPosts() {
 		this.setAllPosts(null)
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchAllPosts()
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllPosts(data)
 		}
 	}
 
 	async fetchUserPosts(userId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchUserPosts(userId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllPosts(data)
 			commentsState.setAllComments([])
@@ -61,9 +61,9 @@ class PostsState {
 	}
 
 	async fetchRatedPosts(userId: number, userRating: boolean) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchRatedPosts(userId, userRating)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllPosts(data)
 			commentsState.setAllComments([])
@@ -71,9 +71,9 @@ class PostsState {
 	}
 
 	async fetchPost(postId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchPost(postId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setPost(data)
 		}
@@ -81,18 +81,18 @@ class PostsState {
 	}
 
 	async fetchPostsByCategories(categories: string[]) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchPostsByCategories(categories)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllPosts(data)
 		}
 	}
 
 	async fetchCommentedPosts(userId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchCommentedPosts(userId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			const commentsByPostId = groupBy('post_id')(data)
 			const posts = []
@@ -113,9 +113,9 @@ class PostsState {
 	// создать новйы эндпоинт для постов, с комментариями от какого-то пользователя
 
 	async deletePost(postId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await postsAPI.deletePost(postId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			const filteredPosts = this.posts.filter(({id}) => postId !== id)
 			this.setAllPosts(filteredPosts)
@@ -125,9 +125,9 @@ class PostsState {
 	}
 
 	async setRating(post: IPost, reaction: IReaction) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await postsAPI.ratePost(post.id, reaction)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			const [userRating, postRating] = getRating(post.userRating, post.postRating, reaction)
 			this.setPostRating(post, userRating, postRating)
@@ -136,9 +136,9 @@ class PostsState {
 	}
 
 	async fetchAllCategories() {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchCategories()
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setAllCategories(data)
 		}
@@ -148,9 +148,9 @@ class PostsState {
 		if (isNaN(postId)) {
 			return
 		}
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await postsAPI.fetchPost(postId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setEditing(data)
 		}

@@ -20,9 +20,9 @@ class UserState {
 	}
 
 	async fetchUser(userId: number) {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await userAPI.fetchUser(userId)
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setUser(data)
 		}
@@ -30,18 +30,18 @@ class UserState {
 	}
 
 	async fetchNotifications() {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {data, status} = await userAPI.fetchNotifications()
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setNotifications(data)
 		}
 	}
 
 	async clearNotifications() {
-		appState.setProgress(0)
+		appState.setIsLoading(true)
 		const {status} = await userAPI.clearNotifications()
-		appState.setProgress(100)
+		appState.setIsLoading(false)
 		if (status) {
 			this.setNotifications([])
 		}
