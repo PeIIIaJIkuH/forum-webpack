@@ -39,6 +39,9 @@ export const Header: FC = observer(() => {
 	}
 
 	const onAuth = () => {
+		if (location.pathname === '/auth/signup') {
+			return
+		}
 		appState.setUrl(location.pathname)
 	}
 
