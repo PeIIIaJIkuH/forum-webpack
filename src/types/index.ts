@@ -51,7 +51,7 @@ export interface ICommentRating {
 	author: IUser
 }
 
-export interface INotification {
+export interface IDefaultNotification {
 	id: number
 	receiver_id: number
 	post_id: number
@@ -62,6 +62,32 @@ export interface INotification {
 	postRating: IPostRating
 	comment: IComment
 	commentRating: ICommentRating
+}
+
+export interface IRoleNotification {
+	id: number
+	receiver_id: number
+	createdAt: number
+	accepted: boolean
+	declined: boolean
+	demoted: boolean
+}
+
+export interface IReportNotification {
+	id: number
+	createdAt: number
+	receiver_id: number
+	approved: boolean
+	deleted: boolean
+}
+
+export interface IPostNotification {
+	id: number
+	createdAt: number
+	receiver_id: number
+	approved: boolean
+	deleted: boolean
+	banned: boolean
 }
 
 export enum EUserRole {
@@ -79,3 +105,20 @@ export interface ApiResponse {
 }
 
 export type ApiPromise = Promise<ApiResponse>
+
+export interface IRoleRequest {
+	id: number
+	userID: number
+	createdAt: number
+	pending: number
+	user: IUser
+}
+
+export interface IPostReport {
+	id: number
+	postID: number
+	moderatorID: number
+	pending: boolean
+	createdAt: number
+	post_title: string
+}
