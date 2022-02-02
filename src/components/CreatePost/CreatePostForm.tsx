@@ -68,10 +68,11 @@ export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) 
 				setIsFetching(false)
 				history.push('/')
 			} else {
-				message.error(`Can not ${!postsState.editing ? 'create' : 'edit'} post!`)
+				message.error(`can not ${!postsState.editing ? 'create' : 'edit'} post`)
 			}
 		} else {
-			await postsAPI.editPost(postsState.editing.id, postsState.editing.author.id, title, content, categories, isImage, imagePath)
+			await postsAPI.editPost(postsState.editing.id, postsState.editing.author.id, title, content, categories,
+				isImage, imagePath)
 			await setIsFetching(false)
 			history.push('/')
 		}
@@ -90,7 +91,9 @@ export const CreatePostForm: FC<Props> = observer(({isFetching, setIsFetching}) 
 
 	return (
 		<Form className={s.form} {...layout} name='createPost' onFinish={onSubmit}>
-			<Form.Item label='Title' name='title' rules={[defaultValidator('Title')]} initialValue={postsState.editing?.title}>
+			<Form.Item label='Title' name='title' rules={[defaultValidator(
+				'Title')]} initialValue={postsState.editing?.title}
+			>
 				<Input autoFocus/>
 			</Form.Item>
 			<Form.Item label='Content' name='content' initialValue={postsState.editing?.content}
