@@ -23,7 +23,7 @@ class AuthState {
 	setRole(role: EUserRole) {
 		this.role = role
 	}
-	
+
 	setModeratorRequest(pending: -1 | 0 | 1) {
 		this.moderatorRequest = pending
 	}
@@ -39,9 +39,9 @@ class AuthState {
 		}
 	}
 
-	async signUp(username: string, email: string, password: string, adminToken: string) {
+	async signUp(username: string, email: string, password: string, adminToken: string, asModerator: boolean) {
 		appState.setIsLoading(true)
-		const {status} = await authAPI.signUp(username, email, password, adminToken)
+		const {status} = await authAPI.signUp(username, email, password, adminToken, asModerator)
 		appState.setIsLoading(false)
 		return status
 	}
@@ -63,7 +63,7 @@ class AuthState {
 		if (status) {
 			this.setUser(null)
 			this.setRole(EUserRole.guest)
-			userState.setNotifications([])
+			userState.setDefaultNotifications([])
 		}
 		return status
 	}
