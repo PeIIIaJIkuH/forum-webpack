@@ -41,7 +41,7 @@ export const PostPage: FC = observer(() => {
 		if (status) {
 			await commentsState.fetchComments(+urlId)
 		} else {
-			message.error('Can not add comment!')
+			message.error('can not add comment')
 		}
 	}
 

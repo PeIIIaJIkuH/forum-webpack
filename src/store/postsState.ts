@@ -6,13 +6,17 @@ import {postsAPI} from '../api/posts'
 import commentsState from './commentsState'
 
 class PostsState {
-	posts: IPost[] = []
-	editing: IPost | null = null
-	allCategories: ICategory[] = []
-	selectedCategories: string[] = []
+	posts: IPost[]
+	editing: IPost | null
+	allCategories: ICategory[]
+	selectedCategories: string[]
 
 	constructor() {
 		makeAutoObservable(this)
+		this.posts = []
+		this.editing = null
+		this.allCategories = []
+		this.selectedCategories = []
 	}
 
 	setAllPosts(posts: IPost[] | null) {
@@ -108,9 +112,6 @@ class PostsState {
 			commentsState.setUserComments(commentsByPostId)
 		}
 	}
-
-	// todo:
-	// создать новйы эндпоинт для постов, с комментариями от какого-то пользователя
 
 	async deletePost(postId: number) {
 		appState.setIsLoading(true)

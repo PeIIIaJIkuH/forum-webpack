@@ -29,7 +29,7 @@ export const Rate: FC<Props> = observer(({post}) => {
 		}
 		setUpIsFetching(false)
 		if (!status) {
-			message.error('Can not rate post!').then()
+			message.error('can not rate post').then()
 		}
 	}
 
@@ -41,7 +41,7 @@ export const Rate: FC<Props> = observer(({post}) => {
 		}
 		setDownIsFetching(false)
 		if (!status) {
-			message.error('Can not rate post!').then()
+			message.error('can not rate post').then()
 		}
 	}
 
