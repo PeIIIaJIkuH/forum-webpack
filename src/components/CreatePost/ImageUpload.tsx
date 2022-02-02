@@ -13,9 +13,13 @@ type Props = {
 export const ImageUpload: FC<Props> = observer(({defaultFileList, setFormData, setImageState}) => {
 	const [fileList] = useState([])[0]
 
-	const beforeUpload = (file: RcFile) => {
-		if (file.size / 1024 / 1024 >= 20) {
-			message.error('Image must be less than 20 megabytes.').then()
+	const beforeUpload = ({size, type}: RcFile) => {
+		if (type !== 'png' && type !== 'jpg' && type !== 'jpeg' && type !== '.gif' && type !== '.svg') {
+			message.error('you can upload only .png,.jpg,.jpeg,.gif,.svg filetypes').then()
+			return false
+		}
+		if (size / 1024 / 1024 >= 20) {
+			message.error('image size must be less than 20 megabytes').then()
 			return false
 		}
 		return true
