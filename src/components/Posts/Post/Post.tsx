@@ -17,7 +17,7 @@ type Props = {
 	comments?: IComment[] | null
 }
 
-export const Post: FC<Props> = observer(({post, comments,}) => {
+export const Post: FC<Props> = observer(({post, comments}) => {
 	return post && (
 		<Card className={s.post}>
 			<Rate post={post}/>
