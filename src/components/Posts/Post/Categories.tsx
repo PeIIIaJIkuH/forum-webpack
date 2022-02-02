@@ -12,16 +12,16 @@ type Props = {
 export const Categories: FC<Props> = ({categories}) => {
 	const history = useHistory()
 
-	const onClick = (categories: string) => {
-		const query = categoriesQuery(categories)
+	const onClick = (categoryName: string) => {
+		const query = categoriesQuery(categoryName)
 		history.push(`/by-categories?${query}`)
 	}
 
 	return categories && (
 		<div className={s.categories}>
-			{categories.map(category => (
-				<Tag className={s.tag} key={category.id} onClick={() => onClick(category.name)}>
-					{category.name}
+			{categories.map(({id, name}) => (
+				<Tag className={s.tag} key={id} onClick={onClick.bind(null, name)}>
+					{name}
 				</Tag>
 			))}
 		</div>
