@@ -17,12 +17,12 @@ import appState from '../../store/appState'
 import {ProgressBar} from '../ProgressBar/ProgressBar'
 
 export const Header: FC = observer(() => {
-	const location = useLocation(),
-		isTabletOrMobile = useMediaQuery({maxWidth: 1200})
+	const location = useLocation()
+	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
 
 	useEffect(() => {
 		if (authState.user) {
-			userState.fetchNotifications().then()
+			userState.fetchAllNotifications().then()
 		}
 	}, [location.pathname])
 
@@ -30,7 +30,7 @@ export const Header: FC = observer(() => {
 		const status = await authState.signOut()
 		appState.setIsMenuOpen(false)
 		if (!status) {
-			message.error('Can not logout!').then()
+			message.error('can not logout').then()
 		}
 	}
 
