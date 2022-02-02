@@ -3,13 +3,16 @@ import {IComment, IReaction} from '../types'
 import appState from './appState'
 import {commentsAPI} from '../api/comments'
 import {getRating} from '../utils/helpers'
+import {adminAPI} from '../api/admin'
 
 class CommentsState {
-	allComments: IComment[] = []
-	userComments: Record<string, IComment[]> = {}
+	allComments: IComment[]
+	userComments: Record<string, IComment[]>
 
 	constructor() {
 		makeAutoObservable(this)
+		this.allComments = []
+		this.userComments = {}
 	}
 
 	setAllComments(comments: IComment[] | null) {
@@ -42,9 +45,15 @@ class CommentsState {
 		}
 	}
 
-	async deleteComment(commentId: number, postId?: number) {
+	async deleteComment(commentId: number, options: { postId?: number, isAdmin?: boolean } = {}) {
+		const {isAdmin, postId} = options
 		appState.setIsLoading(true)
-		const {status} = await commentsAPI.deleteComment(commentId)
+		let status: boolean
+		if (!isAdmin) {
+			status = (await commentsAPI.deleteComment(commentId)).status
+		} else {
+			status = (await adminAPI.deleteComment(commentId)).status
+		}
 		appState.setIsLoading(false)
 		if (status) {
 			if (!postId) {

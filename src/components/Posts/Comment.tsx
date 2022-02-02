@@ -18,37 +18,38 @@ type Props = {
 	content: string
 	datetime: ReactNode
 	comment: IComment
-	check: boolean
+	isAuthor: boolean
+	isAdmin: boolean
 	userPage?: boolean
 }
 
 export const Comment: FC<Props> = observer(({
 	                                            author, content,
 	                                            datetime, comment,
-	                                            check, userPage,
+	                                            isAuthor, userPage, isAdmin,
                                             }) => {
-	const [isEdit, setIsEdit] = useState(false),
-		[text, setText] = useState(content),
-		[deleteLoading, setDeleteLoading] = useState(false),
-		[editLoading, setEditLoading] = useState(false),
-		[visible, setVisible] = useState(false),
-		ref = useRef<HTMLDivElement>(null)
-
+	const [isEdit, setIsEdit] = useState(false)
+	const [text, setText] = useState(content)
+	const [visible, setVisible] = useState(false)
+	const ref = useRef<HTMLDivElement>(null)
 	const paragraphs = content.split('\n').map((paragraph: string, i: number) => (<p key={i}>{paragraph}</p>))
+	const [deleteLoading, setDeleteLoading] = useState(false)
+	const [editLoading, setEditLoading] = useState(false)
 
 	const onDelete = async () => {
 		let status: boolean
 		setDeleteLoading(true)
 		if (!userPage) {
-			status = await commentsState.deleteComment(comment.id)
+			status = await commentsState.deleteComment(comment.id, {isAdmin})
 		} else {
-			status = await commentsState.deleteComment(comment.id, comment.post_id)
+			status = await commentsState.deleteComment(comment.id, {isAdmin, postId: comment.post_id})
 		}
 		setDeleteLoading(false)
 		setVisible(false)
-
-		if (!status) {
-			message.error('Can not delete comment!')
+		if (status) {
+			message.success('comment was deleted successfully')
+		} else {
+			message.error('can not delete comment')
 		}
 	}
 
@@ -63,7 +64,7 @@ export const Comment: FC<Props> = observer(({
 			setIsEdit(false)
 		}
 		if (!status) {
-			message.error('Can not edit comment!')
+			message.error('can not edit comment')
 		}
 	}
 
@@ -71,17 +72,20 @@ export const Comment: FC<Props> = observer(({
 		setText(e.currentTarget.value)
 	}
 
-	const edit = <EditOutlined className={s.icon}/>,
-		save = <SaveOutlined className={s.icon}/>
-
-	const editBtn = <Button type='text' icon={!isEdit ? edit : save} onClick={onEdit} loading={editLoading}/>,
-		deleteBtn = <Button danger type='text' icon={<DeleteOutlined className={s.icon}/>} onClick={onDelete}
-		                    loading={deleteLoading}
-		/>,
-		cContent = !isEdit ? paragraphs :
-			<TextArea autoSize={{minRows: 1, maxRows: 5}} defaultValue={content} onChange={onChange} allowClear
-			          autoFocus
-			/>
+	const editIcon = <EditOutlined className={s.icon}/>
+	const saveIcon = <SaveOutlined className={s.icon}/>
+	const editBtn =
+		<Button type='text' icon={!isEdit ? editIcon : saveIcon} onClick={onEdit} loading={editLoading}/>
+	const deleteBtn = (
+		<Button danger type='text' icon={<DeleteOutlined className={s.icon}/>} onClick={onDelete}
+		        loading={deleteLoading}
+		/>
+	)
+	const cContent = !isEdit ? paragraphs : (
+		<TextArea autoSize={{minRows: 1, maxRows: 5}} defaultValue={content} onChange={onChange} allowClear
+		          autoFocus
+		/>
+	)
 
 	const handleVisibleChange = (visible: boolean) => {
 		setVisible(visible)
@@ -102,7 +106,7 @@ export const Comment: FC<Props> = observer(({
 		}
 		setUpLoading(false)
 		if (!status) {
-			message.error('Can not rate comment!')
+			message.error('can not rate comment')
 		}
 	}
 
@@ -114,23 +118,22 @@ export const Comment: FC<Props> = observer(({
 		}
 		setDownLoading(false)
 		if (!status) {
-			message.error('Can not rate comment!')
+			message.error('can not rate comment')
 		}
 	}
 
-	const upBtn = <Button className={cx(s.commentUp, isRatedUp && s.commentRatedUp)} icon={<UpOutlined/>} ref={upRef}
-	                      disabled={!authState.user?.id} onClick={onUpClick} loading={upLoading} type='text' size='small'
-		/>,
-		downBtn = <Button className={cx(s.downComment, isRatedDown && s.commentRatedDown)} icon={<DownOutlined/>}
-		                  disabled={!authState.user?.id} onClick={onDownClick} loading={downLoading} type='text' size='small'
-		                  ref={downRef}
+	const upBtn = (
+		<Button className={cx(s.commentUp, isRatedUp && s.commentRatedUp)} icon={<UpOutlined/>} ref={upRef}
+		        disabled={!authState.user?.id} onClick={onUpClick} loading={upLoading} type='text' size='small'
 		/>
-
-	const rating = (
-		<div className={s.commentRating}>
-			{comment.commentRating}
-		</div>
 	)
+	const downBtn = (
+		<Button className={cx(s.downComment, isRatedDown && s.commentRatedDown)} icon={<DownOutlined/>}
+		        disabled={!authState.user?.id} onClick={onDownClick} loading={downLoading} type='text' size='small'
+		        ref={downRef}
+		/>
+	)
+	const rating = <div>{comment.commentRating}</div>
 
 	const clickOutsideEdit = () => {
 		if (isEdit) {
@@ -140,25 +143,31 @@ export const Comment: FC<Props> = observer(({
 
 	useOnClickOutside(ref, clickOutsideEdit)
 
-	const updatedAuthor = <>
-		{author}
-		{check && (
-			<Popover trigger='click' placement='top' visible={visible} onVisibleChange={handleVisibleChange}
-			         content={(
-				         <div className='actions'>
-					         {editBtn}
-					         {deleteBtn}
-				         </div>
-			         )}
-			>
-				<Button type='text' icon={<MoreOutlined/>} size='small'/>
-			</Popover>
-		)}
-	</>
+	const updatedAuthor = (
+		<>
+			{author}
+			{(isAuthor || isAdmin) && (
+				<Popover trigger='click' placement='top' visible={visible} onVisibleChange={handleVisibleChange}
+				         content={(
+					         <div className='actions'>
+						         {isAuthor ? (
+							         <>
+								         {editBtn}
+								         {deleteBtn}
+							         </>
+						         ) : (isAdmin && deleteBtn)}
+					         </div>
+				         )}
+				>
+					<Button type='text' icon={<MoreOutlined/>} size='small'/>
+				</Popover>
+			)}
+		</>
+	)
 
 	return (
 		<div ref={ref}>
-			<AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[rating, upBtn, downBtn]}
+			<AntComment author={updatedAuthor} content={cContent} datetime={datetime} actions={[upBtn, rating, downBtn]}
 			            key={comment.id}
 			/>
 		</div>
