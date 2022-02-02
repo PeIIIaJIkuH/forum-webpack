@@ -32,10 +32,12 @@
 
 .menu {
     margin-left: 15px;
+    height: fit-content;
 }
 
 .actions {
     margin-right: 15px;
+    height: fit-content;
 }
 
 .sider {
