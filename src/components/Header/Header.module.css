@@ -107,3 +107,15 @@
 .dashboard {
     margin-right: 15px;
 }
+
+.empty {
+    margin: auto;
+}
+
+.tabs {
+    margin-bottom: 0;
+}
+
+.tab {
+    font-weight: 600 !important;
+}
