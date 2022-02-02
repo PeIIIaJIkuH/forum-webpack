@@ -33,12 +33,11 @@ import cx from 'classnames'
 // TODO:
 // check all the features and functions
 // make all requests for several items paginated: take only some portion of it, and just scroll to request more
-// try to remove return from reducers
 
 export const App: FC = observer(() => {
-	const location = useLocation(),
-		isTabletOrMobile = useMediaQuery({maxWidth: 1200}),
-		removeCookies = useCookies(['forumSecretKey'])[2]
+	const location = useLocation()
+	const isTabletOrMobile = useMediaQuery({maxWidth: 1200})
+	const removeCookies = useCookies(['forumSecretKey'])[2]
 
 	useEffect(() => {
 		const f = async () => {
