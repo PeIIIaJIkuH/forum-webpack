@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react'
+import React, {FC} from 'react'
 import Button from 'antd/lib/button'
 import Form, {FormInstance} from 'antd/lib/form'
 import Input from 'antd/lib/input'
@@ -6,7 +6,10 @@ import {InfoCircleOutlined, LockOutlined, UserOutlined} from '@ant-design/icons'
 import {defaultValidator} from '../../utils/helpers'
 import Tooltip from 'antd/lib/tooltip'
 import {observer} from 'mobx-react-lite'
-import Checkbox, {CheckboxChangeEvent} from 'antd/lib/checkbox/Checkbox'
+import RadioGroup from 'antd/lib/radio/group'
+import Radio from 'antd/lib/radio/radio'
+import {RadioChangeEvent} from 'antd'
+import s from './Auth.module.css'
 
 const tailLayout = {
 	wrapperCol: {offset: 8, span: 16},
@@ -17,10 +20,14 @@ type Props = {
 	register?: boolean
 	form: FormInstance
 	isFetching: boolean
+	type: 'user' | 'moderator' | 'admin'
+	setType: (type: 'user' | 'moderator' | 'admin') => void
 }
 
-export const AuthForm: FC<Props> = observer(({onsubmit, register, form, isFetching}) => {
-	const [isAdmin, setIsAdmin] = useState(false)
+export const AuthForm: FC<Props> = observer(({
+	                                             onsubmit, register, form,
+	                                             type, isFetching, setType,
+                                             }) => {
 
 	const usernameInfo = (
 		<Tooltip title={<>
@@ -59,8 +66,8 @@ export const AuthForm: FC<Props> = observer(({onsubmit, register, form, isFetchi
 		</Tooltip>
 	)
 
-	const onChange = (e: CheckboxChangeEvent) => {
-		setIsAdmin(e.target.checked)
+	const onChange = (e: RadioChangeEvent) => {
+		setType(e.target.value)
 	}
 
 	return (
@@ -85,16 +92,20 @@ export const AuthForm: FC<Props> = observer(({onsubmit, register, form, isFetchi
 				<Input.Password prefix={<LockOutlined/>} placeholder='Password'/>
 			</Form.Item>
 			{register && (
-				<Form.Item name='isAdmin' colon={false}>
-					<Checkbox onChange={onChange}>Register as admin</Checkbox>
-				</Form.Item>
+				<RadioGroup defaultValue='user' onChange={onChange} className={s.radioGroup}>
+					<Radio value='user' className={s.radio}>As user</Radio>
+					<Radio value='moderator' className={s.radio}>As moderator</Radio>
+					<Radio value='admin' className={s.radio}>As admin</Radio>
+				</RadioGroup>
 			)}
-			{register && isAdmin && (
-				<Form.Item name='adminToken' colon={false} label={register && adminTokenInfo}>
+			{register && type === 'admin' && (
+				<Form.Item name='adminToken' colon={false} label={register && adminTokenInfo}
+				           rules={[defaultValidator('AdminToken', register)]}
+				>
 					<Input placeholder='Admin token'/>
 				</Form.Item>
 			)}
-			<Form.Item {...tailLayout}>
+			<Form.Item {...tailLayout} className={s.submit}>
 				<Button type='primary' htmlType='submit' loading={isFetching}>
 					Submit
 				</Button>

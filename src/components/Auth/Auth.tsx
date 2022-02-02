@@ -16,9 +16,10 @@ type Props = {
 }
 
 export const Auth: FC<Props> = observer(({register}) => {
-	const history = useHistory(),
-		[form] = useForm(),
-		[isFetching, setIsFetching] = useState(false)
+	const history = useHistory()
+	const [form] = useForm()
+	const [isFetching, setIsFetching] = useState(false)
+	const [type, setType] = useState<'user' | 'moderator' | 'admin'>('user')
 
 	if (authState.user) {
 		return <Error403 text='Sorry, you are authorized, you have no access to the authorization page.'/>
@@ -33,14 +34,14 @@ export const Auth: FC<Props> = observer(({register}) => {
 	const onSubmit = async ({username, email, password, adminToken}: obj) => {
 		setIsFetching(true)
 		if (register) {
-			const status = await authState.signUp(username, email, password, adminToken)
+			const status = await authState.signUp(username, email, password, adminToken, type === 'moderator')
 			setIsFetching(false)
 			if (status) {
-				message.success('Created new user!')
+				message.success('you were registered successfully')
 				form.resetFields()
 				history.push('/auth/signin')
 			} else {
-				message.error('Can not register!')
+				message.error('can not register')
 			}
 		} else {
 			const status = await authState.signIn(username, password)
@@ -53,7 +54,7 @@ export const Auth: FC<Props> = observer(({register}) => {
 				} else {
 					history.push('/')
 				}
-			} else message.error('Can not login!')
+			} else message.error('can not login')
 		}
 	}
 
@@ -73,7 +74,9 @@ export const Auth: FC<Props> = observer(({register}) => {
 		<Helmet><title>{title} | forume</title></Helmet>
 		<div className={s.wrapper}>
 			<Card className={s.card} title={title} extra={extra}>
-				<AuthForm onsubmit={onSubmit} register={register} form={form} isFetching={isFetching}/>
+				<AuthForm onsubmit={onSubmit} register={register} form={form} isFetching={isFetching}
+				          type={type} setType={setType}
+				/>
 			</Card>
 		</div>
 	</>
